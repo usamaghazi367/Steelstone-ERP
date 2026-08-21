@@ -1,0 +1,798 @@
+{
+  "code": "13",
+  "name": "MATERIAL DEFINITION  (ITEM MASTER)",
+  "category": "ERP Module",
+  "recordCodePrefix": "ITM",
+  "listColumns": [
+    "_recordCode",
+    "1.1",
+    "1.2",
+    "1.3"
+  ],
+  "sections": [
+    {
+      "num": 1,
+      "title": "MATERIAL IDENTIFICATION  (repeating register - unlimited materials)",
+      "repeating": false
+    },
+    {
+      "num": 2,
+      "title": "UNITS OF MEASURE & PACKING",
+      "repeating": false
+    },
+    {
+      "num": 3,
+      "title": "TECHNICAL SPECIFICATION & QUALITY",
+      "repeating": false
+    },
+    {
+      "num": 4,
+      "title": "TAX & STATUTORY TREATMENT",
+      "repeating": false
+    },
+    {
+      "num": 5,
+      "title": "INVENTORY, STORAGE & PLANNING",
+      "repeating": false
+    },
+    {
+      "num": 6,
+      "title": "PURCHASING & SALES CONTROL",
+      "repeating": false
+    },
+    {
+      "num": 7,
+      "title": "APPROVAL, ATTACHMENTS & AUDIT",
+      "repeating": false
+    }
+  ],
+  "fields": [
+    {
+      "ref": "1.1",
+      "field": "Material code",
+      "dataType": "Text (20)",
+      "mandatory": "System",
+      "validation": "Auto-generated from the category and type; unique and immutable once approved.",
+      "sampleEntry": "MAT-CEM-OPC53-BULK",
+      "section": 1
+    },
+    {
+      "ref": "1.2",
+      "field": "Material type (GATING FIELD)",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Finished goods / Raw material / Packing material / Spare part / Consumable / Fuel / Service. Drives which sections below are mandatory.",
+      "sampleEntry": "Finished goods",
+      "section": 1
+    },
+    {
+      "ref": "1.3",
+      "field": "Material category & sub-category",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Cement / Clinker / Limestone / Gypsum / Coal / Bags / Lubricants / Electrical / Mechanical spares.",
+      "sampleEntry": "Cement / Grey Portland",
+      "section": 1
+    },
+    {
+      "ref": "1.4",
+      "field": "Material description (short)",
+      "dataType": "Text (60)",
+      "mandatory": "Yes",
+      "validation": "Appears on orders, challans and invoices.",
+      "sampleEntry": "OPC 53 Grade - Bulk",
+      "section": 1
+    },
+    {
+      "ref": "1.5",
+      "field": "Material description (long)",
+      "dataType": "Text (250)",
+      "mandatory": "Yes",
+      "validation": "Full technical description including grade and standard.",
+      "sampleEntry": "Ordinary Portland Cement, 53 Grade, conforming to PS 232, supplied in bulk",
+      "section": 1
+    },
+    {
+      "ref": "1.6",
+      "field": "Brand name",
+      "dataType": "Text (60)",
+      "mandatory": "Conditional",
+      "validation": "Brand under which the product is sold.",
+      "sampleEntry": "PakCem Ultra",
+      "section": 1
+    },
+    {
+      "ref": "1.7",
+      "field": "Manufacturer / origin",
+      "dataType": "Text (120)",
+      "mandatory": "Conditional",
+      "validation": "Producing plant for finished goods, or the manufacturer for purchased items.",
+      "sampleEntry": "PLANT-01 Nooriabad",
+      "section": 1
+    },
+    {
+      "ref": "1.8",
+      "field": "HS code / PCT heading",
+      "dataType": "Text (12)",
+      "mandatory": "Yes",
+      "validation": "Determines the sales tax, FED and customs treatment on every transaction.",
+      "sampleEntry": "2523.29",
+      "section": 1
+    },
+    {
+      "ref": "1.9",
+      "field": "Material group for reporting",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Used for inventory valuation, ageing and management reporting.",
+      "sampleEntry": "FG-Cement",
+      "section": 1
+    },
+    {
+      "ref": "1.10",
+      "field": "Barcode / QR / batch identifier",
+      "dataType": "Text (40)",
+      "mandatory": "No",
+      "validation": "Used for scanning at gate, store and dispatch.",
+      "sampleEntry": "BC-8901234567890",
+      "section": 1
+    },
+    {
+      "ref": "1.11",
+      "field": "Material status",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Active / Blocked for purchase / Blocked for sale / Under approval / Discontinued - with effective date. Codes are never deleted.",
+      "sampleEntry": "Active",
+      "section": 1
+    },
+    {
+      "ref": "1.12",
+      "field": "Date created & created by",
+      "dataType": "Text (120)",
+      "mandatory": "System",
+      "validation": "Audit stamp for the master record.",
+      "sampleEntry": "01-Jul-2026, Inventory - F. Karim",
+      "section": 1
+    },
+    {
+      "ref": "2.1",
+      "field": "Base unit of measure",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "MT / Kg / Bag / Litre / Piece / Metre / Hour. All stock is held in this unit.",
+      "sampleEntry": "MT",
+      "section": 2
+    },
+    {
+      "ref": "2.2",
+      "field": "Purchase unit of measure",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Unit in which the material is bought.",
+      "sampleEntry": "MT",
+      "section": 2
+    },
+    {
+      "ref": "2.3",
+      "field": "Sales unit of measure",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Unit in which the material is sold and invoiced.",
+      "sampleEntry": "MT",
+      "section": 2
+    },
+    {
+      "ref": "2.4",
+      "field": "Conversion factor to base unit",
+      "dataType": "Number",
+      "mandatory": "Yes",
+      "validation": "Factor used to convert purchase or sales units into the base unit.",
+      "sampleEntry": "1",
+      "section": 2
+    },
+    {
+      "ref": "2.5",
+      "field": "Packing type",
+      "dataType": "Dropdown",
+      "mandatory": "Conditional",
+      "validation": "Bulk / 50 kg PP bag / 50 kg paper bag / Jumbo bag 1.5 MT / Drum / Carton.",
+      "sampleEntry": "Bulk",
+      "section": 2
+    },
+    {
+      "ref": "2.6",
+      "field": "Standard pack size & units per pack",
+      "dataType": "Text (40)",
+      "mandatory": "Conditional",
+      "validation": "Quantity in each pack and packs per pallet or load.",
+      "sampleEntry": "N/A",
+      "section": 2
+    },
+    {
+      "ref": "2.7",
+      "field": "Bags per MT (conversion)",
+      "dataType": "Formula",
+      "mandatory": "System",
+      "validation": "Used to convert between bagged and bulk quantities on orders and invoices.",
+      "sampleEntry": "20 bags per MT",
+      "section": 2
+    },
+    {
+      "ref": "2.8",
+      "field": "Weight tolerance permitted",
+      "dataType": "Text (40)",
+      "mandatory": "Conditional",
+      "validation": "Permitted variation on the declared weight, as allowed by PSQCA.",
+      "sampleEntry": "+/- 1%",
+      "section": 2
+    },
+    {
+      "ref": "2.9",
+      "field": "Gross weight & net weight per unit",
+      "dataType": "Text (40)",
+      "mandatory": "Conditional",
+      "validation": "Used for load planning and freight calculation.",
+      "sampleEntry": "Net 50 kg, gross 50.2 kg",
+      "section": 2
+    },
+    {
+      "ref": "2.10",
+      "field": "Volume / density (per MT)",
+      "dataType": "Text (40)",
+      "mandatory": "Conditional",
+      "validation": "Bulk density; used for silo and tanker capacity planning.",
+      "sampleEntry": "1.44 MT per cubic metre",
+      "section": 2
+    },
+    {
+      "ref": "3.1",
+      "field": "Applicable standard",
+      "dataType": "Text (60)",
+      "mandatory": "Conditional",
+      "validation": "PS, ASTM, EN or BS standard the material conforms to.",
+      "sampleEntry": "PS 232-2015 / ASTM C150 Type I",
+      "section": 3
+    },
+    {
+      "ref": "3.2",
+      "field": "Key specification parameters",
+      "dataType": "Text (250)",
+      "mandatory": "Conditional",
+      "validation": "Strength, setting time, fineness, chemical composition or equivalent.",
+      "sampleEntry": "28-day strength min 53 MPa, Blaine 3200 cm2/g",
+      "section": 3
+    },
+    {
+      "ref": "3.3",
+      "field": "Quality inspection required on receipt",
+      "dataType": "Yes / No",
+      "mandatory": "Yes",
+      "validation": "If Yes, a GRN cannot be posted without an inspection result.",
+      "sampleEntry": "Yes",
+      "section": 3
+    },
+    {
+      "ref": "3.4",
+      "field": "Inspection parameters & acceptance limits",
+      "dataType": "Text (250)",
+      "mandatory": "Conditional",
+      "validation": "Tests performed and the tolerance for acceptance or rejection.",
+      "sampleEntry": "Moisture max 0.5%, strength within spec",
+      "section": 3
+    },
+    {
+      "ref": "3.5",
+      "field": "Mill test certificate required",
+      "dataType": "Yes / No",
+      "mandatory": "Conditional",
+      "validation": "Required with every dispatch or receipt of the material.",
+      "sampleEntry": "Yes",
+      "section": 3
+    },
+    {
+      "ref": "3.6",
+      "field": "Shelf life / expiry applicable",
+      "dataType": "Yes / No",
+      "mandatory": "Yes",
+      "validation": "If Yes, batch and expiry tracking are enforced.",
+      "sampleEntry": "Yes",
+      "section": 3
+    },
+    {
+      "ref": "3.7",
+      "field": "Shelf life period",
+      "dataType": "Text (40)",
+      "mandatory": "Conditional",
+      "validation": "Period from the date of manufacture.",
+      "sampleEntry": "90 days",
+      "section": 3
+    },
+    {
+      "ref": "3.8",
+      "field": "Batch / lot tracking required",
+      "dataType": "Yes / No",
+      "mandatory": "Yes",
+      "validation": "Enables batch-wise traceability from production to delivery.",
+      "sampleEntry": "Yes",
+      "section": 3
+    },
+    {
+      "ref": "3.9",
+      "field": "Hazard classification & MSDS reference",
+      "dataType": "Text (120)",
+      "mandatory": "Conditional",
+      "validation": "Required for fuels, chemicals and regulated materials.",
+      "sampleEntry": "Not hazardous",
+      "section": 3
+    },
+    {
+      "ref": "3.10",
+      "field": "Storage conditions & handling instructions",
+      "dataType": "Text (250)",
+      "mandatory": "Yes",
+      "validation": "Covered dry storage, stacking limits and handling precautions.",
+      "sampleEntry": "Store dry, max stack 12 bags, protect from moisture",
+      "section": 3
+    },
+    {
+      "ref": "4.1",
+      "field": "Sales tax applicability",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Taxable at standard rate / Reduced rate / Zero-rated / Exempt.",
+      "sampleEntry": "Taxable at standard rate",
+      "section": 4
+    },
+    {
+      "ref": "4.2",
+      "field": "Standard sales tax rate (%)",
+      "dataType": "Number",
+      "mandatory": "Yes",
+      "validation": "Rate applied on sales and purchases of this material.",
+      "sampleEntry": "0.18",
+      "section": 4
+    },
+    {
+      "ref": "4.3",
+      "field": "Federal Excise Duty applicable",
+      "dataType": "Yes / No",
+      "mandatory": "Yes",
+      "validation": "Cement and other excisable goods; specify the rate and basis.",
+      "sampleEntry": "Yes",
+      "section": 4
+    },
+    {
+      "ref": "4.4",
+      "field": "FED rate & basis",
+      "dataType": "Text (60)",
+      "mandatory": "Conditional",
+      "validation": "Amount per kilogram or percentage of value.",
+      "sampleEntry": "PKR 2 per kg",
+      "section": 4
+    },
+    {
+      "ref": "4.5",
+      "field": "Provincial sales tax on services applicable",
+      "dataType": "Yes / No",
+      "mandatory": "Conditional",
+      "validation": "Applies to service-type material codes such as freight or handling.",
+      "sampleEntry": "No",
+      "section": 4
+    },
+    {
+      "ref": "4.6",
+      "field": "Withholding tax section on purchase",
+      "dataType": "Text (60)",
+      "mandatory": "Yes",
+      "validation": "Section 153 goods or services rate applied when buying this material.",
+      "sampleEntry": "Sec. 153(1)(a) - goods",
+      "section": 4
+    },
+    {
+      "ref": "4.7",
+      "field": "Advance income tax on sale (Sec. 236)",
+      "dataType": "Text (60)",
+      "mandatory": "Conditional",
+      "validation": "Applies to certain sales; the rate depends on the buyer's filer status.",
+      "sampleEntry": "Not applicable",
+      "section": 4
+    },
+    {
+      "ref": "4.8",
+      "field": "Customs duty & import regulatory duty",
+      "dataType": "Text (60)",
+      "mandatory": "Conditional",
+      "validation": "Applies to imported materials, based on the PCT heading.",
+      "sampleEntry": "N/A",
+      "section": 4
+    },
+    {
+      "ref": "4.9",
+      "field": "Third schedule / retail price item",
+      "dataType": "Yes / No",
+      "mandatory": "Yes",
+      "validation": "Third schedule items are taxed on printed retail price, not transaction value.",
+      "sampleEntry": "Yes - cement is a third schedule item",
+      "section": 4
+    },
+    {
+      "ref": "4.10",
+      "field": "Printed retail price per unit (PKR)",
+      "dataType": "Number",
+      "mandatory": "Conditional",
+      "validation": "Mandatory for third schedule items; sales tax is charged on this value.",
+      "sampleEntry": "880 per 50 kg bag",
+      "section": 4
+    },
+    {
+      "ref": "5.1",
+      "field": "Inventory managed",
+      "dataType": "Yes / No",
+      "mandatory": "Yes",
+      "validation": "Services and expense items are not stock-managed.",
+      "sampleEntry": "Yes",
+      "section": 5
+    },
+    {
+      "ref": "5.2",
+      "field": "Valuation method",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "FIFO / Weighted average - must match the enterprise configuration.",
+      "sampleEntry": "Weighted average",
+      "section": 5
+    },
+    {
+      "ref": "5.3",
+      "field": "Standard cost per unit (PKR)",
+      "dataType": "Number",
+      "mandatory": "Conditional",
+      "validation": "Used for variance analysis and margin checks on quotations.",
+      "sampleEntry": "11250",
+      "section": 5
+    },
+    {
+      "ref": "5.4",
+      "field": "Last purchase price & date",
+      "dataType": "Formula",
+      "mandatory": "System",
+      "validation": "Maintained automatically from the most recent booked bill.",
+      "sampleEntry": "PKR 11,400 on 12-Aug-2026",
+      "section": 5
+    },
+    {
+      "ref": "5.5",
+      "field": "Moving average cost (PKR)",
+      "dataType": "Formula",
+      "mandatory": "System",
+      "validation": "Recalculated on every receipt; used for cost of sales.",
+      "sampleEntry": "11312",
+      "section": 5
+    },
+    {
+      "ref": "5.6",
+      "field": "Storage location type",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Silo / Covered warehouse / Open yard / Bonded store / Tank.",
+      "sampleEntry": "Silo",
+      "section": 5
+    },
+    {
+      "ref": "5.7",
+      "field": "Default storage locations",
+      "dataType": "Multi-select",
+      "mandatory": "Yes",
+      "validation": "Plants and warehouses where this material is normally held.",
+      "sampleEntry": "PLANT-01 Silo 1 & 2",
+      "section": 5
+    },
+    {
+      "ref": "5.8",
+      "field": "Minimum stock level (reorder point)",
+      "dataType": "Number",
+      "mandatory": "Conditional",
+      "validation": "Triggers a purchase requisition when stock falls below this level.",
+      "sampleEntry": "500 MT",
+      "section": 5
+    },
+    {
+      "ref": "5.9",
+      "field": "Maximum stock level",
+      "dataType": "Number",
+      "mandatory": "Conditional",
+      "validation": "Storage capacity constraint; over-receipt is warned.",
+      "sampleEntry": "2000 MT",
+      "section": 5
+    },
+    {
+      "ref": "5.10",
+      "field": "Safety stock",
+      "dataType": "Number",
+      "mandatory": "Conditional",
+      "validation": "Buffer held against demand and lead-time variability.",
+      "sampleEntry": "250 MT",
+      "section": 5
+    },
+    {
+      "ref": "5.11",
+      "field": "Reorder quantity / economic order quantity",
+      "dataType": "Number",
+      "mandatory": "Conditional",
+      "validation": "Default quantity proposed on a requisition.",
+      "sampleEntry": "750 MT",
+      "section": 5
+    },
+    {
+      "ref": "5.12",
+      "field": "Procurement lead time (days)",
+      "dataType": "Integer",
+      "mandatory": "Conditional",
+      "validation": "Used by planning to time the reorder.",
+      "sampleEntry": "3",
+      "section": 5
+    },
+    {
+      "ref": "5.13",
+      "field": "ABC / criticality classification",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "A - high value or critical / B - medium / C - low. Drives counting frequency.",
+      "sampleEntry": "A - critical",
+      "section": 5
+    },
+    {
+      "ref": "5.14",
+      "field": "Physical count frequency",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Daily / Weekly / Monthly / Quarterly / Annual.",
+      "sampleEntry": "Monthly",
+      "section": 5
+    },
+    {
+      "ref": "5.15",
+      "field": "Shrinkage / handling loss allowance (%)",
+      "dataType": "Percentage",
+      "mandatory": "Conditional",
+      "validation": "Acceptable loss on handling and transit before a claim is raised.",
+      "sampleEntry": "0.005",
+      "section": 5
+    },
+    {
+      "ref": "6.1",
+      "field": "Purchasable",
+      "dataType": "Yes / No",
+      "mandatory": "Yes",
+      "validation": "Whether the material can be placed on a purchase order.",
+      "sampleEntry": "No - produced in-house",
+      "section": 6
+    },
+    {
+      "ref": "6.2",
+      "field": "Approved suppliers",
+      "dataType": "Multi-select",
+      "mandatory": "Conditional",
+      "validation": "Manufacturers and vendors approved to supply this material.",
+      "sampleEntry": "N/A",
+      "section": 6
+    },
+    {
+      "ref": "6.3",
+      "field": "Last purchase order reference",
+      "dataType": "Formula",
+      "mandatory": "System",
+      "validation": "Most recent order raised for this material.",
+      "sampleEntry": "N/A",
+      "section": 6
+    },
+    {
+      "ref": "6.4",
+      "field": "Saleable",
+      "dataType": "Yes / No",
+      "mandatory": "Yes",
+      "validation": "Whether the material can be placed on a sales order or invoice.",
+      "sampleEntry": "Yes",
+      "section": 6
+    },
+    {
+      "ref": "6.5",
+      "field": "Selling price list reference",
+      "dataType": "Lookup",
+      "mandatory": "Conditional",
+      "validation": "Price list governing the rate charged; region and customer-type specific.",
+      "sampleEntry": "PL-2026-Q4-Punjab",
+      "section": 6
+    },
+    {
+      "ref": "6.6",
+      "field": "Minimum selling price (floor price)",
+      "dataType": "Number",
+      "mandatory": "Conditional",
+      "validation": "Quotations and orders below this rate are blocked pending approval.",
+      "sampleEntry": "13500 per MT",
+      "section": 6
+    },
+    {
+      "ref": "6.7",
+      "field": "Minimum order quantity",
+      "dataType": "Number",
+      "mandatory": "Conditional",
+      "validation": "Smallest quantity that may be ordered by a customer.",
+      "sampleEntry": "30 MT",
+      "section": 6
+    },
+    {
+      "ref": "6.8",
+      "field": "Authorised customer categories",
+      "dataType": "Multi-select",
+      "mandatory": "Conditional",
+      "validation": "Customer types permitted to buy this material.",
+      "sampleEntry": "Contractor, Distributor, Concrete plant",
+      "section": 6
+    },
+    {
+      "ref": "6.9",
+      "field": "Produced in-house",
+      "dataType": "Yes / No",
+      "mandatory": "Yes",
+      "validation": "Links the material to production planning and the bill of materials.",
+      "sampleEntry": "Yes",
+      "section": 6
+    },
+    {
+      "ref": "6.10",
+      "field": "Bill of materials / recipe reference",
+      "dataType": "Lookup",
+      "mandatory": "Conditional",
+      "validation": "Input materials and quantities consumed per unit produced.",
+      "sampleEntry": "BOM-OPC53-2026",
+      "section": 6
+    },
+    {
+      "ref": "6.11",
+      "field": "By-product / scrap code",
+      "dataType": "Lookup",
+      "mandatory": "No",
+      "validation": "Material code under which by-products or scrap are booked.",
+      "sampleEntry": "N/A",
+      "section": 6
+    },
+    {
+      "ref": "6.12",
+      "field": "Revenue GL account",
+      "dataType": "Lookup",
+      "mandatory": "Conditional",
+      "validation": "Account credited when the material is sold.",
+      "sampleEntry": "4100-Sales Revenue",
+      "section": 6
+    },
+    {
+      "ref": "6.13",
+      "field": "Inventory GL account",
+      "dataType": "Lookup",
+      "mandatory": "Yes",
+      "validation": "Account debited when the material is received into stock.",
+      "sampleEntry": "1310-Finished Goods Inventory",
+      "section": 6
+    },
+    {
+      "ref": "6.14",
+      "field": "Cost of sales GL account",
+      "dataType": "Lookup",
+      "mandatory": "Conditional",
+      "validation": "Account debited when the material is dispatched.",
+      "sampleEntry": "5100-Cost of Sales",
+      "section": 6
+    },
+    {
+      "ref": "7.1",
+      "field": "Requested by & date",
+      "dataType": "Text (120)",
+      "mandatory": "Yes",
+      "validation": "User requesting the creation of the material code.",
+      "sampleEntry": "Production - S. Rehman, 28-Jun-2026",
+      "section": 7
+    },
+    {
+      "ref": "7.2",
+      "field": "Technical specification approved by",
+      "dataType": "Text (120)",
+      "mandatory": "Yes",
+      "validation": "Quality or technical head approving the specification in Section 3.",
+      "sampleEntry": "QA Head - 29-Jun-2026",
+      "section": 7
+    },
+    {
+      "ref": "7.3",
+      "field": "Tax treatment approved by",
+      "dataType": "Text (120)",
+      "mandatory": "Yes",
+      "validation": "Tax officer confirming the PCT heading, tax rates and third schedule status.",
+      "sampleEntry": "Tax - B. Ahmad, 30-Jun-2026",
+      "section": 7
+    },
+    {
+      "ref": "7.4",
+      "field": "Costing & GL mapping approved by",
+      "dataType": "Text (120)",
+      "mandatory": "Yes",
+      "validation": "Finance confirming the valuation method and account mapping.",
+      "sampleEntry": "Manager Finance - 30-Jun-2026",
+      "section": 7
+    },
+    {
+      "ref": "7.5",
+      "field": "Final approval & activation date",
+      "dataType": "Text (120)",
+      "mandatory": "Yes",
+      "validation": "Material becomes usable in transactions from this date.",
+      "sampleEntry": "Approved 01-Jul-2026",
+      "section": 7
+    },
+    {
+      "ref": "7.6",
+      "field": "Technical data sheet",
+      "dataType": "File upload",
+      "mandatory": "Conditional",
+      "validation": "Manufacturer or in-house specification sheet.",
+      "sampleEntry": "Attached",
+      "section": 7
+    },
+    {
+      "ref": "7.7",
+      "field": "Material safety data sheet (MSDS)",
+      "dataType": "File upload",
+      "mandatory": "Conditional",
+      "validation": "Mandatory for hazardous materials and fuels.",
+      "sampleEntry": "N/A",
+      "section": 7
+    },
+    {
+      "ref": "7.8",
+      "field": "Quality test certificate / standard compliance",
+      "dataType": "File upload",
+      "mandatory": "Conditional",
+      "validation": "PSQCA or laboratory certificate supporting Section 3.",
+      "sampleEntry": "Attached",
+      "section": 7
+    },
+    {
+      "ref": "7.9",
+      "field": "Product photograph / packing image",
+      "dataType": "File upload",
+      "mandatory": "No",
+      "validation": "Used in catalogues and the customer portal.",
+      "sampleEntry": "Attached",
+      "section": 7
+    },
+    {
+      "ref": "7.10",
+      "field": "Change history",
+      "dataType": "Note - system",
+      "mandatory": "System",
+      "validation": "Every change to a material master field is logged with the user, timestamp, old and new value. Tax and costing fields require re-approval when changed.",
+      "sampleEntry": "Enabled",
+      "section": 7
+    },
+    {
+      "ref": "7.11",
+      "field": "Deactivation reason & date",
+      "dataType": "Text (150)",
+      "mandatory": "Conditional",
+      "validation": "Recorded when the material is discontinued; historical transactions are retained.",
+      "sampleEntry": "N/A",
+      "section": 7
+    },
+    {
+      "ref": "7.12",
+      "field": "Material master review due date",
+      "dataType": "Date",
+      "mandatory": "Yes",
+      "validation": "Periodic review of price, tax rates and stock parameters.",
+      "sampleEntry": "46568",
+      "section": 7
+    }
+  ]
+}

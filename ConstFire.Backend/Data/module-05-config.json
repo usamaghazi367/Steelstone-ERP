@@ -1,0 +1,734 @@
+{
+  "code": "05",
+  "name": "TRANSPORTER REGISTRATION",
+  "category": "ERP Module",
+  "recordCodePrefix": "TRN",
+  "listColumns": [
+    "_recordCode",
+    "1.1",
+    "1.2",
+    "1.3"
+  ],
+  "sections": [
+    {
+      "num": 1,
+      "title": "TRANSPORTER BUSINESS DETAILS",
+      "repeating": false
+    },
+    {
+      "num": 2,
+      "title": "TAX DETAILS",
+      "repeating": false
+    },
+    {
+      "num": 3,
+      "title": "POINTS OF CONTACT  (repeating block - minimum 2, unlimited additional contacts)",
+      "repeating": true
+    },
+    {
+      "num": 4,
+      "title": "BANK ACCOUNT DETAILS  (repeating block - multiple accounts supported)",
+      "repeating": true
+    },
+    {
+      "num": 5,
+      "title": "SUPPORTING DOCUMENTS CHECKLIST",
+      "repeating": false
+    }
+  ],
+  "fields": [
+    {
+      "ref": "1.1",
+      "field": "Transporter code",
+      "dataType": "Text (10)",
+      "mandatory": "System",
+      "validation": "Auto-generated, unique and immutable (e.g. TRN-00001).",
+      "sampleEntry": "TRN-00007",
+      "section": 1
+    },
+    {
+      "ref": "1.2",
+      "field": "Registering enterprise",
+      "dataType": "Lookup",
+      "mandatory": "Yes",
+      "validation": "Links this transporter to the enterprise registered on sheet 01.",
+      "sampleEntry": "ENT-000145 - Steelstone IT (Pvt) Ltd",
+      "section": 1
+    },
+    {
+      "ref": "1.3",
+      "field": "Is the transporter registered with SECP? (ENTITY-TYPE CHECK)",
+      "dataType": "Yes / No",
+      "mandatory": "Yes",
+      "validation": "GATING FIELD - answered first. Yes = Company track; No = AOP / Firm / Sole Proprietor track.",
+      "sampleEntry": "No",
+      "section": 1
+    },
+    {
+      "ref": "1.4",
+      "field": "Registering authority",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "SECP / Registrar of Firms (Provincial) / FBR only (Sole Proprietor).",
+      "sampleEntry": "Registrar of Firms (Provincial)",
+      "section": 1
+    },
+    {
+      "ref": "1.5",
+      "field": "Entity class (system-derived)",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Derived from 1.3 and 1.4; enforces every conditional rule below.",
+      "sampleEntry": "AOP / Partnership Firm",
+      "section": 1
+    },
+    {
+      "ref": "1.6",
+      "field": "Legal status / entity type",
+      "dataType": "Dependent dropdown",
+      "mandatory": "Yes",
+      "validation": "Company: SMC-Private / Private Limited / Public Limited. AOP: Registered Partnership Firm / Unregistered AOP. Other: Sole Proprietorship.",
+      "sampleEntry": "Registered Partnership Firm",
+      "section": 1
+    },
+    {
+      "ref": "1.7",
+      "field": "Registered legal name",
+      "dataType": "Text (150)",
+      "mandatory": "Yes",
+      "validation": "Must match the Certificate of Incorporation, Form II or NTN certificate exactly.",
+      "sampleEntry": "Shaheen Goods Transport Company",
+      "section": 1
+    },
+    {
+      "ref": "1.8",
+      "field": "Trading / business name",
+      "dataType": "Text (100)",
+      "mandatory": "No",
+      "validation": "Name used on freight bills and gate passes.",
+      "sampleEntry": "Shaheen Transport",
+      "section": 1
+    },
+    {
+      "ref": "1.9",
+      "field": "SECP incorporation number (CUIN) & date",
+      "dataType": "Text (40)",
+      "mandatory": "Company only",
+      "validation": "7-digit CUIN plus date of incorporation.",
+      "sampleEntry": "N/A",
+      "section": 1
+    },
+    {
+      "ref": "1.10",
+      "field": "Registrar of Firms registration no. & province",
+      "dataType": "Text (40)",
+      "mandatory": "AOP only",
+      "validation": "Mandatory if 1.5 = AOP.",
+      "sampleEntry": "RF/KHI/2014/02219 - Sindh",
+      "section": 1
+    },
+    {
+      "ref": "1.11",
+      "field": "Proprietor / partner name & CNIC",
+      "dataType": "Text (60)",
+      "mandatory": "Conditional",
+      "validation": "Required for sole proprietors and unregistered AOPs.",
+      "sampleEntry": "Shahid Mehmood / 42101-3344556-7",
+      "section": 1
+    },
+    {
+      "ref": "1.12",
+      "field": "Business commencement date",
+      "dataType": "Date",
+      "mandatory": "Yes",
+      "validation": "Date transport operations began.",
+      "sampleEntry": "41703",
+      "section": 1
+    },
+    {
+      "ref": "1.13",
+      "field": "Transporter type",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Own-fleet operator / Fleet aggregator (attached vehicles) / Freight broker / Contract carrier.",
+      "sampleEntry": "Own-fleet operator",
+      "section": 1
+    },
+    {
+      "ref": "1.14",
+      "field": "Goods carriage permit / transport licence number",
+      "dataType": "Text (40)",
+      "mandatory": "Yes",
+      "validation": "Permit number issued by the Provincial Transport Authority.",
+      "sampleEntry": "PTA-SIN-GC-2024-8891",
+      "section": 1
+    },
+    {
+      "ref": "1.15",
+      "field": "Goods carriage permit - valid until",
+      "dataType": "Date",
+      "mandatory": "Yes",
+      "validation": "DATE FIELD - highlighted amber 30 days before expiry and red once expired.",
+      "sampleEntry": "46752",
+      "section": 1
+    },
+    {
+      "ref": "1.16",
+      "field": "Goods carriage permit - status (system-derived)",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Active while the date in the row above is in the future. INACTIVE BY DEFAULT once that date passes - the transporter cannot be allocated new dispatches until the permit is renewed.",
+      "sampleEntry": "Active",
+      "section": 1
+    },
+    {
+      "ref": "1.17",
+      "field": "Provincial transport authority of registration",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Sindh / Punjab / KPK / Balochistan / ICT Transport Authority.",
+      "sampleEntry": "Sindh Transport Authority",
+      "section": 1
+    },
+    {
+      "ref": "1.18",
+      "field": "Head office address",
+      "dataType": "Text (300)",
+      "mandatory": "Yes",
+      "validation": "Full address including city, province and postal code.",
+      "sampleEntry": "Plot 88, Transport Chowk, SITE Area, Karachi 75700",
+      "section": 1
+    },
+    {
+      "ref": "1.19",
+      "field": "City / province",
+      "dataType": "Text (80)",
+      "mandatory": "Yes",
+      "validation": "Determines the provincial revenue authority and default operating base.",
+      "sampleEntry": "Karachi / Sindh",
+      "section": 1
+    },
+    {
+      "ref": "1.20",
+      "field": "Terminal / depot / parking yard address(es)",
+      "dataType": "Repeating table",
+      "mandatory": "Yes",
+      "validation": "MULTIPLE SUPPORTED - one row per depot: address, city, parking capacity (vehicles), yard in-charge and mobile.",
+      "sampleEntry": "Yard-1, Nooriabad - 40 vehicles",
+      "section": 1
+    },
+    {
+      "ref": "1.21",
+      "field": "Business email address",
+      "dataType": "Email",
+      "mandatory": "Yes",
+      "validation": "Official mailbox; receives dispatch instructions and freight bills.",
+      "sampleEntry": "ops@shaheentransport.pk",
+      "section": 1
+    },
+    {
+      "ref": "1.22",
+      "field": "Business phone / 24-hour control room number",
+      "dataType": "Phone",
+      "mandatory": "Yes",
+      "validation": "Format +92-XX-XXXXXXXX or +92-3XX-XXXXXXX; must be reachable outside office hours.",
+      "sampleEntry": "+92-21-32587744",
+      "section": 1
+    },
+    {
+      "ref": "2.1",
+      "field": "National Tax Number (NTN)",
+      "dataType": "Text (9)",
+      "mandatory": "Yes",
+      "validation": "7 digits + '-' + check digit; unique per transporter record.",
+      "sampleEntry": "3344556-7",
+      "section": 2
+    },
+    {
+      "ref": "2.2",
+      "field": "Sales Tax Registration No. (STRN)",
+      "dataType": "Text (13)",
+      "mandatory": "Conditional",
+      "validation": "Required where the transporter is registered for sales tax on goods.",
+      "sampleEntry": "N/A",
+      "section": 2
+    },
+    {
+      "ref": "2.3",
+      "field": "FBR filer status (Active Taxpayer List)",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Filer / Non-filer - drives the withholding tax rate on freight payments (Sec. 153 transport services).",
+      "sampleEntry": "Filer",
+      "section": 2
+    },
+    {
+      "ref": "2.4",
+      "field": "Filer status - date last verified against ATL",
+      "dataType": "Date",
+      "mandatory": "Yes",
+      "validation": "Date the status in 2.3 was checked on the FBR Active Taxpayer List.",
+      "sampleEntry": "46235",
+      "section": 2
+    },
+    {
+      "ref": "2.5",
+      "field": "Filer status - valid until (next verification due)",
+      "dataType": "Date",
+      "mandatory": "Yes",
+      "validation": "EDITABLE / UPDATED PERIODICALLY. On expiry the ERP applies non-filer rates until re-verified.",
+      "sampleEntry": "46326",
+      "section": 2
+    },
+    {
+      "ref": "2.6",
+      "field": "ATL re-verification frequency",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Monthly / Quarterly / Half-yearly - the system raises an alert on the due date.",
+      "sampleEntry": "Quarterly",
+      "section": 2
+    },
+    {
+      "ref": "2.7",
+      "field": "Provincial sales tax on services authority & registration no.",
+      "dataType": "Text (60)",
+      "mandatory": "Yes",
+      "validation": "SRB / PRA / KPRA / BRA - transport services are taxable at the provincial level.",
+      "sampleEntry": "SRB - SRB-33-44-5567",
+      "section": 2
+    },
+    {
+      "ref": "2.8",
+      "field": "Provincial sales tax rate applied on freight",
+      "dataType": "Percentage",
+      "mandatory": "Yes",
+      "validation": "Rate applicable to goods transport services in the province of supply.",
+      "sampleEntry": "0.03",
+      "section": 2
+    },
+    {
+      "ref": "2.9",
+      "field": "Withholding tax rate on freight (Sec. 153)",
+      "dataType": "Percentage",
+      "mandatory": "System",
+      "validation": "Applied automatically based on the filer status in field 2.3.",
+      "sampleEntry": "0.02",
+      "section": 2
+    },
+    {
+      "ref": "2.10",
+      "field": "Tax exemption / reduced-rate certificate no.",
+      "dataType": "Text (40)",
+      "mandatory": "Conditional",
+      "validation": "Certificate issued by the Commissioner Inland Revenue, if claimed.",
+      "sampleEntry": "N/A",
+      "section": 2
+    },
+    {
+      "ref": "2.11",
+      "field": "Exemption certificate - valid from",
+      "dataType": "Date",
+      "mandatory": "Conditional",
+      "validation": "Start date of the exemption period.",
+      "sampleEntry": "N/A",
+      "section": 2
+    },
+    {
+      "ref": "2.12",
+      "field": "Exemption certificate - valid until",
+      "dataType": "Date",
+      "mandatory": "Conditional",
+      "validation": "DATE FIELD - amber 30 days before expiry, red once expired.",
+      "sampleEntry": "N/A",
+      "section": 2
+    },
+    {
+      "ref": "2.13",
+      "field": "Exemption certificate - status (system-derived)",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Active while valid. INACTIVE BY DEFAULT after expiry - the ERP resumes the normal withholding rate automatically.",
+      "sampleEntry": "Not applicable",
+      "section": 2
+    },
+    {
+      "ref": "2.14",
+      "field": "Invoice / freight bill mode",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "FBR digital invoicing (integrated) / Manual bill - determines e-invoice handling of freight bills.",
+      "sampleEntry": "Manual bill",
+      "section": 2
+    },
+    {
+      "ref": "2.15",
+      "field": "Tax details verified by & date (internal)",
+      "dataType": "Text (100)",
+      "mandatory": "Internal",
+      "validation": "Finance officer who verified the NTN, provincial registration and ATL status.",
+      "sampleEntry": "Finance - A. Malik, 02-Aug-2026",
+      "section": 2
+    },
+    {
+      "ref": "3.1",
+      "field": "POC serial no.",
+      "dataType": "Integer",
+      "mandatory": "Yes",
+      "validation": "REPEATING BLOCK - minimum 2 contacts required, no upper limit.",
+      "sampleEntry": "1",
+      "section": 3
+    },
+    {
+      "ref": "3.2",
+      "field": "Contact role",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Primary (mandatory) / Secondary (mandatory) / Owner or Partner / Fleet or Operations Manager / Dispatch Controller / Accounts & Billing / Workshop In-charge / 24-hour Emergency.",
+      "sampleEntry": "Primary - Fleet Manager",
+      "section": 3
+    },
+    {
+      "ref": "3.3",
+      "field": "Full name",
+      "dataType": "Text (100)",
+      "mandatory": "Yes",
+      "validation": "As per CNIC.",
+      "sampleEntry": "Shahid Mehmood",
+      "section": 3
+    },
+    {
+      "ref": "3.4",
+      "field": "Designation",
+      "dataType": "Text (60)",
+      "mandatory": "Yes",
+      "validation": "Free text.",
+      "sampleEntry": "Fleet Operations Manager",
+      "section": 3
+    },
+    {
+      "ref": "3.5",
+      "field": "CNIC",
+      "dataType": "Text (15)",
+      "mandatory": "Yes",
+      "validation": "Format XXXXX-XXXXXXX-X",
+      "sampleEntry": "42101-3344556-7",
+      "section": 3
+    },
+    {
+      "ref": "3.6",
+      "field": "Mobile number",
+      "dataType": "Phone",
+      "mandatory": "Yes",
+      "validation": "+92-3XX-XXXXXXX; must be unique per contact.",
+      "sampleEntry": "+92-321-2233445",
+      "section": 3
+    },
+    {
+      "ref": "3.7",
+      "field": "Landline / extension",
+      "dataType": "Phone",
+      "mandatory": "No",
+      "validation": "Format +92-XX-XXXXXXXX ext. NNN",
+      "sampleEntry": "+92-21-32587744 ext. 3",
+      "section": 3
+    },
+    {
+      "ref": "3.8",
+      "field": "Email address",
+      "dataType": "Email",
+      "mandatory": "Yes",
+      "validation": "Unique per contact; receives notifications by role.",
+      "sampleEntry": "shahid@shaheentransport.pk",
+      "section": 3
+    },
+    {
+      "ref": "3.9",
+      "field": "Depot / terminal assigned",
+      "dataType": "Lookup",
+      "mandatory": "Yes",
+      "validation": "Select a depot from field 1.18, or 'All depots' for head-office roles.",
+      "sampleEntry": "All depots",
+      "section": 3
+    },
+    {
+      "ref": "3.10",
+      "field": "Available hours / days",
+      "dataType": "Text (80)",
+      "mandatory": "Yes",
+      "validation": "Contact window; at least one contact must cover 24 hours for dispatch emergencies.",
+      "sampleEntry": "24x7",
+      "section": 3
+    },
+    {
+      "ref": "3.11",
+      "field": "Authorised to accept dispatch orders & freight rates?",
+      "dataType": "Yes / No",
+      "mandatory": "Yes",
+      "validation": "At least one contact must be flagged Yes.",
+      "sampleEntry": "Yes",
+      "section": 3
+    },
+    {
+      "ref": "3.12",
+      "field": "Receives system notifications?",
+      "dataType": "Multi-select",
+      "mandatory": "Yes",
+      "validation": "Dispatch Instruction / Vehicle Allocation / Delivery Confirmation / Freight Bill / Payment Advice / Document Expiry Alert.",
+      "sampleEntry": "Dispatch Instruction, Vehicle Allocation, Document Expiry Alert",
+      "section": 3
+    },
+    {
+      "ref": "3.13",
+      "field": "Contact status",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Active / Inactive with effective date. At least 2 contacts must remain Active.",
+      "sampleEntry": "Active",
+      "section": 3
+    },
+    {
+      "ref": "4.1",
+      "field": "Bank account serial no.",
+      "dataType": "Integer",
+      "mandatory": "Yes",
+      "validation": "REPEATING BLOCK - multiple accounts supported; exactly one must be flagged primary.",
+      "sampleEntry": "1",
+      "section": 4
+    },
+    {
+      "ref": "4.2",
+      "field": "Bank name",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "SBP-licensed scheduled bank.",
+      "sampleEntry": "MCB Bank Limited",
+      "section": 4
+    },
+    {
+      "ref": "4.3",
+      "field": "Branch name & code",
+      "dataType": "Text (80)",
+      "mandatory": "Yes",
+      "validation": "Branch code numeric.",
+      "sampleEntry": "SITE Area Branch, Karachi - 0219",
+      "section": 4
+    },
+    {
+      "ref": "4.4",
+      "field": "Title of account",
+      "dataType": "Text (100)",
+      "mandatory": "Yes",
+      "validation": "Must match the registered legal name in field 1.7; mismatches block freight payments.",
+      "sampleEntry": "Shaheen Goods Transport Company",
+      "section": 4
+    },
+    {
+      "ref": "4.5",
+      "field": "Account number",
+      "dataType": "Text (20)",
+      "mandatory": "Yes",
+      "validation": "Numeric as issued by the bank; leading zeros are preserved.",
+      "sampleEntry": "2190010077331",
+      "section": 4
+    },
+    {
+      "ref": "4.6",
+      "field": "IBAN",
+      "dataType": "Text (24)",
+      "mandatory": "Yes",
+      "validation": "PK + 2 check digits + 4-letter bank code + 16 alphanumeric characters.",
+      "sampleEntry": "PK62MUCB0002190010077331",
+      "section": 4
+    },
+    {
+      "ref": "4.7",
+      "field": "Account currency",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "PKR (default)",
+      "sampleEntry": "PKR",
+      "section": 4
+    },
+    {
+      "ref": "4.8",
+      "field": "Is this the primary account for freight payments?",
+      "dataType": "Yes / No",
+      "mandatory": "Yes",
+      "validation": "Exactly one account must be flagged as primary.",
+      "sampleEntry": "Yes",
+      "section": 4
+    },
+    {
+      "ref": "4.9",
+      "field": "Preferred payment mode & cycle",
+      "dataType": "Text (80)",
+      "mandatory": "Yes",
+      "validation": "Online transfer / Cheque / Pay order, and the settlement cycle (per trip, weekly, fortnightly).",
+      "sampleEntry": "Online transfer (IBFT), fortnightly",
+      "section": 4
+    },
+    {
+      "ref": "4.10",
+      "field": "Security deposit / bank guarantee - instrument, bank & amount",
+      "dataType": "Text (150)",
+      "mandatory": "Conditional",
+      "validation": "Instrument type, issuing bank and amount held against goods in transit.",
+      "sampleEntry": "BG-MCB-2026-0455, MCB Bank, PKR 5,000,000",
+      "section": 4
+    },
+    {
+      "ref": "4.11",
+      "field": "Security deposit / bank guarantee - valid until",
+      "dataType": "Date",
+      "mandatory": "Conditional",
+      "validation": "DATE FIELD - amber 30 days before expiry, red once expired. On expiry the instrument is treated as nil until replaced.",
+      "sampleEntry": "46568",
+      "section": 4
+    },
+    {
+      "ref": "4.12",
+      "field": "Advance / running account balance allowed (PKR)",
+      "dataType": "Number",
+      "mandatory": "No",
+      "validation": "Maximum advance the transporter may hold against future trips.",
+      "sampleEntry": "1000000",
+      "section": 4
+    },
+    {
+      "ref": "4.13",
+      "field": "Bank details verified by finance team",
+      "dataType": "Yes / No + Date",
+      "mandatory": "Internal",
+      "validation": "Dual verification required before the account is activated.",
+      "sampleEntry": "Yes - 14-Aug-2026",
+      "section": 4
+    },
+    {
+      "ref": "5.1",
+      "field": "Certificate of Incorporation / Form II / registration proof",
+      "dataType": "File upload",
+      "mandatory": "Yes",
+      "validation": "Company: Certificate of Incorporation. AOP: Form II and registered deed. Sole proprietor: NTN certificate.",
+      "sampleEntry": "Attached",
+      "section": 5
+    },
+    {
+      "ref": "5.2",
+      "field": "Memorandum & Articles or registered partnership deed",
+      "dataType": "File upload",
+      "mandatory": "Conditional",
+      "validation": "Required for Company and AOP transporters.",
+      "sampleEntry": "Attached",
+      "section": 5
+    },
+    {
+      "ref": "5.3",
+      "field": "CNIC copies of owner / partners / proprietor",
+      "dataType": "File upload",
+      "mandatory": "Yes",
+      "validation": "Both sides; one file per owner or partner.",
+      "sampleEntry": "Attached (2 files)",
+      "section": 5
+    },
+    {
+      "ref": "5.4",
+      "field": "NTN certificate (FBR)",
+      "dataType": "File upload",
+      "mandatory": "Yes",
+      "validation": "PDF from the IRIS portal; supports field 2.1.",
+      "sampleEntry": "Attached",
+      "section": 5
+    },
+    {
+      "ref": "5.5",
+      "field": "Provincial sales tax on services registration certificate",
+      "dataType": "File upload",
+      "mandatory": "Yes",
+      "validation": "SRB / PRA / KPRA / BRA certificate; supports field 2.7.",
+      "sampleEntry": "Attached",
+      "section": 5
+    },
+    {
+      "ref": "5.6",
+      "field": "ATL status print / screenshot",
+      "dataType": "File upload",
+      "mandatory": "Yes",
+      "validation": "Dated within the last 30 days; refreshed at each re-verification (field 2.5).",
+      "sampleEntry": "Attached",
+      "section": 5
+    },
+    {
+      "ref": "5.7",
+      "field": "Tax exemption / reduced-rate certificate",
+      "dataType": "File upload",
+      "mandatory": "Conditional",
+      "validation": "Required where fields 2.10 to 2.13 are completed.",
+      "sampleEntry": "N/A",
+      "section": 5
+    },
+    {
+      "ref": "5.8",
+      "field": "Goods carriage permit / transport licence",
+      "dataType": "File upload",
+      "mandatory": "Yes",
+      "validation": "Supports fields 1.14 to 1.16; expiry tracked by the system.",
+      "sampleEntry": "Attached",
+      "section": 5
+    },
+    {
+      "ref": "5.9",
+      "field": "Proof of head office & depot premises (tenancy or ownership)",
+      "dataType": "File upload",
+      "mandatory": "Yes",
+      "validation": "Supports fields 1.18 and 1.20.",
+      "sampleEntry": "Attached",
+      "section": 5
+    },
+    {
+      "ref": "5.10",
+      "field": "Bank account maintenance certificate / cancelled cheque",
+      "dataType": "File upload",
+      "mandatory": "Yes",
+      "validation": "One per bank account listed in Section 4.",
+      "sampleEntry": "Attached",
+      "section": 5
+    },
+    {
+      "ref": "5.11",
+      "field": "Security deposit / bank guarantee instrument",
+      "dataType": "File upload",
+      "mandatory": "Conditional",
+      "validation": "Supports fields 4.10 and 4.11.",
+      "sampleEntry": "Attached",
+      "section": 5
+    },
+    {
+      "ref": "5.12",
+      "field": "Goods-in-transit / carrier liability insurance policy",
+      "dataType": "File upload",
+      "mandatory": "Yes",
+      "validation": "Company-level cover for consignments carried; vehicle-level policies are held in the vehicle registration module.",
+      "sampleEntry": "Attached",
+      "section": 5
+    },
+    {
+      "ref": "5.13",
+      "field": "Transport service agreement (signed)",
+      "dataType": "File upload",
+      "mandatory": "Yes",
+      "validation": "Executed agreement covering rates, liability and service levels.",
+      "sampleEntry": "Attached",
+      "section": 5
+    },
+    {
+      "ref": "5.14",
+      "field": "Company profile / fleet summary letter",
+      "dataType": "File upload",
+      "mandatory": "No",
+      "validation": "Brief profile stating fleet size and routes served; detailed vehicle and driver records are captured in the separate vehicle and driver registration module.",
+      "sampleEntry": "Attached",
+      "section": 5
+    }
+  ]
+}

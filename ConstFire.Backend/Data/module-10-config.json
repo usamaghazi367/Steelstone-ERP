@@ -1,0 +1,830 @@
+{
+  "code": "10",
+  "name": "PAYMENT VOUCHER",
+  "category": "ERP Module",
+  "recordCodePrefix": "PAY",
+  "listColumns": [
+    "_recordCode",
+    "1.1",
+    "1.2",
+    "1.3"
+  ],
+  "sections": [
+    {
+      "num": 1,
+      "title": "VOUCHER HEADER",
+      "repeating": false
+    },
+    {
+      "num": 2,
+      "title": "PAYEE DETAILS",
+      "repeating": false
+    },
+    {
+      "num": 3,
+      "title": "REFERENCE DOCUMENTS",
+      "repeating": false
+    },
+    {
+      "num": 4,
+      "title": "PAYMENT LINES & AMOUNT",
+      "repeating": false
+    },
+    {
+      "num": 5,
+      "title": "VOUCHER SUMMARY & TAX DEPOSIT",
+      "repeating": false
+    },
+    {
+      "num": 6,
+      "title": "APPROVAL & RELEASE",
+      "repeating": false
+    },
+    {
+      "num": 7,
+      "title": "BANK RECONCILIATION & POST-PAYMENT",
+      "repeating": false
+    },
+    {
+      "num": 8,
+      "title": "ATTACHMENTS & AUDIT",
+      "repeating": false
+    }
+  ],
+  "fields": [
+    {
+      "ref": "1.1",
+      "field": "Payment voucher number",
+      "dataType": "Text (15)",
+      "mandatory": "System",
+      "validation": "Auto-generated using the enterprise prefix; unique, immutable and gapless.",
+      "sampleEntry": "SSIT-PV-2026-00877",
+      "section": 1
+    },
+    {
+      "ref": "1.2",
+      "field": "Voucher date",
+      "dataType": "Date",
+      "mandatory": "Yes",
+      "validation": "Must fall in an open accounting period.",
+      "sampleEntry": "46275",
+      "section": 1
+    },
+    {
+      "ref": "1.3",
+      "field": "Payment type (GATING FIELD)",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Bill payment / Advance to vendor / Salary & wages / Statutory payment (tax, EOBI, social security) / Utility / Petty cash / Loan or refund. Drives which reference fields are mandatory.",
+      "sampleEntry": "Bill payment",
+      "section": 1
+    },
+    {
+      "ref": "1.4",
+      "field": "Enterprise entity making the payment",
+      "dataType": "Lookup",
+      "mandatory": "Yes",
+      "validation": "Paying entity from sheet 01.",
+      "sampleEntry": "ENT-000145 - Steelstone IT (Pvt) Ltd",
+      "section": 1
+    },
+    {
+      "ref": "1.5",
+      "field": "Location / plant",
+      "dataType": "Lookup",
+      "mandatory": "Yes",
+      "validation": "Location the payment relates to.",
+      "sampleEntry": "PLANT-01 Nooriabad",
+      "section": 1
+    },
+    {
+      "ref": "1.6",
+      "field": "Cost centre / department",
+      "dataType": "Lookup",
+      "mandatory": "Conditional",
+      "validation": "Required where the payment is not against a booked bill.",
+      "sampleEntry": "CC-2100 Packing Plant",
+      "section": 1
+    },
+    {
+      "ref": "1.7",
+      "field": "Project reference",
+      "dataType": "Lookup",
+      "mandatory": "No",
+      "validation": "Where project accounting is in use.",
+      "sampleEntry": "PRJ-2026-014",
+      "section": 1
+    },
+    {
+      "ref": "1.8",
+      "field": "Currency & exchange rate",
+      "dataType": "Text (40)",
+      "mandatory": "Yes",
+      "validation": "PKR by default; rate required for foreign currency payments.",
+      "sampleEntry": "PKR / 1.0000",
+      "section": 1
+    },
+    {
+      "ref": "1.9",
+      "field": "Payment mode",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Online transfer (RTGS / IBFT) / Cheque / Pay order / Demand draft / Letter of credit / Cash.",
+      "sampleEntry": "Online transfer (RTGS)",
+      "section": 1
+    },
+    {
+      "ref": "1.10",
+      "field": "Bank account paid from",
+      "dataType": "Lookup",
+      "mandatory": "Yes",
+      "validation": "Enterprise bank account; the available balance is checked before release.",
+      "sampleEntry": "PK36MEZN0001230010012345 - Meezan Bank",
+      "section": 1
+    },
+    {
+      "ref": "1.11",
+      "field": "Cheque / instrument number & date",
+      "dataType": "Text (60)",
+      "mandatory": "Conditional",
+      "validation": "Mandatory for cheque, pay order and demand draft payments.",
+      "sampleEntry": "N/A",
+      "section": 1
+    },
+    {
+      "ref": "1.12",
+      "field": "Voucher status",
+      "dataType": "Dropdown",
+      "mandatory": "System",
+      "validation": "Draft / Pending approval / Approved / Released / Cleared / Bounced / Cancelled - with effective date.",
+      "sampleEntry": "Pending approval",
+      "section": 1
+    },
+    {
+      "ref": "2.1",
+      "field": "Payee type",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Manufacturer / Distributor / Transporter / Service vendor / Employee / Government authority / Other.",
+      "sampleEntry": "Manufacturer",
+      "section": 2
+    },
+    {
+      "ref": "2.2",
+      "field": "Payee code & name",
+      "dataType": "Lookup",
+      "mandatory": "Yes",
+      "validation": "Pulled from the relevant register; the name must match the bank account title.",
+      "sampleEntry": "MFR-00021 - Pak Cement Industries Limited",
+      "section": 2
+    },
+    {
+      "ref": "2.3",
+      "field": "Payee NTN / CNIC",
+      "dataType": "Text (20)",
+      "mandatory": "Yes",
+      "validation": "Required for withholding tax reporting.",
+      "sampleEntry": "0098765-4",
+      "section": 2
+    },
+    {
+      "ref": "2.4",
+      "field": "Payee filer status on the payment date",
+      "dataType": "Dropdown",
+      "mandatory": "System",
+      "validation": "Pulled from the payee record; a lapsed ATL validity triggers non-filer withholding rates.",
+      "sampleEntry": "Filer",
+      "section": 2
+    },
+    {
+      "ref": "2.5",
+      "field": "Payee bank name & branch",
+      "dataType": "Text (120)",
+      "mandatory": "Yes",
+      "validation": "Pulled from the verified payee bank record.",
+      "sampleEntry": "Habib Bank Limited, I.I. Chundrigar Road",
+      "section": 2
+    },
+    {
+      "ref": "2.6",
+      "field": "Payee account title",
+      "dataType": "Text (100)",
+      "mandatory": "System",
+      "validation": "Must match the payee's registered legal name; a mismatch blocks release.",
+      "sampleEntry": "Pak Cement Industries Limited",
+      "section": 2
+    },
+    {
+      "ref": "2.7",
+      "field": "Payee IBAN / account number",
+      "dataType": "Text (24)",
+      "mandatory": "Yes",
+      "validation": "Only verified accounts can be selected.",
+      "sampleEntry": "PK24HABB0007867900123456",
+      "section": 2
+    },
+    {
+      "ref": "2.8",
+      "field": "Bank account verification status",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Verified / Not verified. An unverified account blocks the release of the voucher.",
+      "sampleEntry": "Verified",
+      "section": 2
+    },
+    {
+      "ref": "2.9",
+      "field": "Payee contact for remittance advice",
+      "dataType": "Text (120)",
+      "mandatory": "Yes",
+      "validation": "Email and mobile to which the advice is sent on release.",
+      "sampleEntry": "accounts@pakcement.com.pk",
+      "section": 2
+    },
+    {
+      "ref": "2.10",
+      "field": "Payee outstanding balance before payment (PKR)",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Total payable to this payee across all open bills.",
+      "sampleEntry": "5215638",
+      "section": 2
+    },
+    {
+      "ref": "3.1",
+      "field": "Bill / invoice reference(s)",
+      "dataType": "Lookup",
+      "mandatory": "Conditional",
+      "validation": "One or more approved bills from sheet 08; mandatory for bill payments.",
+      "sampleEntry": "SSIT-BILL-2026-00145",
+      "section": 3
+    },
+    {
+      "ref": "3.2",
+      "field": "Bill date(s) & due date(s)",
+      "dataType": "Text (80)",
+      "mandatory": "System",
+      "validation": "Pulled from the referenced bills; early payment requires approval.",
+      "sampleEntry": "12-Aug-2026 / due 12-Sep-2026",
+      "section": 3
+    },
+    {
+      "ref": "3.3",
+      "field": "Bill approval status",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Only bills with status Approved can be paid; unapproved bills are rejected by the system.",
+      "sampleEntry": "Approved",
+      "section": 3
+    },
+    {
+      "ref": "3.4",
+      "field": "Purchase order / contract reference",
+      "dataType": "Lookup",
+      "mandatory": "No",
+      "validation": "Pulled from the bill for the audit trail.",
+      "sampleEntry": "PO-2026-004512",
+      "section": 3
+    },
+    {
+      "ref": "3.5",
+      "field": "Advance request reference",
+      "dataType": "Lookup",
+      "mandatory": "Conditional",
+      "validation": "Mandatory for advance payments; must be approved before release.",
+      "sampleEntry": "N/A",
+      "section": 3
+    },
+    {
+      "ref": "3.6",
+      "field": "Payroll batch reference",
+      "dataType": "Lookup",
+      "mandatory": "Conditional",
+      "validation": "Mandatory for salary payments; links to the payroll sheet.",
+      "sampleEntry": "N/A",
+      "section": 3
+    },
+    {
+      "ref": "3.7",
+      "field": "Statutory challan / PSID number",
+      "dataType": "Text (40)",
+      "mandatory": "Conditional",
+      "validation": "Mandatory for tax, EOBI and social security payments.",
+      "sampleEntry": "N/A",
+      "section": 3
+    },
+    {
+      "ref": "3.8",
+      "field": "Petty cash requisition reference",
+      "dataType": "Lookup",
+      "mandatory": "Conditional",
+      "validation": "Mandatory for petty cash reimbursements.",
+      "sampleEntry": "N/A",
+      "section": 3
+    },
+    {
+      "ref": "3.9",
+      "field": "Supporting document completeness check",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Pass / Fail - confirms every mandatory attachment for the payment type is present.",
+      "sampleEntry": "Pass",
+      "section": 3
+    },
+    {
+      "ref": "4.1",
+      "field": "Line number",
+      "dataType": "Integer",
+      "mandatory": "Yes",
+      "validation": "REPEATING BLOCK - one line per bill or expense head being settled.",
+      "sampleEntry": "1",
+      "section": 4
+    },
+    {
+      "ref": "4.2",
+      "field": "Bill / expense head reference",
+      "dataType": "Lookup",
+      "mandatory": "Yes",
+      "validation": "Bill number or GL expense head being paid.",
+      "sampleEntry": "SSIT-BILL-2026-00145",
+      "section": 4
+    },
+    {
+      "ref": "4.3",
+      "field": "GL account to be debited",
+      "dataType": "Lookup",
+      "mandatory": "Yes",
+      "validation": "Payable account, advance account or expense head.",
+      "sampleEntry": "2100-Accounts Payable",
+      "section": 4
+    },
+    {
+      "ref": "4.4",
+      "field": "Gross amount of the bill (PKR)",
+      "dataType": "Formula",
+      "mandatory": "System",
+      "validation": "Pulled from the referenced bill.",
+      "sampleEntry": "5598666",
+      "section": 4
+    },
+    {
+      "ref": "4.5",
+      "field": "Amount already paid (PKR)",
+      "dataType": "Formula",
+      "mandatory": "System",
+      "validation": "Prior payments against the same bill.",
+      "sampleEntry": "0",
+      "section": 4
+    },
+    {
+      "ref": "4.6",
+      "field": "Withholding tax deducted (PKR)",
+      "dataType": "Formula",
+      "mandatory": "System",
+      "validation": "Income tax and sales tax withheld, pulled from the bill.",
+      "sampleEntry": "364528",
+      "section": 4
+    },
+    {
+      "ref": "4.7",
+      "field": "Deductions & recoveries (PKR)",
+      "dataType": "Formula",
+      "mandatory": "System",
+      "validation": "Shortage, penalty and other recoveries from the bill.",
+      "sampleEntry": "18500",
+      "section": 4
+    },
+    {
+      "ref": "4.8",
+      "field": "Advance adjusted (PKR)",
+      "dataType": "Number",
+      "mandatory": "No",
+      "validation": "Advance previously paid to the payee, adjusted here.",
+      "sampleEntry": "0",
+      "section": 4
+    },
+    {
+      "ref": "4.9",
+      "field": "Credit / debit note adjusted (PKR)",
+      "dataType": "Number",
+      "mandatory": "No",
+      "validation": "Notes settled in this voucher, with the reference.",
+      "sampleEntry": "0",
+      "section": 4
+    },
+    {
+      "ref": "4.10",
+      "field": "Early payment discount availed (PKR)",
+      "dataType": "Number",
+      "mandatory": "No",
+      "validation": "Only if paid within the qualifying period.",
+      "sampleEntry": "0",
+      "section": 4
+    },
+    {
+      "ref": "4.11",
+      "field": "Net amount paid in this voucher (PKR)",
+      "dataType": "Formula",
+      "mandatory": "System",
+      "validation": "Amount actually released to the payee for this line.",
+      "sampleEntry": "5215638",
+      "section": 4
+    },
+    {
+      "ref": "4.12",
+      "field": "Balance remaining on the bill (PKR)",
+      "dataType": "Formula",
+      "mandatory": "System",
+      "validation": "Updates the bill to Paid or Partially paid on release.",
+      "sampleEntry": "0",
+      "section": 4
+    },
+    {
+      "ref": "4.13",
+      "field": "Narration for the line",
+      "dataType": "Text (250)",
+      "mandatory": "Yes",
+      "validation": "Printed on the voucher and posted to the general ledger.",
+      "sampleEntry": "Payment against 300 MT OPC 53 bulk, GRN-2026-011245",
+      "section": 4
+    },
+    {
+      "ref": "5.1",
+      "field": "Total gross amount (PKR)",
+      "dataType": "Formula",
+      "mandatory": "System",
+      "validation": "Sum of the gross amounts of all lines.",
+      "sampleEntry": "5598666",
+      "section": 5
+    },
+    {
+      "ref": "5.2",
+      "field": "Total withholding tax deducted (PKR)",
+      "dataType": "Formula",
+      "mandatory": "System",
+      "validation": "To be deposited with the FBR by the statutory due date.",
+      "sampleEntry": "364528",
+      "section": 5
+    },
+    {
+      "ref": "5.3",
+      "field": "Total deductions & adjustments (PKR)",
+      "dataType": "Formula",
+      "mandatory": "System",
+      "validation": "Recoveries, advances and notes adjusted.",
+      "sampleEntry": "18500",
+      "section": 5
+    },
+    {
+      "ref": "5.4",
+      "field": "NET AMOUNT PAID (PKR)",
+      "dataType": "Formula",
+      "mandatory": "System",
+      "validation": "The figure debited from the enterprise bank account.",
+      "sampleEntry": "5215638",
+      "section": 5
+    },
+    {
+      "ref": "5.5",
+      "field": "Amount in words",
+      "dataType": "Formula",
+      "mandatory": "System",
+      "validation": "Generated from the net amount paid.",
+      "sampleEntry": "Rupees five million two hundred fifteen thousand six hundred thirty eight only",
+      "section": 5
+    },
+    {
+      "ref": "5.6",
+      "field": "Income tax withheld - section & deposit due date",
+      "dataType": "Text (100)",
+      "mandatory": "System",
+      "validation": "Section applied and the statutory deposit deadline.",
+      "sampleEntry": "Sec. 153(1)(a) - deposit by 15-Oct-2026",
+      "section": 5
+    },
+    {
+      "ref": "5.7",
+      "field": "Sales tax withheld - deposit due date",
+      "dataType": "Text (80)",
+      "mandatory": "System",
+      "validation": "Deposit deadline for sales tax withheld at source.",
+      "sampleEntry": "46310",
+      "section": 5
+    },
+    {
+      "ref": "5.8",
+      "field": "Tax deposit challan / CPR number & date",
+      "dataType": "Text (60)",
+      "mandatory": "Conditional",
+      "validation": "Recorded once the withheld tax is deposited with the FBR.",
+      "sampleEntry": "Pending",
+      "section": 5
+    },
+    {
+      "ref": "5.9",
+      "field": "Withholding tax certificate issued to payee",
+      "dataType": "Yes / No + Date",
+      "mandatory": "Yes",
+      "validation": "Certificate must be issued after deposit; tracked as an open task.",
+      "sampleEntry": "Pending",
+      "section": 5
+    },
+    {
+      "ref": "5.10",
+      "field": "Bank balance available before release (PKR)",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Checked at release; an insufficient balance blocks the voucher.",
+      "sampleEntry": "24500000",
+      "section": 5
+    },
+    {
+      "ref": "6.1",
+      "field": "Prepared by & date",
+      "dataType": "Text (120)",
+      "mandatory": "System",
+      "validation": "Accounts payable officer who raised the voucher.",
+      "sampleEntry": "AP Clerk - S. Nawaz, 09-Sep-2026",
+      "section": 6
+    },
+    {
+      "ref": "6.2",
+      "field": "Checked by (accounts) & date",
+      "dataType": "Text (120)",
+      "mandatory": "Yes",
+      "validation": "Verifies the bill reference, amounts, tax and bank details.",
+      "sampleEntry": "Manager Accounts - 09-Sep-2026",
+      "section": 6
+    },
+    {
+      "ref": "6.3",
+      "field": "Budget / fund availability confirmed",
+      "dataType": "Yes / No",
+      "mandatory": "Yes",
+      "validation": "Treasury confirms funds are available on the planned date.",
+      "sampleEntry": "Yes",
+      "section": 6
+    },
+    {
+      "ref": "6.4",
+      "field": "Approval level 1 - name, role & date",
+      "dataType": "Text (120)",
+      "mandatory": "Yes",
+      "validation": "First approver as per the delegation of authority matrix.",
+      "sampleEntry": "Manager Finance - 10-Sep-2026",
+      "section": 6
+    },
+    {
+      "ref": "6.5",
+      "field": "Approval level 2 - name, role & date",
+      "dataType": "Text (120)",
+      "mandatory": "Conditional",
+      "validation": "Required above the level 1 authority limit.",
+      "sampleEntry": "CFO - 10-Sep-2026",
+      "section": 6
+    },
+    {
+      "ref": "6.6",
+      "field": "Approval level 3 - name, role & date",
+      "dataType": "Text (120)",
+      "mandatory": "Conditional",
+      "validation": "Required for high-value payments above the CFO limit.",
+      "sampleEntry": "N/A",
+      "section": 6
+    },
+    {
+      "ref": "6.7",
+      "field": "Bank signatory A - name & date",
+      "dataType": "Text (120)",
+      "mandatory": "Yes",
+      "validation": "First authorised bank signatory.",
+      "sampleEntry": "Director - A. Raza, 10-Sep-2026",
+      "section": 6
+    },
+    {
+      "ref": "6.8",
+      "field": "Bank signatory B - name & date",
+      "dataType": "Text (120)",
+      "mandatory": "Conditional",
+      "validation": "Second signatory where joint operation of the account is required.",
+      "sampleEntry": "CFO - F. Ali, 10-Sep-2026",
+      "section": 6
+    },
+    {
+      "ref": "6.9",
+      "field": "Released by & date-time",
+      "dataType": "Text (120)",
+      "mandatory": "System",
+      "validation": "User who transmitted the payment, with the timestamp.",
+      "sampleEntry": "Treasury - 10-Sep-2026 14:20",
+      "section": 6
+    },
+    {
+      "ref": "6.10",
+      "field": "Segregation of duties check",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "The preparer, approver and releaser must be different users; the voucher is blocked otherwise.",
+      "sampleEntry": "Pass",
+      "section": 6
+    },
+    {
+      "ref": "6.11",
+      "field": "Remittance advice sent to payee",
+      "dataType": "Yes / No + Date",
+      "mandatory": "Yes",
+      "validation": "Advice emailed automatically on release.",
+      "sampleEntry": "Yes - 10-Sep-2026",
+      "section": 6
+    },
+    {
+      "ref": "6.12",
+      "field": "Payment reference / UTR number from bank",
+      "dataType": "Text (40)",
+      "mandatory": "System",
+      "validation": "Bank transaction reference captured on release or reconciliation.",
+      "sampleEntry": "RTGS-20260910-99871",
+      "section": 6
+    },
+    {
+      "ref": "7.1",
+      "field": "Bank statement date of debit",
+      "dataType": "Date",
+      "mandatory": "System",
+      "validation": "Captured during bank reconciliation.",
+      "sampleEntry": "46275",
+      "section": 7
+    },
+    {
+      "ref": "7.2",
+      "field": "Amount debited by bank (PKR)",
+      "dataType": "Number",
+      "mandatory": "System",
+      "validation": "Actual debit; a variance against the voucher amount raises an exception.",
+      "sampleEntry": "5215638",
+      "section": 7
+    },
+    {
+      "ref": "7.3",
+      "field": "Bank charges deducted (PKR)",
+      "dataType": "Number",
+      "mandatory": "No",
+      "validation": "Charged separately to the bank charges expense head.",
+      "sampleEntry": "250",
+      "section": 7
+    },
+    {
+      "ref": "7.4",
+      "field": "Reconciliation status",
+      "dataType": "Dropdown",
+      "mandatory": "System",
+      "validation": "Unreconciled / Reconciled / Exception - with the reconciliation date.",
+      "sampleEntry": "Reconciled",
+      "section": 7
+    },
+    {
+      "ref": "7.5",
+      "field": "Cheque clearance / bounce status",
+      "dataType": "Dropdown",
+      "mandatory": "Conditional",
+      "validation": "Presented / Cleared / Bounced / Stale - applies to cheque payments.",
+      "sampleEntry": "N/A",
+      "section": 7
+    },
+    {
+      "ref": "7.6",
+      "field": "Bounce reason & action taken",
+      "dataType": "Text (200)",
+      "mandatory": "Conditional",
+      "validation": "Mandatory where the instrument bounced; a replacement voucher is required.",
+      "sampleEntry": "N/A",
+      "section": 7
+    },
+    {
+      "ref": "7.7",
+      "field": "Payment acknowledgement from payee",
+      "dataType": "File upload",
+      "mandatory": "No",
+      "validation": "Receipt or acknowledgement provided by the payee.",
+      "sampleEntry": "Attached",
+      "section": 7
+    },
+    {
+      "ref": "7.8",
+      "field": "Effect on bill status",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Sets the referenced bill to Paid or Partially paid automatically on release.",
+      "sampleEntry": "Bill marked Paid",
+      "section": 7
+    },
+    {
+      "ref": "7.9",
+      "field": "Effect on payee balance",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Reduces the payee's outstanding balance and updates the ageing report.",
+      "sampleEntry": "Balance now nil",
+      "section": 7
+    },
+    {
+      "ref": "7.10",
+      "field": "GL posting reference & date",
+      "dataType": "Text (60)",
+      "mandatory": "System",
+      "validation": "Journal voucher created on release.",
+      "sampleEntry": "JV-2026-008912, 10-Sep-2026",
+      "section": 7
+    },
+    {
+      "ref": "8.1",
+      "field": "Approved bill / invoice copy",
+      "dataType": "File upload",
+      "mandatory": "Yes",
+      "validation": "The bill being settled; mandatory for bill payments.",
+      "sampleEntry": "Attached",
+      "section": 8
+    },
+    {
+      "ref": "8.2",
+      "field": "Goods receipt & delivery documents",
+      "dataType": "File upload",
+      "mandatory": "Conditional",
+      "validation": "Pulled from the bill record for the audit file.",
+      "sampleEntry": "Attached",
+      "section": 8
+    },
+    {
+      "ref": "8.3",
+      "field": "Advance request or payroll batch approval",
+      "dataType": "File upload",
+      "mandatory": "Conditional",
+      "validation": "Mandatory for advance and salary payments.",
+      "sampleEntry": "N/A",
+      "section": 8
+    },
+    {
+      "ref": "8.4",
+      "field": "Statutory challan / PSID",
+      "dataType": "File upload",
+      "mandatory": "Conditional",
+      "validation": "Mandatory for tax and statutory payments.",
+      "sampleEntry": "N/A",
+      "section": 8
+    },
+    {
+      "ref": "8.5",
+      "field": "Bank transfer instruction / cheque scan",
+      "dataType": "File upload",
+      "mandatory": "Yes",
+      "validation": "Signed instruction or the scanned instrument.",
+      "sampleEntry": "Attached",
+      "section": 8
+    },
+    {
+      "ref": "8.6",
+      "field": "Bank debit advice / UTR confirmation",
+      "dataType": "File upload",
+      "mandatory": "Yes",
+      "validation": "Confirmation of the debit from the bank.",
+      "sampleEntry": "Attached",
+      "section": 8
+    },
+    {
+      "ref": "8.7",
+      "field": "Withholding tax certificate issued",
+      "dataType": "File upload",
+      "mandatory": "Conditional",
+      "validation": "Filed once issued to the payee.",
+      "sampleEntry": "Pending",
+      "section": 8
+    },
+    {
+      "ref": "8.8",
+      "field": "Approval trail (system log)",
+      "dataType": "Note - system",
+      "mandatory": "System",
+      "validation": "Every approval, edit and release is logged with the user, timestamp and IP; released vouchers cannot be edited, only reversed.",
+      "sampleEntry": "Enabled",
+      "section": 8
+    },
+    {
+      "ref": "8.9",
+      "field": "Cancellation / reversal reference",
+      "dataType": "Text (60)",
+      "mandatory": "Conditional",
+      "validation": "Reversal voucher number where this payment is cancelled.",
+      "sampleEntry": "N/A",
+      "section": 8
+    },
+    {
+      "ref": "8.10",
+      "field": "Final voucher status",
+      "dataType": "Dropdown",
+      "mandatory": "System",
+      "validation": "Released / Cleared / Bounced / Cancelled / Reversed - with the effective date.",
+      "sampleEntry": "Cleared",
+      "section": 8
+    }
+  ]
+}

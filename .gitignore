@@ -1,0 +1,19 @@
+# Local production overrides (contain secrets)
+**/appsettings.Production.local.json
+ConstFire.Frontend/.env.development.local
+ConstFire.Frontend/.env.production.local
+
+# Build / publish outputs
+publish-smarterasp/
+publish-staging/
+publish-staging-v2/
+ConstFire-deploy.zip
+run-api/
+build-out/
+build-out-v2/
+
+# Dependencies & IDE
+**/node_modules/
+**/bin/
+**/obj/
+**/dist/

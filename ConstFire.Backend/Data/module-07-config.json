@@ -1,0 +1,1389 @@
+{
+  "code": "07",
+  "name": "MANPOWER / HR - EMPLOYEE REGISTRATION",
+  "category": "ERP Module",
+  "recordCodePrefix": "EMP",
+  "listColumns": [
+    "_recordCode",
+    "1.1",
+    "1.2",
+    "1.3"
+  ],
+  "sections": [
+    {
+      "num": 1,
+      "title": "EMPLOYEE IDENTIFICATION & PERSONAL DETAILS  (repeating register - unlimited employees)",
+      "repeating": false
+    },
+    {
+      "num": 2,
+      "title": "CONTACT, ADDRESS & NEXT OF KIN",
+      "repeating": false
+    },
+    {
+      "num": 3,
+      "title": "EMPLOYMENT & POSTING DETAILS",
+      "repeating": false
+    },
+    {
+      "num": 4,
+      "title": "QUALIFICATION, EXPERIENCE & TRAINING",
+      "repeating": false
+    },
+    {
+      "num": 5,
+      "title": "STATUTORY REGISTRATIONS, TAX & MEDICAL COMPLIANCE",
+      "repeating": false
+    },
+    {
+      "num": 6,
+      "title": "COMPENSATION & PAYROLL SETUP",
+      "repeating": false
+    },
+    {
+      "num": 7,
+      "title": "BANK ACCOUNT DETAILS FOR SALARY",
+      "repeating": false
+    },
+    {
+      "num": 8,
+      "title": "LEAVE, ATTENDANCE & WORKING CALENDAR",
+      "repeating": false
+    },
+    {
+      "num": 9,
+      "title": "SUPPORTING DOCUMENTS CHECKLIST",
+      "repeating": false
+    },
+    {
+      "num": 10,
+      "title": "DECLARATION, AUTHORISATION & INTERNAL APPROVAL",
+      "repeating": false
+    }
+  ],
+  "fields": [
+    {
+      "ref": "1.1",
+      "field": "Employee code",
+      "dataType": "Text (10)",
+      "mandatory": "System",
+      "validation": "Auto-generated, unique and immutable (e.g. EMP-00001). REPEATING REGISTER - unlimited employees.",
+      "sampleEntry": "EMP-00256",
+      "section": 1
+    },
+    {
+      "ref": "1.2",
+      "field": "Registering enterprise / company",
+      "dataType": "Lookup",
+      "mandatory": "Yes",
+      "validation": "Links the employee to the enterprise registered on sheet 01.",
+      "sampleEntry": "ENT-000145 - Steelstone IT (Pvt) Ltd",
+      "section": 1
+    },
+    {
+      "ref": "1.3",
+      "field": "Employment category (GATING FIELD)",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Permanent / Probationary / Contract / Daily wage / Apprentice or Trainee / Consultant / Expatriate. Drives which fields below are mandatory.",
+      "sampleEntry": "Permanent",
+      "section": 1
+    },
+    {
+      "ref": "1.4",
+      "field": "Full name",
+      "dataType": "Text (100)",
+      "mandatory": "Yes",
+      "validation": "Exactly as printed on the CNIC.",
+      "sampleEntry": "Usman Ghani",
+      "section": 1
+    },
+    {
+      "ref": "1.5",
+      "field": "Father's / husband's name",
+      "dataType": "Text (100)",
+      "mandatory": "Yes",
+      "validation": "As printed on the CNIC.",
+      "sampleEntry": "Abdul Ghani",
+      "section": 1
+    },
+    {
+      "ref": "1.6",
+      "field": "CNIC number",
+      "dataType": "Text (15)",
+      "mandatory": "Pakistani only",
+      "validation": "Format XXXXX-XXXXXXX-X; unique across the employee register.",
+      "sampleEntry": "35202-9988776-1",
+      "section": 1
+    },
+    {
+      "ref": "1.7",
+      "field": "CNIC - valid until (expiry date)",
+      "dataType": "Date",
+      "mandatory": "Pakistani only",
+      "validation": "DATE FIELD - amber 30 days before expiry, red once expired.",
+      "sampleEntry": "47748",
+      "section": 1
+    },
+    {
+      "ref": "1.8",
+      "field": "CNIC - status (system-derived)",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Active while valid. INACTIVE BY DEFAULT after expiry - payroll release and gate access are flagged until renewed.",
+      "sampleEntry": "Active",
+      "section": 1
+    },
+    {
+      "ref": "1.9",
+      "field": "Passport number & nationality",
+      "dataType": "Text (40)",
+      "mandatory": "Expatriate only",
+      "validation": "Required where field 1.3 = Expatriate.",
+      "sampleEntry": "N/A",
+      "section": 1
+    },
+    {
+      "ref": "1.10",
+      "field": "Work visa / work permit number",
+      "dataType": "Text (40)",
+      "mandatory": "Expatriate only",
+      "validation": "Permit number issued by the Ministry of Interior / Board of Investment.",
+      "sampleEntry": "N/A",
+      "section": 1
+    },
+    {
+      "ref": "1.11",
+      "field": "Work visa / work permit - valid until",
+      "dataType": "Date",
+      "mandatory": "Expatriate only",
+      "validation": "DATE FIELD - amber 30 days before expiry, red once expired. Employment is suspended automatically on expiry.",
+      "sampleEntry": "N/A",
+      "section": 1
+    },
+    {
+      "ref": "1.12",
+      "field": "Date of birth",
+      "dataType": "Date",
+      "mandatory": "Yes",
+      "validation": "Employee must be 18 or older; 14-18 only where permitted by the Factories Act for light work.",
+      "sampleEntry": "33891",
+      "section": 1
+    },
+    {
+      "ref": "1.13",
+      "field": "Age (system-derived)",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Calculated from the date of birth; flags employees approaching retirement age (60).",
+      "sampleEntry": "33",
+      "section": 1
+    },
+    {
+      "ref": "1.14",
+      "field": "Gender",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Male / Female / Other.",
+      "sampleEntry": "Male",
+      "section": 1
+    },
+    {
+      "ref": "1.15",
+      "field": "Marital status",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Single / Married / Widowed / Divorced - affects dependant and benefit records.",
+      "sampleEntry": "Married",
+      "section": 1
+    },
+    {
+      "ref": "1.16",
+      "field": "Religion",
+      "dataType": "Dropdown",
+      "mandatory": "No",
+      "validation": "Recorded for holiday and welfare entitlement purposes.",
+      "sampleEntry": "Islam",
+      "section": 1
+    },
+    {
+      "ref": "1.17",
+      "field": "Blood group",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "A+ / A- / B+ / B- / AB+ / AB- / O+ / O- ; recorded for emergency response.",
+      "sampleEntry": "O+",
+      "section": 1
+    },
+    {
+      "ref": "1.18",
+      "field": "Disability status & nature",
+      "dataType": "Text (80)",
+      "mandatory": "No",
+      "validation": "Recorded for the disabled persons employment quota and workplace accommodation.",
+      "sampleEntry": "None",
+      "section": 1
+    },
+    {
+      "ref": "1.19",
+      "field": "Photograph",
+      "dataType": "File upload",
+      "mandatory": "Yes",
+      "validation": "Passport-size colour photograph taken within the last 6 months.",
+      "sampleEntry": "Attached",
+      "section": 1
+    },
+    {
+      "ref": "2.1",
+      "field": "Mobile number",
+      "dataType": "Phone",
+      "mandatory": "Yes",
+      "validation": "+92-3XX-XXXXXXX; used for payslip and roster notifications.",
+      "sampleEntry": "+92-300-4455661",
+      "section": 2
+    },
+    {
+      "ref": "2.2",
+      "field": "Alternate mobile number",
+      "dataType": "Phone",
+      "mandatory": "No",
+      "validation": "Second reachable number.",
+      "sampleEntry": "+92-321-7788991",
+      "section": 2
+    },
+    {
+      "ref": "2.3",
+      "field": "Personal email address",
+      "dataType": "Email",
+      "mandatory": "Yes",
+      "validation": "Used for onboarding and payslip delivery before the official email is issued.",
+      "sampleEntry": "usman.ghani@gmail.com",
+      "section": 2
+    },
+    {
+      "ref": "2.4",
+      "field": "Official company email address",
+      "dataType": "Email",
+      "mandatory": "Conditional",
+      "validation": "Issued on joining; mandatory for permanent and contract staff.",
+      "sampleEntry": "usman.ghani@steelstone.com.pk",
+      "section": 2
+    },
+    {
+      "ref": "2.5",
+      "field": "Present / residential address",
+      "dataType": "Text (250)",
+      "mandatory": "Yes",
+      "validation": "Full address including city and province.",
+      "sampleEntry": "House 22, Street 5, Johar Town, Lahore",
+      "section": 2
+    },
+    {
+      "ref": "2.6",
+      "field": "Permanent address (as per CNIC)",
+      "dataType": "Text (250)",
+      "mandatory": "Yes",
+      "validation": "Full address as printed on the CNIC.",
+      "sampleEntry": "Chak 91, Tehsil Okara, Punjab",
+      "section": 2
+    },
+    {
+      "ref": "2.7",
+      "field": "City / province of residence",
+      "dataType": "Text (80)",
+      "mandatory": "Yes",
+      "validation": "Determines the applicable provincial social security authority.",
+      "sampleEntry": "Lahore / Punjab",
+      "section": 2
+    },
+    {
+      "ref": "2.8",
+      "field": "Domicile district & province",
+      "dataType": "Text (60)",
+      "mandatory": "Yes",
+      "validation": "Required for regional quota reporting.",
+      "sampleEntry": "Okara / Punjab",
+      "section": 2
+    },
+    {
+      "ref": "2.9",
+      "field": "Emergency contact - name & relation",
+      "dataType": "Text (100)",
+      "mandatory": "Yes",
+      "validation": "Person to be contacted in case of accident or emergency.",
+      "sampleEntry": "Ayesha Usman / Wife",
+      "section": 2
+    },
+    {
+      "ref": "2.10",
+      "field": "Emergency contact - mobile number",
+      "dataType": "Phone",
+      "mandatory": "Yes",
+      "validation": "+92-3XX-XXXXXXX",
+      "sampleEntry": "+92-333-2211445",
+      "section": 2
+    },
+    {
+      "ref": "2.11",
+      "field": "Next of kin for benefits & gratuity",
+      "dataType": "Text (120)",
+      "mandatory": "Yes",
+      "validation": "Name, relation and CNIC of the nominee for terminal benefits.",
+      "sampleEntry": "Ayesha Usman / Wife / 35202-1122334-8",
+      "section": 2
+    },
+    {
+      "ref": "2.12",
+      "field": "Dependants (name, relation, date of birth)",
+      "dataType": "Repeating table",
+      "mandatory": "No",
+      "validation": "Used for medical cover and dependant allowances.",
+      "sampleEntry": "2 children",
+      "section": 2
+    },
+    {
+      "ref": "3.1",
+      "field": "Date of joining",
+      "dataType": "Date",
+      "mandatory": "Yes",
+      "validation": "First day of service; drives seniority, gratuity and leave accrual.",
+      "sampleEntry": "46266",
+      "section": 3
+    },
+    {
+      "ref": "3.2",
+      "field": "Designation / job title",
+      "dataType": "Text (60)",
+      "mandatory": "Yes",
+      "validation": "As stated in the appointment letter.",
+      "sampleEntry": "Production Supervisor",
+      "section": 3
+    },
+    {
+      "ref": "3.3",
+      "field": "Department / function",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Production / Maintenance / Quality / Logistics & Dispatch / Sales / Finance / HR & Admin / IT / Procurement / Security.",
+      "sampleEntry": "Production",
+      "section": 3
+    },
+    {
+      "ref": "3.4",
+      "field": "Section / cost centre",
+      "dataType": "Text (60)",
+      "mandatory": "Yes",
+      "validation": "Cost centre the salary is charged to.",
+      "sampleEntry": "CC-2100 Packing Plant",
+      "section": 3
+    },
+    {
+      "ref": "3.5",
+      "field": "Work location / plant",
+      "dataType": "Lookup",
+      "mandatory": "Yes",
+      "validation": "Location or plant from the enterprise location master.",
+      "sampleEntry": "PLANT-01 Nooriabad",
+      "section": 3
+    },
+    {
+      "ref": "3.6",
+      "field": "Reporting manager",
+      "dataType": "Lookup",
+      "mandatory": "Yes",
+      "validation": "Employee code and name of the line manager.",
+      "sampleEntry": "EMP-00104 - Engr. Saad Rehman",
+      "section": 3
+    },
+    {
+      "ref": "3.7",
+      "field": "Grade / pay scale",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Management grade or worker scale as per the enterprise grade structure.",
+      "sampleEntry": "M-3",
+      "section": 3
+    },
+    {
+      "ref": "3.8",
+      "field": "Employment status",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Active / On probation / On leave / Suspended / Notice period / Resigned / Terminated / Retired - with effective date.",
+      "sampleEntry": "On probation",
+      "section": 3
+    },
+    {
+      "ref": "3.9",
+      "field": "Probation period (months) & confirmation due date",
+      "dataType": "Text (60)",
+      "mandatory": "Conditional",
+      "validation": "Probation is normally 3 months; the system raises a confirmation task on the due date.",
+      "sampleEntry": "3 months - due 30-Nov-2026",
+      "section": 3
+    },
+    {
+      "ref": "3.10",
+      "field": "Contract start date",
+      "dataType": "Date",
+      "mandatory": "Contract only",
+      "validation": "Required where field 1.3 is Contract, Daily wage, Apprentice or Consultant.",
+      "sampleEntry": "N/A",
+      "section": 3
+    },
+    {
+      "ref": "3.11",
+      "field": "Contract end date",
+      "dataType": "Date",
+      "mandatory": "Contract only",
+      "validation": "DATE FIELD - amber 30 days before expiry, red once expired.",
+      "sampleEntry": "N/A",
+      "section": 3
+    },
+    {
+      "ref": "3.12",
+      "field": "Contract - status (system-derived)",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Active while within the contract term. INACTIVE BY DEFAULT after the end date - payroll and access are suspended until the contract is renewed.",
+      "sampleEntry": "Not applicable",
+      "section": 3
+    },
+    {
+      "ref": "3.13",
+      "field": "Shift / roster assigned",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "General shift / A 06:00-14:00 / B 14:00-22:00 / C 22:00-06:00 / Rotating.",
+      "sampleEntry": "Rotating (A-B-C)",
+      "section": 3
+    },
+    {
+      "ref": "3.14",
+      "field": "Weekly off day",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Sunday (default) / Friday / Rotating - drives attendance and overtime calculation.",
+      "sampleEntry": "Rotating",
+      "section": 3
+    },
+    {
+      "ref": "3.15",
+      "field": "Attendance / biometric ID",
+      "dataType": "Text (20)",
+      "mandatory": "Yes",
+      "validation": "Card or biometric enrolment number used by the time attendance system.",
+      "sampleEntry": "BIO-00256",
+      "section": 3
+    },
+    {
+      "ref": "3.16",
+      "field": "Gate pass / access card number",
+      "dataType": "Text (20)",
+      "mandatory": "Yes",
+      "validation": "Site access credential issued at joining.",
+      "sampleEntry": "GP-00256",
+      "section": 3
+    },
+    {
+      "ref": "3.17",
+      "field": "Gate pass / access card - valid until",
+      "dataType": "Date",
+      "mandatory": "Yes",
+      "validation": "DATE FIELD - amber 30 days before expiry, red once expired. Access is revoked automatically on expiry or when employment is not Active.",
+      "sampleEntry": "46630",
+      "section": 3
+    },
+    {
+      "ref": "3.18",
+      "field": "Previous employee code (rehire)",
+      "dataType": "Text (10)",
+      "mandatory": "No",
+      "validation": "Where the person has served the enterprise before.",
+      "sampleEntry": "N/A",
+      "section": 3
+    },
+    {
+      "ref": "3.19",
+      "field": "Notice period (days) as per contract",
+      "dataType": "Integer",
+      "mandatory": "Yes",
+      "validation": "Applied on resignation or termination.",
+      "sampleEntry": "30",
+      "section": 3
+    },
+    {
+      "ref": "4.1",
+      "field": "Highest qualification",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Below Matric / Matric / Intermediate / Diploma / Bachelors / Masters / PhD.",
+      "sampleEntry": "Bachelors",
+      "section": 4
+    },
+    {
+      "ref": "4.2",
+      "field": "Degree / certification title & specialisation",
+      "dataType": "Text (120)",
+      "mandatory": "Yes",
+      "validation": "Full title of the qualification.",
+      "sampleEntry": "B.Sc. Mechanical Engineering",
+      "section": 4
+    },
+    {
+      "ref": "4.3",
+      "field": "Institution & year of completion",
+      "dataType": "Text (120)",
+      "mandatory": "Yes",
+      "validation": "Awarding institution and year.",
+      "sampleEntry": "UET Lahore, 2014",
+      "section": 4
+    },
+    {
+      "ref": "4.4",
+      "field": "HEC attestation / degree verification status",
+      "dataType": "Text (60)",
+      "mandatory": "Yes",
+      "validation": "Verification of the qualification before confirmation.",
+      "sampleEntry": "Verified 20-Aug-2026",
+      "section": 4
+    },
+    {
+      "ref": "4.5",
+      "field": "Professional licence / registration number",
+      "dataType": "Text (40)",
+      "mandatory": "Conditional",
+      "validation": "PEC, ICAP, ICMAP, PMDC or trade certification where the role requires it.",
+      "sampleEntry": "PEC/ENG/44112",
+      "section": 4
+    },
+    {
+      "ref": "4.6",
+      "field": "Professional licence - valid until",
+      "dataType": "Date",
+      "mandatory": "Conditional",
+      "validation": "DATE FIELD - amber 30 days before expiry, red once expired.",
+      "sampleEntry": "46752",
+      "section": 4
+    },
+    {
+      "ref": "4.7",
+      "field": "Professional licence - status (system-derived)",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Active while valid. INACTIVE BY DEFAULT after expiry - the employee cannot sign off regulated work until renewed.",
+      "sampleEntry": "Active",
+      "section": 4
+    },
+    {
+      "ref": "4.8",
+      "field": "Total years of prior experience",
+      "dataType": "Number",
+      "mandatory": "Yes",
+      "validation": "Experience before joining this enterprise.",
+      "sampleEntry": "8",
+      "section": 4
+    },
+    {
+      "ref": "4.9",
+      "field": "Previous employer(s) - name, designation & period",
+      "dataType": "Repeating table",
+      "mandatory": "Yes",
+      "validation": "One row per previous employment.",
+      "sampleEntry": "Pak Cement Ltd - Shift Engineer, 2018-2026",
+      "section": 4
+    },
+    {
+      "ref": "4.10",
+      "field": "Reference check - referee, contact & outcome",
+      "dataType": "Text (180)",
+      "mandatory": "Yes",
+      "validation": "At least one reference verified before confirmation.",
+      "sampleEntry": "Verified - former line manager, satisfactory",
+      "section": 4
+    },
+    {
+      "ref": "4.11",
+      "field": "Key skills / competencies",
+      "dataType": "Multi-select",
+      "mandatory": "No",
+      "validation": "Technical and soft skills used for deployment and succession planning.",
+      "sampleEntry": "Kiln operation, SAP PM, team leadership",
+      "section": 4
+    },
+    {
+      "ref": "4.12",
+      "field": "Driving licence number & class (where the role involves driving)",
+      "dataType": "Text (60)",
+      "mandatory": "Conditional",
+      "validation": "The full driver record is held in the Vehicle & Driver Registration module.",
+      "sampleEntry": "N/A",
+      "section": 4
+    },
+    {
+      "ref": "4.13",
+      "field": "Driving licence - valid until",
+      "dataType": "Date",
+      "mandatory": "Conditional",
+      "validation": "DATE FIELD - amber 30 days before expiry, red once expired.",
+      "sampleEntry": "N/A",
+      "section": 4
+    },
+    {
+      "ref": "4.14",
+      "field": "Mandatory safety induction completed - date",
+      "dataType": "Date",
+      "mandatory": "Yes",
+      "validation": "Site safety induction before first entry to an operational area.",
+      "sampleEntry": "46264",
+      "section": 4
+    },
+    {
+      "ref": "4.15",
+      "field": "Training record (course, provider, date, expiry)",
+      "dataType": "Repeating table",
+      "mandatory": "No",
+      "validation": "Includes first aid, fire fighting, confined space and forklift certification with expiry tracking.",
+      "sampleEntry": "Fire fighting - Aug-2026, expires Aug-2028",
+      "section": 4
+    },
+    {
+      "ref": "5.1",
+      "field": "National Tax Number (NTN) of employee",
+      "dataType": "Text (9)",
+      "mandatory": "Conditional",
+      "validation": "Required where annual salary exceeds the taxable threshold; otherwise the CNIC serves as the NTN.",
+      "sampleEntry": "9988776-1",
+      "section": 5
+    },
+    {
+      "ref": "5.2",
+      "field": "FBR filer status (Active Taxpayer List)",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Filer / Non-filer - recorded for reference and tax planning.",
+      "sampleEntry": "Filer",
+      "section": 5
+    },
+    {
+      "ref": "5.3",
+      "field": "Income tax exemption / reduced-rate certificate no.",
+      "dataType": "Text (40)",
+      "mandatory": "No",
+      "validation": "Certificate issued by the Commissioner Inland Revenue, if any.",
+      "sampleEntry": "N/A",
+      "section": 5
+    },
+    {
+      "ref": "5.4",
+      "field": "Exemption certificate - valid until",
+      "dataType": "Date",
+      "mandatory": "Conditional",
+      "validation": "DATE FIELD - amber 30 days before expiry, red once expired; normal tax deduction resumes automatically.",
+      "sampleEntry": "N/A",
+      "section": 5
+    },
+    {
+      "ref": "5.5",
+      "field": "EOBI registration number",
+      "dataType": "Text (20)",
+      "mandatory": "Yes",
+      "validation": "Employees Old-Age Benefits Institution registration; contribution deducted through payroll.",
+      "sampleEntry": "EOBI-042-9988776",
+      "section": 5
+    },
+    {
+      "ref": "5.6",
+      "field": "EOBI registration date",
+      "dataType": "Date",
+      "mandatory": "Yes",
+      "validation": "Must be within 30 days of the date of joining.",
+      "sampleEntry": "46280",
+      "section": 5
+    },
+    {
+      "ref": "5.7",
+      "field": "Provincial social security number (PESSI / SESSI / KPESSI)",
+      "dataType": "Text (20)",
+      "mandatory": "Conditional",
+      "validation": "Required where the employee's wage is within the social security wage ceiling.",
+      "sampleEntry": "PESSI/LHR/556677",
+      "section": 5
+    },
+    {
+      "ref": "5.8",
+      "field": "Provincial social security registration date",
+      "dataType": "Date",
+      "mandatory": "Conditional",
+      "validation": "Registration with the provincial institution of the work location.",
+      "sampleEntry": "46280",
+      "section": 5
+    },
+    {
+      "ref": "5.9",
+      "field": "Provident fund membership number",
+      "dataType": "Text (20)",
+      "mandatory": "Conditional",
+      "validation": "Where the enterprise operates a recognised provident fund.",
+      "sampleEntry": "PF-00256",
+      "section": 5
+    },
+    {
+      "ref": "5.10",
+      "field": "Gratuity scheme applicable",
+      "dataType": "Yes / No",
+      "mandatory": "Yes",
+      "validation": "Entitlement accrues under the Standing Orders Ordinance 1968 or the contract.",
+      "sampleEntry": "Yes",
+      "section": 5
+    },
+    {
+      "ref": "5.11",
+      "field": "Group life / health insurance policy & member number",
+      "dataType": "Text (100)",
+      "mandatory": "Yes",
+      "validation": "Insurer, policy number and the employee's membership number.",
+      "sampleEntry": "EFU Life G-2026-118 / M-00256",
+      "section": 5
+    },
+    {
+      "ref": "5.12",
+      "field": "Group insurance - valid until",
+      "dataType": "Date",
+      "mandatory": "Yes",
+      "validation": "DATE FIELD - amber 30 days before expiry, red once expired; cover lapses until renewed.",
+      "sampleEntry": "46568",
+      "section": 5
+    },
+    {
+      "ref": "5.13",
+      "field": "Pre-employment medical examination - date & result",
+      "dataType": "Text (80)",
+      "mandatory": "Yes",
+      "validation": "Fitness for the assigned role, including any restriction.",
+      "sampleEntry": "28-Aug-2026 - fit for duty",
+      "section": 5
+    },
+    {
+      "ref": "5.14",
+      "field": "Periodic medical fitness - valid until",
+      "dataType": "Date",
+      "mandatory": "Conditional",
+      "validation": "DATE FIELD - required for plant, driving and food-handling roles; amber at 30 days, red once expired.",
+      "sampleEntry": "46630",
+      "section": 5
+    },
+    {
+      "ref": "5.15",
+      "field": "Medical fitness - status (system-derived)",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Active while valid. INACTIVE BY DEFAULT after expiry - the employee cannot be rostered to operational duty until re-examined.",
+      "sampleEntry": "Active",
+      "section": 5
+    },
+    {
+      "ref": "5.16",
+      "field": "Police verification / character certificate number",
+      "dataType": "Text (30)",
+      "mandatory": "Conditional",
+      "validation": "Required for security, cash-handling and driving roles.",
+      "sampleEntry": "N/A",
+      "section": 5
+    },
+    {
+      "ref": "5.17",
+      "field": "Police verification - valid until",
+      "dataType": "Date",
+      "mandatory": "Conditional",
+      "validation": "DATE FIELD - amber 30 days before expiry, red once expired. The employee is withheld from restricted duties on expiry.",
+      "sampleEntry": "N/A",
+      "section": 5
+    },
+    {
+      "ref": "5.18",
+      "field": "COMPLIANCE STATUS (system-derived)",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Compliant only when the CNIC, contract (if applicable), professional licence, medical fitness and insurance are all within validity. If ANY expires the employee record is set to INACTIVE automatically and flagged to HR.",
+      "sampleEntry": "Compliant",
+      "section": 5
+    },
+    {
+      "ref": "6.1",
+      "field": "Salary basis",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Monthly / Daily wage / Hourly / Piece rate - drives the payroll calculation method.",
+      "sampleEntry": "Monthly",
+      "section": 6
+    },
+    {
+      "ref": "6.2",
+      "field": "Gross monthly salary (PKR)",
+      "dataType": "Number",
+      "mandatory": "Yes",
+      "validation": "Total cost to company before deductions; must meet the notified provincial minimum wage.",
+      "sampleEntry": "135000",
+      "section": 6
+    },
+    {
+      "ref": "6.3",
+      "field": "Basic salary (PKR)",
+      "dataType": "Number",
+      "mandatory": "Yes",
+      "validation": "Basis for provident fund, gratuity and overtime calculation.",
+      "sampleEntry": "81000",
+      "section": 6
+    },
+    {
+      "ref": "6.4",
+      "field": "House rent allowance (PKR)",
+      "dataType": "Number",
+      "mandatory": "Yes",
+      "validation": "Normally 45% of basic salary.",
+      "sampleEntry": "36450",
+      "section": 6
+    },
+    {
+      "ref": "6.5",
+      "field": "Utilities / conveyance allowance (PKR)",
+      "dataType": "Number",
+      "mandatory": "No",
+      "validation": "Fixed monthly allowances.",
+      "sampleEntry": "17550",
+      "section": 6
+    },
+    {
+      "ref": "6.6",
+      "field": "Other allowances (shift, site, fuel, mobile)",
+      "dataType": "Repeating table",
+      "mandatory": "No",
+      "validation": "One row per allowance with amount and taxability.",
+      "sampleEntry": "Shift allowance PKR 8,000",
+      "section": 6
+    },
+    {
+      "ref": "6.7",
+      "field": "Overtime eligibility & rate",
+      "dataType": "Text (80)",
+      "mandatory": "Yes",
+      "validation": "Workers are entitled to double the ordinary rate under the Factories Act 1934.",
+      "sampleEntry": "Eligible - 2x ordinary rate",
+      "section": 6
+    },
+    {
+      "ref": "6.8",
+      "field": "Income tax deduction method",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Monthly withholding as per the salary slab / Exempt (below threshold).",
+      "sampleEntry": "Monthly withholding",
+      "section": 6
+    },
+    {
+      "ref": "6.9",
+      "field": "EOBI contribution - employee & employer share",
+      "dataType": "Text (60)",
+      "mandatory": "Yes",
+      "validation": "Statutory contribution rates applied through payroll.",
+      "sampleEntry": "Employee 1%, Employer 5% of minimum wage",
+      "section": 6
+    },
+    {
+      "ref": "6.10",
+      "field": "Provident fund contribution rate",
+      "dataType": "Percentage",
+      "mandatory": "Conditional",
+      "validation": "Employee and matching employer contribution.",
+      "sampleEntry": "8.33% each",
+      "section": 6
+    },
+    {
+      "ref": "6.11",
+      "field": "Other recurring deductions",
+      "dataType": "Repeating table",
+      "mandatory": "No",
+      "validation": "Loan instalments, advances, union dues, canteen recoveries.",
+      "sampleEntry": "Advance recovery PKR 5,000 per month",
+      "section": 6
+    },
+    {
+      "ref": "6.12",
+      "field": "Annual increment / review month",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Month in which the salary review falls due.",
+      "sampleEntry": "July",
+      "section": 6
+    },
+    {
+      "ref": "6.13",
+      "field": "Bonus entitlement",
+      "dataType": "Text (80)",
+      "mandatory": "Yes",
+      "validation": "Statutory or discretionary bonus and the basis of calculation.",
+      "sampleEntry": "One month basic, payable in June",
+      "section": 6
+    },
+    {
+      "ref": "6.14",
+      "field": "Leave encashment eligibility",
+      "dataType": "Yes / No",
+      "mandatory": "Yes",
+      "validation": "Whether unused annual leave is encashable on separation.",
+      "sampleEntry": "Yes",
+      "section": 6
+    },
+    {
+      "ref": "6.15",
+      "field": "Payroll cycle & payment date",
+      "dataType": "Text (60)",
+      "mandatory": "Yes",
+      "validation": "Salary must be paid within 7 days of the end of the wage period.",
+      "sampleEntry": "Monthly, paid on the 3rd working day",
+      "section": 6
+    },
+    {
+      "ref": "6.16",
+      "field": "Cost centre for payroll posting",
+      "dataType": "Lookup",
+      "mandatory": "Yes",
+      "validation": "General ledger cost centre to which the salary is charged; must match field 3.4.",
+      "sampleEntry": "CC-2100 Packing Plant",
+      "section": 6
+    },
+    {
+      "ref": "7.1",
+      "field": "Bank name",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "SBP-licensed scheduled bank; salary is paid by bank transfer.",
+      "sampleEntry": "Bank Alfalah Limited",
+      "section": 7
+    },
+    {
+      "ref": "7.2",
+      "field": "Branch name & code",
+      "dataType": "Text (80)",
+      "mandatory": "Yes",
+      "validation": "Branch code numeric.",
+      "sampleEntry": "Johar Town Branch, Lahore - 0512",
+      "section": 7
+    },
+    {
+      "ref": "7.3",
+      "field": "Title of account",
+      "dataType": "Text (100)",
+      "mandatory": "Yes",
+      "validation": "Must match the employee name in field 1.4; mismatches block salary transfer.",
+      "sampleEntry": "Usman Ghani",
+      "section": 7
+    },
+    {
+      "ref": "7.4",
+      "field": "Account number",
+      "dataType": "Text (20)",
+      "mandatory": "Yes",
+      "validation": "Numeric as issued by the bank; leading zeros are preserved.",
+      "sampleEntry": "5120010044556",
+      "section": 7
+    },
+    {
+      "ref": "7.5",
+      "field": "IBAN",
+      "dataType": "Text (24)",
+      "mandatory": "Yes",
+      "validation": "PK + 2 check digits + 4-letter bank code + 16 alphanumeric characters.",
+      "sampleEntry": "PK41ALFH0005120010044556",
+      "section": 7
+    },
+    {
+      "ref": "7.6",
+      "field": "Account type & currency",
+      "dataType": "Text (40)",
+      "mandatory": "Yes",
+      "validation": "Current or savings account, PKR.",
+      "sampleEntry": "Savings, PKR",
+      "section": 7
+    },
+    {
+      "ref": "7.7",
+      "field": "Salary payment mode",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Bank transfer (default) / Cheque / Cash - cash only for daily wage staff where permitted.",
+      "sampleEntry": "Bank transfer",
+      "section": 7
+    },
+    {
+      "ref": "7.8",
+      "field": "Bank details verified by HR & finance",
+      "dataType": "Yes / No + Date",
+      "mandatory": "Internal",
+      "validation": "Dual verification before the first salary run.",
+      "sampleEntry": "Yes - 30-Aug-2026",
+      "section": 7
+    },
+    {
+      "ref": "7.9",
+      "field": "Mobile wallet / branchless banking account",
+      "dataType": "Text (30)",
+      "mandatory": "No",
+      "validation": "Alternate disbursement channel for daily wage staff.",
+      "sampleEntry": "N/A",
+      "section": 7
+    },
+    {
+      "ref": "7.10",
+      "field": "Bank account status",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Active / Closed - with effective date; salary is held if the account is closed.",
+      "sampleEntry": "Active",
+      "section": 7
+    },
+    {
+      "ref": "8.1",
+      "field": "Annual (earned) leave entitlement - days",
+      "dataType": "Integer",
+      "mandatory": "Yes",
+      "validation": "Minimum 14 consecutive days after 12 months of continuous service (Factories Act 1934).",
+      "sampleEntry": "14",
+      "section": 8
+    },
+    {
+      "ref": "8.2",
+      "field": "Casual leave entitlement - days",
+      "dataType": "Integer",
+      "mandatory": "Yes",
+      "validation": "Normally 10 days per calendar year.",
+      "sampleEntry": "10",
+      "section": 8
+    },
+    {
+      "ref": "8.3",
+      "field": "Sick leave entitlement - days",
+      "dataType": "Integer",
+      "mandatory": "Yes",
+      "validation": "Normally 16 days per year on half average pay.",
+      "sampleEntry": "16",
+      "section": 8
+    },
+    {
+      "ref": "8.4",
+      "field": "Maternity / paternity leave entitlement",
+      "dataType": "Text (60)",
+      "mandatory": "Conditional",
+      "validation": "As per the Maternity Benefits Ordinance and enterprise policy.",
+      "sampleEntry": "Maternity 180 days (female staff)",
+      "section": 8
+    },
+    {
+      "ref": "8.5",
+      "field": "Leave carry-forward rule",
+      "dataType": "Text (80)",
+      "mandatory": "Yes",
+      "validation": "Maximum days that may be carried into the next year.",
+      "sampleEntry": "Up to 14 days annual leave",
+      "section": 8
+    },
+    {
+      "ref": "8.6",
+      "field": "Leave year basis",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Calendar year / Financial year / Service anniversary.",
+      "sampleEntry": "Calendar year",
+      "section": 8
+    },
+    {
+      "ref": "8.7",
+      "field": "Opening leave balance at registration",
+      "dataType": "Text (60)",
+      "mandatory": "Conditional",
+      "validation": "Balances transferred for rehires or transfers.",
+      "sampleEntry": "Nil",
+      "section": 8
+    },
+    {
+      "ref": "8.8",
+      "field": "Attendance capture method",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Biometric / Card swipe / Mobile geo-fenced app / Manual register.",
+      "sampleEntry": "Biometric",
+      "section": 8
+    },
+    {
+      "ref": "8.9",
+      "field": "Standard working hours per day / week",
+      "dataType": "Text (40)",
+      "mandatory": "Yes",
+      "validation": "Maximum 8 hours per day and 48 hours per week under the Factories Act.",
+      "sampleEntry": "8 hours per day / 48 per week",
+      "section": 8
+    },
+    {
+      "ref": "8.10",
+      "field": "Overtime approval authority",
+      "dataType": "Lookup",
+      "mandatory": "Yes",
+      "validation": "Manager authorised to approve overtime for this employee.",
+      "sampleEntry": "Department Head - Production",
+      "section": 8
+    },
+    {
+      "ref": "8.11",
+      "field": "Public holidays calendar applicable",
+      "dataType": "Lookup",
+      "mandatory": "Yes",
+      "validation": "Gazetted holidays plus enterprise-declared closures for the work location.",
+      "sampleEntry": "Pakistan gazetted holidays 2026-27",
+      "section": 8
+    },
+    {
+      "ref": "8.12",
+      "field": "Roster / duty calendar effective from",
+      "dataType": "Date",
+      "mandatory": "Yes",
+      "validation": "Calendars are versioned; the system applies the version valid on the attendance date.",
+      "sampleEntry": "46266",
+      "section": 8
+    },
+    {
+      "ref": "9.1",
+      "field": "CNIC copy (both sides)",
+      "dataType": "File upload",
+      "mandatory": "Yes",
+      "validation": "Supports fields 1.6 and 1.7.",
+      "sampleEntry": "Attached",
+      "section": 9
+    },
+    {
+      "ref": "9.2",
+      "field": "Passport, visa & work permit copies",
+      "dataType": "File upload",
+      "mandatory": "Expatriate only",
+      "validation": "Supports fields 1.9 and 1.10.",
+      "sampleEntry": "N/A",
+      "section": 9
+    },
+    {
+      "ref": "9.3",
+      "field": "Passport-size photographs",
+      "dataType": "File upload",
+      "mandatory": "Yes",
+      "validation": "Minimum 2 recent photographs.",
+      "sampleEntry": "Attached (2 files)",
+      "section": 9
+    },
+    {
+      "ref": "9.4",
+      "field": "Educational degrees & transcripts",
+      "dataType": "File upload",
+      "mandatory": "Yes",
+      "validation": "Supports fields 4.1 to 4.4.",
+      "sampleEntry": "Attached",
+      "section": 9
+    },
+    {
+      "ref": "9.5",
+      "field": "Professional licence / registration certificate",
+      "dataType": "File upload",
+      "mandatory": "Conditional",
+      "validation": "Supports fields 4.5 and 4.6.",
+      "sampleEntry": "Attached",
+      "section": 9
+    },
+    {
+      "ref": "9.6",
+      "field": "Experience & relieving letters from previous employers",
+      "dataType": "File upload",
+      "mandatory": "Yes",
+      "validation": "Supports field 4.9.",
+      "sampleEntry": "Attached",
+      "section": 9
+    },
+    {
+      "ref": "9.7",
+      "field": "Reference check record",
+      "dataType": "File upload",
+      "mandatory": "Yes",
+      "validation": "Supports field 4.10.",
+      "sampleEntry": "Attached",
+      "section": 9
+    },
+    {
+      "ref": "9.8",
+      "field": "Signed appointment letter / employment contract",
+      "dataType": "File upload",
+      "mandatory": "Yes",
+      "validation": "Executed copy signed by both parties.",
+      "sampleEntry": "Attached",
+      "section": 9
+    },
+    {
+      "ref": "9.9",
+      "field": "Pre-employment medical report",
+      "dataType": "File upload",
+      "mandatory": "Yes",
+      "validation": "Supports field 5.13.",
+      "sampleEntry": "Attached",
+      "section": 9
+    },
+    {
+      "ref": "9.10",
+      "field": "Police verification / character certificate",
+      "dataType": "File upload",
+      "mandatory": "Conditional",
+      "validation": "Supports field 5.16.",
+      "sampleEntry": "N/A",
+      "section": 9
+    },
+    {
+      "ref": "9.11",
+      "field": "EOBI & social security registration forms",
+      "dataType": "File upload",
+      "mandatory": "Yes",
+      "validation": "Supports fields 5.5 to 5.8.",
+      "sampleEntry": "Attached",
+      "section": 9
+    },
+    {
+      "ref": "9.12",
+      "field": "Bank account maintenance certificate / cancelled cheque",
+      "dataType": "File upload",
+      "mandatory": "Yes",
+      "validation": "Supports Section 7; verified before the first salary run.",
+      "sampleEntry": "Attached",
+      "section": 9
+    },
+    {
+      "ref": "9.13",
+      "field": "Provident fund & gratuity nomination forms",
+      "dataType": "File upload",
+      "mandatory": "Yes",
+      "validation": "Nominee details must match field 2.11.",
+      "sampleEntry": "Attached",
+      "section": 9
+    },
+    {
+      "ref": "9.14",
+      "field": "Signed code of conduct, confidentiality & IT policy",
+      "dataType": "File upload",
+      "mandatory": "Yes",
+      "validation": "Acknowledges enterprise policies including safety and anti-harassment rules.",
+      "sampleEntry": "Attached",
+      "section": 9
+    },
+    {
+      "ref": "10.1",
+      "field": "Declaration of accuracy of information",
+      "dataType": "Checkbox",
+      "mandatory": "Yes",
+      "validation": "\"I certify that the particulars given above are true and correct to the best of my knowledge.\"",
+      "sampleEntry": "Accepted",
+      "section": 10
+    },
+    {
+      "ref": "10.2",
+      "field": "Acceptance of appointment terms & conditions",
+      "dataType": "Checkbox",
+      "mandatory": "Yes",
+      "validation": "Version and timestamp recorded by the system.",
+      "sampleEntry": "Accepted",
+      "section": 10
+    },
+    {
+      "ref": "10.3",
+      "field": "Acceptance of code of conduct, safety & anti-harassment policy",
+      "dataType": "Checkbox",
+      "mandatory": "Yes",
+      "validation": "Includes the Protection Against Harassment of Women at the Workplace Act 2010.",
+      "sampleEntry": "Accepted",
+      "section": 10
+    },
+    {
+      "ref": "10.4",
+      "field": "Consent to processing of personal data",
+      "dataType": "Checkbox",
+      "mandatory": "Yes",
+      "validation": "Covers payroll, statutory reporting and medical records.",
+      "sampleEntry": "Accepted",
+      "section": 10
+    },
+    {
+      "ref": "10.5",
+      "field": "Undertaking to notify changes within 7 days",
+      "dataType": "Checkbox",
+      "mandatory": "Yes",
+      "validation": "Covers address, contact, CNIC renewal, bank account and dependants.",
+      "sampleEntry": "Accepted",
+      "section": 10
+    },
+    {
+      "ref": "10.6",
+      "field": "Employee signature & date",
+      "dataType": "File upload / e-sign",
+      "mandatory": "Yes",
+      "validation": "Scanned signature or verified e-signature with the date.",
+      "sampleEntry": "Attached - 30-Aug-2026",
+      "section": 10
+    },
+    {
+      "ref": "10.7",
+      "field": "Documents verified by (HR officer) & date",
+      "dataType": "Text (120)",
+      "mandatory": "Internal",
+      "validation": "HR officer who checked the originals against the copies.",
+      "sampleEntry": "HR - N. Fatima, 30-Aug-2026",
+      "section": 10
+    },
+    {
+      "ref": "10.8",
+      "field": "Recommended by (department head) & date",
+      "dataType": "Text (120)",
+      "mandatory": "Internal",
+      "validation": "Hiring manager's recommendation.",
+      "sampleEntry": "Production Head - Engr. S. Rehman, 30-Aug-2026",
+      "section": 10
+    },
+    {
+      "ref": "10.9",
+      "field": "Approved by (HR head / CEO) & date",
+      "dataType": "Text (120)",
+      "mandatory": "Internal",
+      "validation": "Final approving authority as per the delegation of authority.",
+      "sampleEntry": "HR Head - A. Qureshi, 31-Aug-2026",
+      "section": 10
+    },
+    {
+      "ref": "10.10",
+      "field": "Employee file / personnel record number",
+      "dataType": "Text (20)",
+      "mandatory": "Internal",
+      "validation": "Physical or digital personnel file reference.",
+      "sampleEntry": "PF-EMP-00256",
+      "section": 10
+    },
+    {
+      "ref": "10.11",
+      "field": "Induction & orientation completed - date",
+      "dataType": "Date",
+      "mandatory": "Internal",
+      "validation": "Completion of the joining formalities and orientation programme.",
+      "sampleEntry": "46266",
+      "section": 10
+    },
+    {
+      "ref": "10.12",
+      "field": "Registration status",
+      "dataType": "Dropdown",
+      "mandatory": "Internal",
+      "validation": "Draft / Pending approval / Approved & active / Rejected / Separated - with effective date.",
+      "sampleEntry": "Approved & active",
+      "section": 10
+    }
+  ]
+}

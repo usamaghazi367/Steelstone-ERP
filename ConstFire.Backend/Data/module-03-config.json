@@ -1,0 +1,951 @@
+{
+  "code": "03",
+  "name": "DISTRIBUTOR REGISTRATION",
+  "category": "ERP Module",
+  "recordCodePrefix": "DST",
+  "listColumns": [
+    "_recordCode",
+    "1.1",
+    "1.2",
+    "1.3"
+  ],
+  "sections": [
+    {
+      "num": 1,
+      "title": "BUSINESS DETAILS",
+      "repeating": false
+    },
+    {
+      "num": 2,
+      "title": "TAX DETAILS",
+      "repeating": false
+    },
+    {
+      "num": 3,
+      "title": "POINTS OF CONTACT  (repeating block - minimum 2, unlimited additional contacts)",
+      "repeating": true
+    },
+    {
+      "num": 4,
+      "title": "BANK ACCOUNT DETAILS  (repeating block - multiple accounts supported)",
+      "repeating": true
+    },
+    {
+      "num": 5,
+      "title": "CREDIT LIMITS & PAYMENT TERMS",
+      "repeating": false
+    },
+    {
+      "num": 6,
+      "title": "EXEMPTION CERTIFICATES  (repeating block - validity updated periodically)",
+      "repeating": true
+    },
+    {
+      "num": 7,
+      "title": "SUPPORTING DOCUMENTS CHECKLIST",
+      "repeating": false
+    }
+  ],
+  "fields": [
+    {
+      "ref": "1.1",
+      "field": "Distributor code",
+      "dataType": "Text (10)",
+      "mandatory": "System",
+      "validation": "Auto-generated, unique and immutable (e.g. DIST-00001).",
+      "sampleEntry": "DIST-00034",
+      "section": 1
+    },
+    {
+      "ref": "1.2",
+      "field": "Registering enterprise (principal)",
+      "dataType": "Lookup",
+      "mandatory": "Yes",
+      "validation": "Links this distributor to the enterprise registered on sheet 01.",
+      "sampleEntry": "ENT-000145 - Steelstone IT (Pvt) Ltd",
+      "section": 1
+    },
+    {
+      "ref": "1.3",
+      "field": "Is the distributor registered with SECP? (ENTITY-TYPE CHECK)",
+      "dataType": "Yes / No",
+      "mandatory": "Yes",
+      "validation": "GATING FIELD - answered first. Yes = Company track; No = AOP / Firm / Sole Proprietor track.",
+      "sampleEntry": "No",
+      "section": 1
+    },
+    {
+      "ref": "1.4",
+      "field": "Registering authority",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "SECP / Registrar of Firms (Provincial) / FBR only (Sole Proprietor). Must be SECP if 1.3 = Yes.",
+      "sampleEntry": "Registrar of Firms (Provincial)",
+      "section": 1
+    },
+    {
+      "ref": "1.5",
+      "field": "Entity class (system-derived)",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Derived from 1.3 and 1.4; enforces every conditional rule below.",
+      "sampleEntry": "AOP / Partnership Firm",
+      "section": 1
+    },
+    {
+      "ref": "1.6",
+      "field": "Legal status / entity type",
+      "dataType": "Dependent dropdown",
+      "mandatory": "Yes",
+      "validation": "Company: SMC-Private / Private Limited / Public Limited. AOP: Registered Partnership Firm / Unregistered AOP. Other: Sole Proprietorship.",
+      "sampleEntry": "Registered Partnership Firm",
+      "section": 1
+    },
+    {
+      "ref": "1.7",
+      "field": "Registered legal name",
+      "dataType": "Text (150)",
+      "mandatory": "Yes",
+      "validation": "Must match the Certificate of Incorporation, Form II or NTN certificate exactly.",
+      "sampleEntry": "Al-Karam Traders",
+      "section": 1
+    },
+    {
+      "ref": "1.8",
+      "field": "Trading / business name",
+      "dataType": "Text (100)",
+      "mandatory": "Yes",
+      "validation": "Name used on invoices and delivery documents.",
+      "sampleEntry": "Al-Karam Cement Distributors",
+      "section": 1
+    },
+    {
+      "ref": "1.9",
+      "field": "SECP incorporation number (CUIN) & date",
+      "dataType": "Text (40)",
+      "mandatory": "Company only",
+      "validation": "7-digit CUIN plus date of incorporation. Disabled if 1.5 is not Company.",
+      "sampleEntry": "N/A",
+      "section": 1
+    },
+    {
+      "ref": "1.10",
+      "field": "Registrar of Firms registration no. & province",
+      "dataType": "Text (40)",
+      "mandatory": "AOP only",
+      "validation": "Mandatory if 1.5 = AOP; disabled for companies and sole proprietors.",
+      "sampleEntry": "RF/LHR/2016/03318 - Punjab",
+      "section": 1
+    },
+    {
+      "ref": "1.11",
+      "field": "Proprietor name & CNIC",
+      "dataType": "Text (60)",
+      "mandatory": "Sole prop. only",
+      "validation": "Mandatory where 1.5 = Sole Proprietor.",
+      "sampleEntry": "N/A",
+      "section": 1
+    },
+    {
+      "ref": "1.12",
+      "field": "Business commencement date",
+      "dataType": "Date",
+      "mandatory": "Yes",
+      "validation": "Date trading operations began; must not be in the future.",
+      "sampleEntry": "42472",
+      "section": 1
+    },
+    {
+      "ref": "1.13",
+      "field": "Distributor type",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Exclusive distributor / Non-exclusive distributor / Sub-dealer / Stockist / Retail chain.",
+      "sampleEntry": "Exclusive distributor",
+      "section": 1
+    },
+    {
+      "ref": "1.14",
+      "field": "Assigned sales territory / region",
+      "dataType": "Multi-select",
+      "mandatory": "Yes",
+      "validation": "One or more territories from the enterprise territory master; drives order routing.",
+      "sampleEntry": "Lahore Central, Sheikhupura",
+      "section": 1
+    },
+    {
+      "ref": "1.15",
+      "field": "Product categories authorised to distribute",
+      "dataType": "Multi-select",
+      "mandatory": "Yes",
+      "validation": "Linked to the material master; the ERP blocks orders for unauthorised categories.",
+      "sampleEntry": "OPC 53 (bagged), SRC (bagged)",
+      "section": 1
+    },
+    {
+      "ref": "1.16",
+      "field": "Registered office / head office address",
+      "dataType": "Text (300)",
+      "mandatory": "Yes",
+      "validation": "Full address including city, province and postal code.",
+      "sampleEntry": "23-C, Bund Road, Lahore, Punjab 54000",
+      "section": 1
+    },
+    {
+      "ref": "1.17",
+      "field": "City / province",
+      "dataType": "Text (80)",
+      "mandatory": "Yes",
+      "validation": "Determines the applicable provincial revenue authority and delivery zone.",
+      "sampleEntry": "Lahore / Punjab",
+      "section": 1
+    },
+    {
+      "ref": "1.18",
+      "field": "Warehouse / godown address(es)",
+      "dataType": "Repeating table",
+      "mandatory": "Yes",
+      "validation": "MULTIPLE SUPPORTED - one row per storage point: address, city, covered area (sq ft), storage capacity (MT), site contact.",
+      "sampleEntry": "Godown-1, Kot Lakhpat, Lahore - 2,000 MT",
+      "section": 1
+    },
+    {
+      "ref": "1.19",
+      "field": "Business email address",
+      "dataType": "Email",
+      "mandatory": "Yes",
+      "validation": "Official mailbox; receives orders, invoices and statements of account.",
+      "sampleEntry": "info@alkaramtraders.pk",
+      "section": 1
+    },
+    {
+      "ref": "1.20",
+      "field": "Business phone / mobile number",
+      "dataType": "Phone",
+      "mandatory": "Yes",
+      "validation": "Format +92-XX-XXXXXXXX or +92-3XX-XXXXXXX.",
+      "sampleEntry": "+92-42-37651122",
+      "section": 1
+    },
+    {
+      "ref": "2.1",
+      "field": "National Tax Number (NTN)",
+      "dataType": "Text (9)",
+      "mandatory": "Yes",
+      "validation": "7 digits + '-' + check digit; unique per distributor record.",
+      "sampleEntry": "2233445-6",
+      "section": 2
+    },
+    {
+      "ref": "2.2",
+      "field": "Sales Tax Registration No. (STRN - FBR)",
+      "dataType": "Text (13)",
+      "mandatory": "Conditional",
+      "validation": "13 digits. Mandatory where the distributor is sales-tax registered; unregistered buyers attract further tax.",
+      "sampleEntry": "3277822334456",
+      "section": 2
+    },
+    {
+      "ref": "2.3",
+      "field": "Sales tax registration category",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Distributor / Wholesaler / Dealer / Retailer / Unregistered.",
+      "sampleEntry": "Distributor",
+      "section": 2
+    },
+    {
+      "ref": "2.4",
+      "field": "FBR filer status (Active Taxpayer List)",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Filer / Non-filer - drives the withholding tax rate applied on sales to this party.",
+      "sampleEntry": "Filer",
+      "section": 2
+    },
+    {
+      "ref": "2.5",
+      "field": "Filer status - date last verified against ATL",
+      "dataType": "Date",
+      "mandatory": "Yes",
+      "validation": "Date the status in 2.4 was checked on the FBR Active Taxpayer List.",
+      "sampleEntry": "46235",
+      "section": 2
+    },
+    {
+      "ref": "2.6",
+      "field": "Filer status - valid until (next verification due)",
+      "dataType": "Date",
+      "mandatory": "Yes",
+      "validation": "EDITABLE / UPDATED PERIODICALLY. On expiry the ERP flags the account and applies non-filer rates until re-verified.",
+      "sampleEntry": "46326",
+      "section": 2
+    },
+    {
+      "ref": "2.7",
+      "field": "FBR filer status - status flag (system-derived)",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Active while the date in field 2.6 is in the future. INACTIVE BY DEFAULT once it passes - non-filer withholding rates apply until the status is re-verified.",
+      "sampleEntry": "Active",
+      "section": 2
+    },
+    {
+      "ref": "2.8",
+      "field": "ATL re-verification frequency",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Monthly / Quarterly / Half-yearly - the system raises an alert on the due date.",
+      "sampleEntry": "Quarterly",
+      "section": 2
+    },
+    {
+      "ref": "2.9",
+      "field": "Further tax applicable (unregistered buyer)",
+      "dataType": "Yes / No",
+      "mandatory": "Yes",
+      "validation": "System applies further tax under the Sales Tax Act where 2.2 is blank.",
+      "sampleEntry": "No",
+      "section": 2
+    },
+    {
+      "ref": "2.10",
+      "field": "Provincial revenue authority & registration no.",
+      "dataType": "Text (60)",
+      "mandatory": "Conditional",
+      "validation": "PRA / SRB / KPRA / BRA registration where services are also rendered.",
+      "sampleEntry": "PRA - PRA-2233445-6",
+      "section": 2
+    },
+    {
+      "ref": "2.11",
+      "field": "Withholding tax status on supplies",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Withheld at source / Exempt / Not applicable - see Section 6 for exemption certificates.",
+      "sampleEntry": "Withheld at source",
+      "section": 2
+    },
+    {
+      "ref": "2.12",
+      "field": "Provincial professional tax / trade licence no.",
+      "dataType": "Text (30)",
+      "mandatory": "No",
+      "validation": "Local council or excise & taxation department trade licence.",
+      "sampleEntry": "ETO-LHR-2024-8890",
+      "section": 2
+    },
+    {
+      "ref": "2.13",
+      "field": "Sales tax invoice mode",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "FBR digital invoicing (integrated) / Manual STI invoice - determines the e-invoice integration.",
+      "sampleEntry": "FBR digital invoicing",
+      "section": 2
+    },
+    {
+      "ref": "2.14",
+      "field": "Tax verification completed by (internal)",
+      "dataType": "Text (100)",
+      "mandatory": "Internal",
+      "validation": "Finance officer who verified the NTN, STRN and ATL status, with date.",
+      "sampleEntry": "Finance - A. Malik, 02-Aug-2026",
+      "section": 2
+    },
+    {
+      "ref": "3.1",
+      "field": "POC serial no.",
+      "dataType": "Integer",
+      "mandatory": "Yes",
+      "validation": "REPEATING BLOCK - minimum 2 contacts required, no upper limit. Add one row set per contact.",
+      "sampleEntry": "1",
+      "section": 3
+    },
+    {
+      "ref": "3.2",
+      "field": "Contact role",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Primary (mandatory) / Secondary (mandatory) / Owner or Proprietor / Order Placement / Accounts & Payments / Warehouse & Receiving / Escalation.",
+      "sampleEntry": "Primary - Owner",
+      "section": 3
+    },
+    {
+      "ref": "3.3",
+      "field": "Full name",
+      "dataType": "Text (100)",
+      "mandatory": "Yes",
+      "validation": "As per CNIC.",
+      "sampleEntry": "Muhammad Aslam",
+      "section": 3
+    },
+    {
+      "ref": "3.4",
+      "field": "Designation",
+      "dataType": "Text (60)",
+      "mandatory": "Yes",
+      "validation": "Free text.",
+      "sampleEntry": "Managing Partner",
+      "section": 3
+    },
+    {
+      "ref": "3.5",
+      "field": "CNIC",
+      "dataType": "Text (15)",
+      "mandatory": "Yes",
+      "validation": "Format XXXXX-XXXXXXX-X",
+      "sampleEntry": "35202-4455667-8",
+      "section": 3
+    },
+    {
+      "ref": "3.6",
+      "field": "Mobile number",
+      "dataType": "Phone",
+      "mandatory": "Yes",
+      "validation": "+92-3XX-XXXXXXX; must be unique per contact.",
+      "sampleEntry": "+92-300-8765432",
+      "section": 3
+    },
+    {
+      "ref": "3.7",
+      "field": "Landline / extension",
+      "dataType": "Phone",
+      "mandatory": "No",
+      "validation": "Format +92-XX-XXXXXXXX ext. NNN",
+      "sampleEntry": "+92-42-37651122 ext. 11",
+      "section": 3
+    },
+    {
+      "ref": "3.8",
+      "field": "Email address",
+      "dataType": "Email",
+      "mandatory": "Yes",
+      "validation": "Unique per contact; receives notifications by role.",
+      "sampleEntry": "aslam@alkaramtraders.pk",
+      "section": 3
+    },
+    {
+      "ref": "3.9",
+      "field": "Location assigned",
+      "dataType": "Lookup",
+      "mandatory": "Yes",
+      "validation": "Head office or a warehouse listed in field 1.18; use 'All locations' for owners.",
+      "sampleEntry": "All locations",
+      "section": 3
+    },
+    {
+      "ref": "3.10",
+      "field": "Available hours / days",
+      "dataType": "Text (80)",
+      "mandatory": "Yes",
+      "validation": "Contact window in local time.",
+      "sampleEntry": "Mon-Sat, 09:00-19:00 PKT",
+      "section": 3
+    },
+    {
+      "ref": "3.11",
+      "field": "Authorised to place orders / accept prices?",
+      "dataType": "Yes / No",
+      "mandatory": "Yes",
+      "validation": "At least one contact must be flagged Yes; orders from other contacts require approval.",
+      "sampleEntry": "Yes",
+      "section": 3
+    },
+    {
+      "ref": "3.12",
+      "field": "Receives system notifications?",
+      "dataType": "Multi-select",
+      "mandatory": "Yes",
+      "validation": "Order Confirmation / Dispatch & Delivery / Invoice / Payment Reminder / Credit Alert / Statement of Account.",
+      "sampleEntry": "Order Confirmation, Invoice, Credit Alert",
+      "section": 3
+    },
+    {
+      "ref": "3.13",
+      "field": "Contact status",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Active / Inactive with effective date. At least 2 contacts must remain Active at all times.",
+      "sampleEntry": "Active",
+      "section": 3
+    },
+    {
+      "ref": "4.1",
+      "field": "Bank account serial no.",
+      "dataType": "Integer",
+      "mandatory": "Yes",
+      "validation": "REPEATING BLOCK - multiple accounts supported; exactly one must be flagged primary.",
+      "sampleEntry": "1",
+      "section": 4
+    },
+    {
+      "ref": "4.2",
+      "field": "Bank name",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "SBP-licensed scheduled bank.",
+      "sampleEntry": "Bank Alfalah Limited",
+      "section": 4
+    },
+    {
+      "ref": "4.3",
+      "field": "Branch name & code",
+      "dataType": "Text (80)",
+      "mandatory": "Yes",
+      "validation": "Branch code numeric.",
+      "sampleEntry": "Bund Road Branch, Lahore - 0455",
+      "section": 4
+    },
+    {
+      "ref": "4.4",
+      "field": "Title of account",
+      "dataType": "Text (100)",
+      "mandatory": "Yes",
+      "validation": "Must match the registered legal name in field 1.7; mismatches block refunds and rebates.",
+      "sampleEntry": "Al-Karam Traders",
+      "section": 4
+    },
+    {
+      "ref": "4.5",
+      "field": "Account number",
+      "dataType": "Text (20)",
+      "mandatory": "Yes",
+      "validation": "Numeric, as issued by the bank, allow 0 at Start",
+      "sampleEntry": "4550010098765",
+      "section": 4
+    },
+    {
+      "ref": "4.6",
+      "field": "IBAN",
+      "dataType": "Text (24)",
+      "mandatory": "Yes",
+      "validation": "PK + 2 check digits + 4-letter bank code + 16 alphanumeric characters.",
+      "sampleEntry": "PK77ALFH0004550010098765",
+      "section": 4
+    },
+    {
+      "ref": "4.7",
+      "field": "Account currency",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "PKR (default) / USD",
+      "sampleEntry": "PKR",
+      "section": 4
+    },
+    {
+      "ref": "4.8",
+      "field": "Is this the primary account?",
+      "dataType": "Yes / No",
+      "mandatory": "Yes",
+      "validation": "Used for refunds, rebates, incentives and credit-note settlements.",
+      "sampleEntry": "Yes",
+      "section": 4
+    },
+    {
+      "ref": "4.9",
+      "field": "Preferred payment mode",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Online transfer (RTGS / IBFT) / Cheque / Pay order / Cash deposit slip.",
+      "sampleEntry": "Online transfer (IBFT)",
+      "section": 4
+    },
+    {
+      "ref": "4.10",
+      "field": "Bank guarantee / security instrument - type, bank & amount",
+      "dataType": "Text (150)",
+      "mandatory": "Conditional",
+      "validation": "Instrument type, issuing bank and amount held as security against the credit facility.",
+      "sampleEntry": "BG-ALFH-2026-0912, Bank Alfalah, PKR 10,000,000",
+      "section": 4
+    },
+    {
+      "ref": "4.11",
+      "field": "Bank guarantee / security instrument - valid until",
+      "dataType": "Date",
+      "mandatory": "Conditional",
+      "validation": "DATE FIELD - amber 30 days before expiry, red once expired. INACTIVE BY DEFAULT after expiry - the security is treated as nil and the credit limit is suspended until replaced.",
+      "sampleEntry": "46568",
+      "section": 4
+    },
+    {
+      "ref": "4.12",
+      "field": "Post-dated cheques held (count & value)",
+      "dataType": "Text (80)",
+      "mandatory": "No",
+      "validation": "Recorded against the credit facility; tracked for maturity in the ERP.",
+      "sampleEntry": "6 cheques, PKR 12,000,000",
+      "section": 4
+    },
+    {
+      "ref": "4.13",
+      "field": "Bank details verified by finance team",
+      "dataType": "Yes / No + Date",
+      "mandatory": "Internal",
+      "validation": "Dual verification required before the account is activated.",
+      "sampleEntry": "Yes - 12-Aug-2026",
+      "section": 4
+    },
+    {
+      "ref": "5.1",
+      "field": "Credit facility required?",
+      "dataType": "Yes / No",
+      "mandatory": "Yes",
+      "validation": "If No, the account operates on advance payment only and fields 5.2 to 5.13 are disabled.",
+      "sampleEntry": "Yes",
+      "section": 5
+    },
+    {
+      "ref": "5.2",
+      "field": "Credit limit requested (PKR)",
+      "dataType": "Number",
+      "mandatory": "Conditional",
+      "validation": "Amount requested by the distributor.",
+      "sampleEntry": "15000000",
+      "section": 5
+    },
+    {
+      "ref": "5.3",
+      "field": "Credit limit approved (PKR)",
+      "dataType": "Number",
+      "mandatory": "Internal",
+      "validation": "Approved by the enterprise finance team; the ERP blocks orders that breach this limit.",
+      "sampleEntry": "12000000",
+      "section": 5
+    },
+    {
+      "ref": "5.4",
+      "field": "Credit period / payment terms",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Advance / Cash on delivery / Net 7 / Net 15 / Net 30 / Net 45.",
+      "sampleEntry": "Net 30",
+      "section": 5
+    },
+    {
+      "ref": "5.5",
+      "field": "Credit limit - valid from",
+      "dataType": "Date",
+      "mandatory": "Yes",
+      "validation": "Date the approved limit takes effect.",
+      "sampleEntry": "46204",
+      "section": 5
+    },
+    {
+      "ref": "5.6",
+      "field": "Credit limit - valid until",
+      "dataType": "Date",
+      "mandatory": "Yes",
+      "validation": "DATE FIELD - amber 30 days before expiry, red once expired.",
+      "sampleEntry": "46568",
+      "section": 5
+    },
+    {
+      "ref": "5.7",
+      "field": "Credit limit - status (system-derived)",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Active while within the validity window. INACTIVE BY DEFAULT after expiry - the available limit drops to zero and new orders are blocked until the limit is renewed.",
+      "sampleEntry": "Active",
+      "section": 5
+    },
+    {
+      "ref": "5.8",
+      "field": "Security against credit",
+      "dataType": "Dropdown",
+      "mandatory": "Conditional",
+      "validation": "Bank guarantee / Post-dated cheques / Property mortgage / Personal guarantee / Unsecured. Details captured in fields 4.10 and 4.11.",
+      "sampleEntry": "Bank guarantee",
+      "section": 5
+    },
+    {
+      "ref": "5.9",
+      "field": "Security value held (PKR)",
+      "dataType": "Number",
+      "mandatory": "Conditional",
+      "validation": "Total value of the instruments recorded in Section 4.",
+      "sampleEntry": "10000000",
+      "section": 5
+    },
+    {
+      "ref": "5.10",
+      "field": "Credit exposure limit as % of security",
+      "dataType": "Percentage",
+      "mandatory": "Internal",
+      "validation": "Policy ratio used to cap exposure against the security held.",
+      "sampleEntry": "1.2",
+      "section": 5
+    },
+    {
+      "ref": "5.11",
+      "field": "Overdue tolerance (days) before order block",
+      "dataType": "Integer",
+      "mandatory": "Yes",
+      "validation": "Days past due after which the ERP automatically blocks new orders.",
+      "sampleEntry": "7",
+      "section": 5
+    },
+    {
+      "ref": "5.12",
+      "field": "Late payment mark-up / surcharge",
+      "dataType": "Percentage",
+      "mandatory": "No",
+      "validation": "Charged on overdue balances per month, if applicable.",
+      "sampleEntry": "2.0% per month",
+      "section": 5
+    },
+    {
+      "ref": "5.13",
+      "field": "Early payment / prompt settlement discount",
+      "dataType": "Percentage",
+      "mandatory": "No",
+      "validation": "Discount and qualifying days.",
+      "sampleEntry": "1.0% within 10 days",
+      "section": 5
+    },
+    {
+      "ref": "5.14",
+      "field": "Credit rating / risk category",
+      "dataType": "Dropdown",
+      "mandatory": "Internal",
+      "validation": "A - Low risk / B - Moderate / C - High / D - Cash only. Drives approval routing.",
+      "sampleEntry": "B - Moderate",
+      "section": 5
+    },
+    {
+      "ref": "5.15",
+      "field": "Credit limit approved by & date",
+      "dataType": "Text (100)",
+      "mandatory": "Internal",
+      "validation": "Approver name, designation and approval date; retained in the audit trail.",
+      "sampleEntry": "CFO - F. Ali, 20-Aug-2026",
+      "section": 5
+    },
+    {
+      "ref": "5.16",
+      "field": "Next credit review date",
+      "dataType": "Date",
+      "mandatory": "Yes",
+      "validation": "System raises a review task to the finance team on this date.",
+      "sampleEntry": "46388",
+      "section": 5
+    },
+    {
+      "ref": "6.1",
+      "field": "Certificate serial no.",
+      "dataType": "Integer",
+      "mandatory": "Yes",
+      "validation": "REPEATING BLOCK - multiple certificates supported (income tax, sales tax, provincial).",
+      "sampleEntry": "1",
+      "section": 6
+    },
+    {
+      "ref": "6.2",
+      "field": "Certificate type",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Income tax exemption (Sec. 159) / Reduced rate certificate (Sec. 153) / Sales tax exemption / Zero-rating / Provincial exemption.",
+      "sampleEntry": "Reduced rate certificate (Sec. 153)",
+      "section": 6
+    },
+    {
+      "ref": "6.3",
+      "field": "Certificate number",
+      "dataType": "Text (40)",
+      "mandatory": "Yes",
+      "validation": "As issued by the Commissioner Inland Revenue or the provincial authority.",
+      "sampleEntry": "EXC-153/2026/0912",
+      "section": 6
+    },
+    {
+      "ref": "6.4",
+      "field": "Issuing authority / tax office",
+      "dataType": "Text (100)",
+      "mandatory": "Yes",
+      "validation": "CIR zone, RTO / LTO, or provincial revenue authority.",
+      "sampleEntry": "CIR Zone-II, RTO Lahore",
+      "section": 6
+    },
+    {
+      "ref": "6.5",
+      "field": "Section / statutory reference",
+      "dataType": "Text (40)",
+      "mandatory": "Yes",
+      "validation": "Section of the Income Tax Ordinance 2001 or the Sales Tax Act 1990 relied upon.",
+      "sampleEntry": "Section 153(1)(a)",
+      "section": 6
+    },
+    {
+      "ref": "6.6",
+      "field": "Applicable tax type & normal rate",
+      "dataType": "Text (60)",
+      "mandatory": "Yes",
+      "validation": "Tax the certificate relates to and the standard rate that would otherwise apply.",
+      "sampleEntry": "Income tax WHT, normal 4.5%",
+      "section": 6
+    },
+    {
+      "ref": "6.7",
+      "field": "Exempted / reduced rate granted",
+      "dataType": "Percentage",
+      "mandatory": "Yes",
+      "validation": "Rate the ERP applies while the certificate is valid.",
+      "sampleEntry": "0.01",
+      "section": 6
+    },
+    {
+      "ref": "6.8",
+      "field": "Valid from",
+      "dataType": "Date",
+      "mandatory": "Yes",
+      "validation": "Start date of the exemption period.",
+      "sampleEntry": "46204",
+      "section": 6
+    },
+    {
+      "ref": "6.9",
+      "field": "Valid until",
+      "dataType": "Date",
+      "mandatory": "Yes",
+      "validation": "EDITABLE / UPDATED PERIODICALLY. After this date the ERP automatically resumes the normal rate and alerts the finance team.",
+      "sampleEntry": "46568",
+      "section": 6
+    },
+    {
+      "ref": "6.10",
+      "field": "Renewal reminder lead time (days)",
+      "dataType": "Integer",
+      "mandatory": "Yes",
+      "validation": "Days before expiry that the system notifies the distributor and finance team.",
+      "sampleEntry": "30",
+      "section": 6
+    },
+    {
+      "ref": "6.11",
+      "field": "Certificate copy attached",
+      "dataType": "File upload",
+      "mandatory": "Yes",
+      "validation": "PDF, max 5 MB; verified against the FBR portal before activation.",
+      "sampleEntry": "Attached",
+      "section": 6
+    },
+    {
+      "ref": "6.12",
+      "field": "Verified by & date (internal)",
+      "dataType": "Text (100)",
+      "mandatory": "Internal",
+      "validation": "Finance officer who verified the certificate with the issuing authority.",
+      "sampleEntry": "Finance - A. Malik, 02-Aug-2026",
+      "section": 6
+    },
+    {
+      "ref": "6.13",
+      "field": "Certificate status",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Active / Expired / Withdrawn / Under renewal. Set automatically from the valid-until date - INACTIVE BY DEFAULT after expiry, and the ERP resumes the normal tax rate.",
+      "sampleEntry": "Active",
+      "section": 6
+    },
+    {
+      "ref": "7.1",
+      "field": "Certificate of Incorporation / Form II / registration proof",
+      "dataType": "File upload",
+      "mandatory": "Yes",
+      "validation": "Company: Certificate of Incorporation. AOP: Form II and registered deed. Sole proprietor: NTN certificate.",
+      "sampleEntry": "Attached",
+      "section": 7
+    },
+    {
+      "ref": "7.2",
+      "field": "Partnership deed (registered)",
+      "dataType": "File upload",
+      "mandatory": "AOP only",
+      "validation": "Stamped and registered deed listing all partners.",
+      "sampleEntry": "Attached",
+      "section": 7
+    },
+    {
+      "ref": "7.3",
+      "field": "NTN certificate (FBR)",
+      "dataType": "File upload",
+      "mandatory": "Yes",
+      "validation": "PDF from the IRIS portal.",
+      "sampleEntry": "Attached",
+      "section": 7
+    },
+    {
+      "ref": "7.4",
+      "field": "Sales Tax Registration certificate",
+      "dataType": "File upload",
+      "mandatory": "Conditional",
+      "validation": "Required where an STRN is entered in field 2.2.",
+      "sampleEntry": "Attached",
+      "section": 7
+    },
+    {
+      "ref": "7.5",
+      "field": "ATL status print / screenshot",
+      "dataType": "File upload",
+      "mandatory": "Yes",
+      "validation": "Dated within the last 30 days; refreshed at each re-verification (field 2.6).",
+      "sampleEntry": "Attached",
+      "section": 7
+    },
+    {
+      "ref": "7.6",
+      "field": "Exemption / reduced-rate certificates",
+      "dataType": "File upload",
+      "mandatory": "Conditional",
+      "validation": "One file per certificate recorded in Section 6.",
+      "sampleEntry": "Attached",
+      "section": 7
+    },
+    {
+      "ref": "7.7",
+      "field": "CNIC copies of owners / main partner / proprietor",
+      "dataType": "File upload",
+      "mandatory": "Yes",
+      "validation": "Both sides; one file per person.",
+      "sampleEntry": "Attached (2 files)",
+      "section": 7
+    },
+    {
+      "ref": "7.8",
+      "field": "Bank account maintenance certificate / cancelled cheque",
+      "dataType": "File upload",
+      "mandatory": "Yes",
+      "validation": "One per bank account listed in Section 4.",
+      "sampleEntry": "Attached",
+      "section": 7
+    },
+    {
+      "ref": "7.9",
+      "field": "Bank guarantee / security instrument copy",
+      "dataType": "File upload",
+      "mandatory": "Conditional",
+      "validation": "Required where credit is secured (fields 4.10 and 5.6).",
+      "sampleEntry": "Attached",
+      "section": 7
+    },
+    {
+      "ref": "7.10",
+      "field": "Trade licence / professional tax certificate",
+      "dataType": "File upload",
+      "mandatory": "No",
+      "validation": "Local council or excise & taxation department licence.",
+      "sampleEntry": "Attached",
+      "section": 7
+    },
+    {
+      "ref": "7.11",
+      "field": "Distribution / dealership agreement (signed)",
+      "dataType": "File upload",
+      "mandatory": "No",
+      "validation": "Executed agreement defining territory, targets and margins.",
+      "sampleEntry": "Attached",
+      "section": 7
+    }
+  ]
+}

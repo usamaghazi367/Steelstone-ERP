@@ -1,0 +1,997 @@
+{
+  "code": "11",
+  "name": "SALES TAX INVOICE",
+  "category": "ERP Module",
+  "recordCodePrefix": "INV",
+  "listColumns": [
+    "_recordCode",
+    "1.1",
+    "1.2",
+    "1.3"
+  ],
+  "sections": [
+    {
+      "num": 1,
+      "title": "INVOICE HEADER  (statutory particulars)",
+      "repeating": false
+    },
+    {
+      "num": 2,
+      "title": "CUSTOMER (BUYER) DETAILS  (statutory particulars)",
+      "repeating": false
+    },
+    {
+      "num": 3,
+      "title": "DELIVERY & DISPATCH REFERENCE",
+      "repeating": false
+    },
+    {
+      "num": 4,
+      "title": "INVOICE LINE ITEMS  (repeating block - unlimited lines)",
+      "repeating": true
+    },
+    {
+      "num": 5,
+      "title": "TAXES, LEVIES & INVOICE SUMMARY",
+      "repeating": false
+    },
+    {
+      "num": 6,
+      "title": "PAYMENT TERMS & RECEIVABLE",
+      "repeating": false
+    },
+    {
+      "num": 7,
+      "title": "FBR COMPLIANCE & REPORTING",
+      "repeating": false
+    },
+    {
+      "num": 8,
+      "title": "ISSUE, APPROVAL & AUDIT",
+      "repeating": false
+    },
+    {
+      "num": 9,
+      "title": "ATTACHMENTS",
+      "repeating": false
+    }
+  ],
+  "fields": [
+    {
+      "ref": "1.1",
+      "field": "Invoice number",
+      "dataType": "Text (20)",
+      "mandatory": "STATUTORY",
+      "validation": "Serial number in a continuous, gapless series for the tax period; auto-generated and immutable.",
+      "sampleEntry": "SSIT-INV-2026-004512",
+      "section": 1
+    },
+    {
+      "ref": "1.2",
+      "field": "Invoice date",
+      "dataType": "Date",
+      "mandatory": "STATUTORY",
+      "validation": "Date of supply or issue; must fall in an open tax period.",
+      "sampleEntry": "46315",
+      "section": 1
+    },
+    {
+      "ref": "1.3",
+      "field": "Invoice type",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Tax invoice / Advance receipt invoice / Debit note / Credit note / Export invoice / Exempt supply invoice.",
+      "sampleEntry": "Tax invoice",
+      "section": 1
+    },
+    {
+      "ref": "1.4",
+      "field": "Supplier name, address & NTN",
+      "dataType": "Text (250)",
+      "mandatory": "STATUTORY",
+      "validation": "Registered name, address and NTN of the selling entity, pulled from sheet 01.",
+      "sampleEntry": "Steelstone IT (Pvt) Ltd, Lahore, NTN 1234567-8",
+      "section": 1
+    },
+    {
+      "ref": "1.5",
+      "field": "Supplier STRN",
+      "dataType": "Text (13)",
+      "mandatory": "STATUTORY",
+      "validation": "Sales tax registration number of the supplier.",
+      "sampleEntry": "3277876543210",
+      "section": 1
+    },
+    {
+      "ref": "1.6",
+      "field": "Supplying plant / location",
+      "dataType": "Lookup",
+      "mandatory": "Yes",
+      "validation": "Plant or depot making the supply; determines the province of supply.",
+      "sampleEntry": "PLANT-01 Nooriabad",
+      "section": 1
+    },
+    {
+      "ref": "1.7",
+      "field": "Province of supply",
+      "dataType": "Dropdown",
+      "mandatory": "System",
+      "validation": "Derived from the supplying location and the delivery point; determines federal versus provincial tax.",
+      "sampleEntry": "Sindh to Punjab",
+      "section": 1
+    },
+    {
+      "ref": "1.8",
+      "field": "Currency & exchange rate",
+      "dataType": "Text (40)",
+      "mandatory": "Yes",
+      "validation": "PKR by default; rate required for export invoices.",
+      "sampleEntry": "PKR / 1.0000",
+      "section": 1
+    },
+    {
+      "ref": "1.9",
+      "field": "Sales order reference",
+      "dataType": "Lookup",
+      "mandatory": "Yes",
+      "validation": "Order being invoiced; the invoice cannot exceed the ordered quantity.",
+      "sampleEntry": "SO-2026-002211",
+      "section": 1
+    },
+    {
+      "ref": "1.10",
+      "field": "Quotation reference",
+      "dataType": "Lookup",
+      "mandatory": "No",
+      "validation": "Quotation from which the order originated.",
+      "sampleEntry": "SSIT-QTN-2026-00312",
+      "section": 1
+    },
+    {
+      "ref": "1.11",
+      "field": "FBR digital invoice number (IRN)",
+      "dataType": "Text (40)",
+      "mandatory": "Conditional",
+      "validation": "Invoice reference number returned by the FBR system for integrated taxpayers.",
+      "sampleEntry": "IRN-7788991122",
+      "section": 1
+    },
+    {
+      "ref": "1.12",
+      "field": "FBR QR code / verification string",
+      "dataType": "Text (60)",
+      "mandatory": "Conditional",
+      "validation": "Printed on the invoice for verification by the buyer.",
+      "sampleEntry": "Generated",
+      "section": 1
+    },
+    {
+      "ref": "1.13",
+      "field": "Invoice status",
+      "dataType": "Dropdown",
+      "mandatory": "System",
+      "validation": "Draft / Issued / Transmitted to FBR / Partially paid / Paid / Overdue / Cancelled / Credited.",
+      "sampleEntry": "Issued",
+      "section": 1
+    },
+    {
+      "ref": "2.1",
+      "field": "Customer code & registered name",
+      "dataType": "Lookup",
+      "mandatory": "STATUTORY",
+      "validation": "Name exactly as registered; pulled from sheet 03 or 04.",
+      "sampleEntry": "CUST-00512 - Zameen Builders (Pvt) Ltd",
+      "section": 2
+    },
+    {
+      "ref": "2.2",
+      "field": "Customer type",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "End-user customer / Distributor / Government / Export buyer.",
+      "sampleEntry": "End-user customer",
+      "section": 2
+    },
+    {
+      "ref": "2.3",
+      "field": "Customer address",
+      "dataType": "Text (250)",
+      "mandatory": "STATUTORY",
+      "validation": "Registered address of the buyer.",
+      "sampleEntry": "78-A, Gulberg II, Lahore, Punjab",
+      "section": 2
+    },
+    {
+      "ref": "2.4",
+      "field": "Customer NTN",
+      "dataType": "Text (9)",
+      "mandatory": "STATUTORY",
+      "validation": "Buyer's NTN; the CNIC is used for unregistered individual buyers.",
+      "sampleEntry": "0077331-2",
+      "section": 2
+    },
+    {
+      "ref": "2.5",
+      "field": "Customer STRN",
+      "dataType": "Text (13)",
+      "mandatory": "Conditional",
+      "validation": "Required where the buyer is sales-tax registered; drives further tax if absent.",
+      "sampleEntry": "3277800773312",
+      "section": 2
+    },
+    {
+      "ref": "2.6",
+      "field": "Customer CNIC (unregistered buyers)",
+      "dataType": "Text (15)",
+      "mandatory": "Conditional",
+      "validation": "Required for unregistered buyers where the supply exceeds the prescribed threshold.",
+      "sampleEntry": "N/A",
+      "section": 2
+    },
+    {
+      "ref": "2.7",
+      "field": "Buyer registration status",
+      "dataType": "Dropdown",
+      "mandatory": "System",
+      "validation": "Registered / Unregistered - determines whether further tax applies.",
+      "sampleEntry": "Registered",
+      "section": 2
+    },
+    {
+      "ref": "2.8",
+      "field": "Filer status on the invoice date",
+      "dataType": "Dropdown",
+      "mandatory": "System",
+      "validation": "Pulled from the customer record; drives advance income tax under Section 236.",
+      "sampleEntry": "Filer",
+      "section": 2
+    },
+    {
+      "ref": "2.9",
+      "field": "Exemption certificate applied",
+      "dataType": "Lookup",
+      "mandatory": "Conditional",
+      "validation": "Only applied if valid on the invoice date; otherwise the normal rate is charged.",
+      "sampleEntry": "None",
+      "section": 2
+    },
+    {
+      "ref": "2.10",
+      "field": "Delivery point / ship-to address",
+      "dataType": "Lookup",
+      "mandatory": "STATUTORY",
+      "validation": "Bag or bulker delivery point from the customer record.",
+      "sampleEntry": "BULK-01 Batching Plant, Raiwind Road",
+      "section": 2
+    },
+    {
+      "ref": "2.11",
+      "field": "Customer credit status at invoicing",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Within limit / Limit exceeded / On hold - an over-limit invoice requires approval before issue.",
+      "sampleEntry": "Within limit",
+      "section": 2
+    },
+    {
+      "ref": "3.1",
+      "field": "Dispatch / delivery note number(s)",
+      "dataType": "Lookup",
+      "mandatory": "Yes",
+      "validation": "Delivery documents being invoiced.",
+      "sampleEntry": "DSP-2026-004512",
+      "section": 3
+    },
+    {
+      "ref": "3.2",
+      "field": "Date & time of supply",
+      "dataType": "Date-time",
+      "mandatory": "STATUTORY",
+      "validation": "Time of supply governs the tax period in which the invoice falls.",
+      "sampleEntry": "46314.59375",
+      "section": 3
+    },
+    {
+      "ref": "3.3",
+      "field": "Transporter & vehicle registration",
+      "dataType": "Text (120)",
+      "mandatory": "Yes",
+      "validation": "Carrier and vehicle used; pulled from the dispatch record.",
+      "sampleEntry": "TRN-00007 / TLE-1234",
+      "section": 3
+    },
+    {
+      "ref": "3.4",
+      "field": "Driver name & CNIC",
+      "dataType": "Text (120)",
+      "mandatory": "Yes",
+      "validation": "Driver assigned at dispatch from the driver register.",
+      "sampleEntry": "Muhammad Ilyas / 42201-5566778-9",
+      "section": 3
+    },
+    {
+      "ref": "3.5",
+      "field": "Weighbridge slip - gross, tare & net weight",
+      "dataType": "Text (100)",
+      "mandatory": "Yes",
+      "validation": "Net weight governs the invoiced quantity for bulk supplies.",
+      "sampleEntry": "44.5 / 14.5 / 30.0 MT",
+      "section": 3
+    },
+    {
+      "ref": "3.6",
+      "field": "Quantity dispatched",
+      "dataType": "Number",
+      "mandatory": "System",
+      "validation": "Pulled from the dispatch document.",
+      "sampleEntry": "30",
+      "section": 3
+    },
+    {
+      "ref": "3.7",
+      "field": "Quantity received & acknowledged",
+      "dataType": "Number",
+      "mandatory": "Conditional",
+      "validation": "Signed delivery challan quantity; variances raise a credit note.",
+      "sampleEntry": "30",
+      "section": 3
+    },
+    {
+      "ref": "3.8",
+      "field": "Shortage / excess on delivery",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Difference between dispatched and received quantity; drives claims.",
+      "sampleEntry": "Nil",
+      "section": 3
+    },
+    {
+      "ref": "3.9",
+      "field": "Mill test certificate reference",
+      "dataType": "Text (40)",
+      "mandatory": "Conditional",
+      "validation": "Issued with each dispatch where required by the customer.",
+      "sampleEntry": "MTC-2026-3345",
+      "section": 3
+    },
+    {
+      "ref": "3.10",
+      "field": "Delivery basis / Incoterm",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Ex-works / FOR destination / Delivered at site - must match the order.",
+      "sampleEntry": "FOR destination",
+      "section": 3
+    },
+    {
+      "ref": "4.1",
+      "field": "Line number",
+      "dataType": "Integer",
+      "mandatory": "Yes",
+      "validation": "REPEATING BLOCK - one row set per product and packing combination.",
+      "sampleEntry": "1",
+      "section": 4
+    },
+    {
+      "ref": "4.2",
+      "field": "Material code",
+      "dataType": "Lookup",
+      "mandatory": "STATUTORY",
+      "validation": "From the material definition sheet.",
+      "sampleEntry": "MAT-CEM-OPC53-BULK",
+      "section": 4
+    },
+    {
+      "ref": "4.3",
+      "field": "Description of goods or services",
+      "dataType": "Text (200)",
+      "mandatory": "STATUTORY",
+      "validation": "Description as required on a tax invoice.",
+      "sampleEntry": "Ordinary Portland Cement, 53 Grade, bulk",
+      "section": 4
+    },
+    {
+      "ref": "4.4",
+      "field": "HS code / PCT heading",
+      "dataType": "Text (12)",
+      "mandatory": "STATUTORY",
+      "validation": "Determines the sales tax and FED treatment.",
+      "sampleEntry": "2523.29",
+      "section": 4
+    },
+    {
+      "ref": "4.5",
+      "field": "Unit of measure",
+      "dataType": "Dropdown",
+      "mandatory": "STATUTORY",
+      "validation": "MT / Bag / Litre.",
+      "sampleEntry": "MT",
+      "section": 4
+    },
+    {
+      "ref": "4.6",
+      "field": "Quantity invoiced",
+      "dataType": "Number",
+      "mandatory": "STATUTORY",
+      "validation": "Must not exceed the dispatched quantity.",
+      "sampleEntry": "30",
+      "section": 4
+    },
+    {
+      "ref": "4.7",
+      "field": "Rate per unit excluding tax (PKR)",
+      "dataType": "Number",
+      "mandatory": "STATUTORY",
+      "validation": "Contract or order rate; deviations are blocked.",
+      "sampleEntry": "14300",
+      "section": 4
+    },
+    {
+      "ref": "4.8",
+      "field": "Gross value (PKR)",
+      "dataType": "Formula",
+      "mandatory": "System",
+      "validation": "Quantity multiplied by the rate.",
+      "sampleEntry": "429000",
+      "section": 4
+    },
+    {
+      "ref": "4.9",
+      "field": "Discount allowed (PKR)",
+      "dataType": "Number",
+      "mandatory": "No",
+      "validation": "Trade or prompt-payment discount shown on the invoice.",
+      "sampleEntry": "0",
+      "section": 4
+    },
+    {
+      "ref": "4.10",
+      "field": "Value excluding sales tax (PKR)",
+      "dataType": "Formula",
+      "mandatory": "STATUTORY",
+      "validation": "Gross value less discount; the taxable value.",
+      "sampleEntry": "429000",
+      "section": 4
+    },
+    {
+      "ref": "4.11",
+      "field": "Sales tax rate (%)",
+      "dataType": "Formula",
+      "mandatory": "STATUTORY",
+      "validation": "Standard rate applicable to the PCT heading, or the reduced rate under a valid exemption.",
+      "sampleEntry": "0.18",
+      "section": 4
+    },
+    {
+      "ref": "4.12",
+      "field": "Sales tax amount (PKR)",
+      "dataType": "Formula",
+      "mandatory": "STATUTORY",
+      "validation": "Taxable value multiplied by the rate.",
+      "sampleEntry": "77220",
+      "section": 4
+    },
+    {
+      "ref": "4.13",
+      "field": "Federal Excise Duty (PKR)",
+      "dataType": "Formula",
+      "mandatory": "System",
+      "validation": "Applies to cement; calculated per kilogram of product.",
+      "sampleEntry": "60000",
+      "section": 4
+    },
+    {
+      "ref": "4.14",
+      "field": "Further tax (PKR)",
+      "dataType": "Formula",
+      "mandatory": "System",
+      "validation": "Charged where the buyer has no valid STRN.",
+      "sampleEntry": "0",
+      "section": 4
+    },
+    {
+      "ref": "4.15",
+      "field": "Line total including taxes (PKR)",
+      "dataType": "Formula",
+      "mandatory": "System",
+      "validation": "Value plus sales tax plus FED plus further tax.",
+      "sampleEntry": "566220",
+      "section": 4
+    },
+    {
+      "ref": "4.16",
+      "field": "Revenue GL account & cost centre",
+      "dataType": "Lookup",
+      "mandatory": "Yes",
+      "validation": "Sales account credited and the cost centre for reporting.",
+      "sampleEntry": "4100-Sales Revenue / CC-3100",
+      "section": 4
+    },
+    {
+      "ref": "5.1",
+      "field": "Total quantity invoiced",
+      "dataType": "Formula",
+      "mandatory": "System",
+      "validation": "Sum of all line quantities.",
+      "sampleEntry": "30 MT",
+      "section": 5
+    },
+    {
+      "ref": "5.2",
+      "field": "Total value excluding sales tax (PKR)",
+      "dataType": "Formula",
+      "mandatory": "STATUTORY",
+      "validation": "Sum of the taxable value of all lines.",
+      "sampleEntry": "429000",
+      "section": 5
+    },
+    {
+      "ref": "5.3",
+      "field": "Total sales tax (PKR)",
+      "dataType": "Formula",
+      "mandatory": "STATUTORY",
+      "validation": "Sum of sales tax across all lines.",
+      "sampleEntry": "77220",
+      "section": 5
+    },
+    {
+      "ref": "5.4",
+      "field": "Total Federal Excise Duty (PKR)",
+      "dataType": "Formula",
+      "mandatory": "System",
+      "validation": "Sum of FED across all lines.",
+      "sampleEntry": "60000",
+      "section": 5
+    },
+    {
+      "ref": "5.5",
+      "field": "Further tax (PKR)",
+      "dataType": "Formula",
+      "mandatory": "System",
+      "validation": "Total further tax on supplies to unregistered buyers.",
+      "sampleEntry": "0",
+      "section": 5
+    },
+    {
+      "ref": "5.6",
+      "field": "Provincial sales tax on services (PKR)",
+      "dataType": "Formula",
+      "mandatory": "System",
+      "validation": "Where freight or services are billed on the same invoice.",
+      "sampleEntry": "0",
+      "section": 5
+    },
+    {
+      "ref": "5.7",
+      "field": "Advance income tax collected - section & amount",
+      "dataType": "Text (80)",
+      "mandatory": "System",
+      "validation": "Section 236 or 153 advance tax, at the rate driven by the buyer's filer status.",
+      "sampleEntry": "Not applicable",
+      "section": 5
+    },
+    {
+      "ref": "5.8",
+      "field": "Freight & other charges (PKR)",
+      "dataType": "Number",
+      "mandatory": "No",
+      "validation": "Charged where the price basis is FOR destination.",
+      "sampleEntry": "0",
+      "section": 5
+    },
+    {
+      "ref": "5.9",
+      "field": "Total invoice value (PKR)",
+      "dataType": "Formula",
+      "mandatory": "STATUTORY",
+      "validation": "Grand total payable by the customer.",
+      "sampleEntry": "566220",
+      "section": 5
+    },
+    {
+      "ref": "5.10",
+      "field": "Rounding adjustment (PKR)",
+      "dataType": "Formula",
+      "mandatory": "System",
+      "validation": "Rounds the invoice total to the nearest rupee.",
+      "sampleEntry": "0",
+      "section": 5
+    },
+    {
+      "ref": "5.11",
+      "field": "Amount in words",
+      "dataType": "Formula",
+      "mandatory": "STATUTORY",
+      "validation": "Generated from the invoice total.",
+      "sampleEntry": "Rupees five hundred sixty six thousand two hundred twenty only",
+      "section": 5
+    },
+    {
+      "ref": "5.12",
+      "field": "Tax period of the invoice",
+      "dataType": "Formula",
+      "mandatory": "System",
+      "validation": "Tax period in which the invoice is reported in the sales tax return.",
+      "sampleEntry": "46296",
+      "section": 5
+    },
+    {
+      "ref": "5.13",
+      "field": "Withholding by customer (information only)",
+      "dataType": "Text (100)",
+      "mandatory": "System",
+      "validation": "Income and sales tax the customer is expected to withhold; reconciled against the CPR.",
+      "sampleEntry": "Sec. 153 - 4.5% income tax",
+      "section": 5
+    },
+    {
+      "ref": "5.14",
+      "field": "Net receivable after expected withholding (PKR)",
+      "dataType": "Formula",
+      "mandatory": "System",
+      "validation": "Used for cash flow forecasting; the full invoice value remains the recorded receivable.",
+      "sampleEntry": "540740",
+      "section": 5
+    },
+    {
+      "ref": "6.1",
+      "field": "Payment terms",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Advance / Cash on delivery / Net 15 / Net 30 / Net 45 / Milestone-linked - pulled from the customer record.",
+      "sampleEntry": "Net 30",
+      "section": 6
+    },
+    {
+      "ref": "6.2",
+      "field": "Payment due date",
+      "dataType": "Formula",
+      "mandatory": "System",
+      "validation": "Invoice date plus the credit period; drives the receivable ageing bucket.",
+      "sampleEntry": "46345",
+      "section": 6
+    },
+    {
+      "ref": "6.3",
+      "field": "Credit limit available before this invoice (PKR)",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Checked at issue; an over-limit invoice requires approval.",
+      "sampleEntry": "15000000",
+      "section": 6
+    },
+    {
+      "ref": "6.4",
+      "field": "Credit limit available after this invoice (PKR)",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Updated automatically on issue.",
+      "sampleEntry": "14433780",
+      "section": 6
+    },
+    {
+      "ref": "6.5",
+      "field": "Advance received against this invoice (PKR)",
+      "dataType": "Number",
+      "mandatory": "No",
+      "validation": "Advance adjusted, with the receipt reference.",
+      "sampleEntry": "0",
+      "section": 6
+    },
+    {
+      "ref": "6.6",
+      "field": "Amount received to date (PKR)",
+      "dataType": "Formula",
+      "mandatory": "System",
+      "validation": "Sum of receipts posted against this invoice.",
+      "sampleEntry": "0",
+      "section": 6
+    },
+    {
+      "ref": "6.7",
+      "field": "Balance outstanding (PKR)",
+      "dataType": "Formula",
+      "mandatory": "System",
+      "validation": "Invoice total less receipts; feeds the ageing and statement of account.",
+      "sampleEntry": "566220",
+      "section": 6
+    },
+    {
+      "ref": "6.8",
+      "field": "Days overdue",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Calculated from the due date; drives dunning letters and order blocking.",
+      "sampleEntry": "0",
+      "section": 6
+    },
+    {
+      "ref": "6.9",
+      "field": "Early payment discount available",
+      "dataType": "Text (80)",
+      "mandatory": "System",
+      "validation": "Discount and the last qualifying date, from the customer terms.",
+      "sampleEntry": "1.0% if paid by 30-Oct-2026",
+      "section": 6
+    },
+    {
+      "ref": "6.10",
+      "field": "Late payment mark-up applicable",
+      "dataType": "Percentage",
+      "mandatory": "No",
+      "validation": "Charged on overdue balances under the contract.",
+      "sampleEntry": "2.0% per month",
+      "section": 6
+    },
+    {
+      "ref": "6.11",
+      "field": "Receipt reference(s)",
+      "dataType": "Lookup",
+      "mandatory": "System",
+      "validation": "Receipts or bank credits applied against this invoice.",
+      "sampleEntry": "Pending",
+      "section": 6
+    },
+    {
+      "ref": "6.12",
+      "field": "Receivable status",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Current / Due / Overdue 1-30 / Overdue 31-60 / Overdue 60+ / Settled / Written off.",
+      "sampleEntry": "Current",
+      "section": 6
+    },
+    {
+      "ref": "7.1",
+      "field": "Sales tax invoice mode",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "FBR digital invoicing (integrated) / Manual STI invoice.",
+      "sampleEntry": "FBR digital invoicing",
+      "section": 7
+    },
+    {
+      "ref": "7.2",
+      "field": "Transmitted to FBR - date & time",
+      "dataType": "Date-time",
+      "mandatory": "Conditional",
+      "validation": "Real-time transmission for integrated taxpayers; failures are queued and retried.",
+      "sampleEntry": "46315.626388888886",
+      "section": 7
+    },
+    {
+      "ref": "7.3",
+      "field": "FBR acknowledgement / IRN status",
+      "dataType": "Dropdown",
+      "mandatory": "System",
+      "validation": "Accepted / Rejected / Pending - a rejected invoice cannot be issued to the customer.",
+      "sampleEntry": "Accepted",
+      "section": 7
+    },
+    {
+      "ref": "7.4",
+      "field": "FBR rejection reason",
+      "dataType": "Text (200)",
+      "mandatory": "Conditional",
+      "validation": "Returned by the FBR system where the invoice is rejected.",
+      "sampleEntry": "N/A",
+      "section": 7
+    },
+    {
+      "ref": "7.5",
+      "field": "Reported in sales tax return (period)",
+      "dataType": "Text (30)",
+      "mandatory": "System",
+      "validation": "Tax period in which the invoice appears in Annexure C.",
+      "sampleEntry": "46296",
+      "section": 7
+    },
+    {
+      "ref": "7.6",
+      "field": "Annexure C reference",
+      "dataType": "Text (40)",
+      "mandatory": "System",
+      "validation": "Line reference in the monthly sales tax return.",
+      "sampleEntry": "AnxC-Oct26-0451",
+      "section": 7
+    },
+    {
+      "ref": "7.7",
+      "field": "Debit / credit note issued against this invoice",
+      "dataType": "Lookup",
+      "mandatory": "Conditional",
+      "validation": "Reference of any note adjusting this invoice; the original is never edited.",
+      "sampleEntry": "N/A",
+      "section": 7
+    },
+    {
+      "ref": "7.8",
+      "field": "Reason for credit note",
+      "dataType": "Dropdown",
+      "mandatory": "Conditional",
+      "validation": "Shortage / Quality rejection / Rate correction / Return of goods / Cancellation.",
+      "sampleEntry": "N/A",
+      "section": 7
+    },
+    {
+      "ref": "7.9",
+      "field": "Invoice cancellation reference & reason",
+      "dataType": "Text (150)",
+      "mandatory": "Conditional",
+      "validation": "Cancellation is permitted only within the tax period and before transmission.",
+      "sampleEntry": "N/A",
+      "section": 7
+    },
+    {
+      "ref": "7.10",
+      "field": "Record retention",
+      "dataType": "Note - system",
+      "mandatory": "System",
+      "validation": "Invoices and supporting records are retained for 6 years as required by the Sales Tax Act 1990.",
+      "sampleEntry": "Enabled",
+      "section": 7
+    },
+    {
+      "ref": "8.1",
+      "field": "Prepared by & date",
+      "dataType": "Text (120)",
+      "mandatory": "System",
+      "validation": "Billing officer who generated the invoice.",
+      "sampleEntry": "Billing - R. Aslam, 20-Oct-2026",
+      "section": 8
+    },
+    {
+      "ref": "8.2",
+      "field": "Checked by (accounts) & date",
+      "dataType": "Text (120)",
+      "mandatory": "Yes",
+      "validation": "Verifies quantity, rate, tax treatment and customer particulars.",
+      "sampleEntry": "Manager Accounts - 20-Oct-2026",
+      "section": 8
+    },
+    {
+      "ref": "8.3",
+      "field": "Approved by & date",
+      "dataType": "Text (120)",
+      "mandatory": "Conditional",
+      "validation": "Required where the invoice exceeds the credit limit or carries a special rate.",
+      "sampleEntry": "CFO - 20-Oct-2026",
+      "section": 8
+    },
+    {
+      "ref": "8.4",
+      "field": "Issued to customer - date & mode",
+      "dataType": "Text (80)",
+      "mandatory": "Yes",
+      "validation": "Date and channel of delivery to the customer.",
+      "sampleEntry": "20-Oct-2026, email and hard copy with driver",
+      "section": 8
+    },
+    {
+      "ref": "8.5",
+      "field": "Customer acknowledgement received",
+      "dataType": "Yes / No + Date",
+      "mandatory": "No",
+      "validation": "Signed copy or delivery acknowledgement returned by the customer.",
+      "sampleEntry": "Pending",
+      "section": 8
+    },
+    {
+      "ref": "8.6",
+      "field": "GL posting reference & date",
+      "dataType": "Text (60)",
+      "mandatory": "System",
+      "validation": "Journal voucher created on issue; debits receivable, credits revenue and tax.",
+      "sampleEntry": "JV-2026-009912, 20-Oct-2026",
+      "section": 8
+    },
+    {
+      "ref": "8.7",
+      "field": "Inventory movement posted",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Stock reduced at the supplying plant on dispatch; cost of sales recognised.",
+      "sampleEntry": "Posted",
+      "section": 8
+    },
+    {
+      "ref": "8.8",
+      "field": "Audit trail",
+      "dataType": "Note - system",
+      "mandatory": "System",
+      "validation": "Issued invoices cannot be edited. Every view, print and reprint is logged with the user and timestamp.",
+      "sampleEntry": "Enabled",
+      "section": 8
+    },
+    {
+      "ref": "8.9",
+      "field": "Print count & last printed by",
+      "dataType": "Text (80)",
+      "mandatory": "System",
+      "validation": "Duplicate copies are watermarked 'DUPLICATE'.",
+      "sampleEntry": "1 - Billing, 20-Oct-2026",
+      "section": 8
+    },
+    {
+      "ref": "8.10",
+      "field": "Final invoice status",
+      "dataType": "Dropdown",
+      "mandatory": "System",
+      "validation": "Issued / Paid / Partially paid / Overdue / Credited / Cancelled.",
+      "sampleEntry": "Issued",
+      "section": 8
+    },
+    {
+      "ref": "9.1",
+      "field": "Signed delivery challan",
+      "dataType": "File upload",
+      "mandatory": "Yes",
+      "validation": "Acknowledged by the customer at the delivery point.",
+      "sampleEntry": "Attached",
+      "section": 9
+    },
+    {
+      "ref": "9.2",
+      "field": "Weighbridge slip",
+      "dataType": "File upload",
+      "mandatory": "Yes",
+      "validation": "Supports the invoiced quantity for bulk supplies.",
+      "sampleEntry": "Attached",
+      "section": 9
+    },
+    {
+      "ref": "9.3",
+      "field": "Mill test / quality certificate",
+      "dataType": "File upload",
+      "mandatory": "Conditional",
+      "validation": "Issued with the dispatch where required.",
+      "sampleEntry": "Attached",
+      "section": 9
+    },
+    {
+      "ref": "9.4",
+      "field": "Customer purchase order / work order",
+      "dataType": "File upload",
+      "mandatory": "Yes",
+      "validation": "Supports the sales order and the rate charged.",
+      "sampleEntry": "Attached",
+      "section": 9
+    },
+    {
+      "ref": "9.5",
+      "field": "Gate pass & transporter documents",
+      "dataType": "File upload",
+      "mandatory": "No",
+      "validation": "Gate-out record and consignment note.",
+      "sampleEntry": "Attached",
+      "section": 9
+    },
+    {
+      "ref": "9.6",
+      "field": "FBR transmission acknowledgement",
+      "dataType": "File upload",
+      "mandatory": "Conditional",
+      "validation": "IRN acknowledgement for integrated invoices.",
+      "sampleEntry": "Attached",
+      "section": 9
+    },
+    {
+      "ref": "9.7",
+      "field": "Exemption certificate applied",
+      "dataType": "File upload",
+      "mandatory": "Conditional",
+      "validation": "Must be valid on the invoice date.",
+      "sampleEntry": "N/A",
+      "section": 9
+    },
+    {
+      "ref": "9.8",
+      "field": "Withholding tax certificate received from customer",
+      "dataType": "File upload",
+      "mandatory": "Conditional",
+      "validation": "Filed on receipt; reconciled against the CPR and claimed in the annual return.",
+      "sampleEntry": "Pending",
+      "section": 9
+    }
+  ]
+}

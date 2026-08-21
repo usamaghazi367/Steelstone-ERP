@@ -1,0 +1,857 @@
+{
+  "code": "14",
+  "name": "DELIVERY CHALLAN",
+  "category": "ERP Module",
+  "recordCodePrefix": "CHL",
+  "listColumns": [
+    "_recordCode",
+    "1.1",
+    "1.2",
+    "1.3"
+  ],
+  "sections": [
+    {
+      "num": 1,
+      "title": "CHALLAN HEADER",
+      "repeating": false
+    },
+    {
+      "num": 2,
+      "title": "CONSIGNEE & DELIVERY POINT",
+      "repeating": false
+    },
+    {
+      "num": 3,
+      "title": "TRANSPORTER, VEHICLE & DRIVER",
+      "repeating": false
+    },
+    {
+      "num": 4,
+      "title": "MATERIAL & QUANTITY DISPATCHED  (repeating block)",
+      "repeating": true
+    },
+    {
+      "num": 5,
+      "title": "WEIGHBRIDGE & GATE CONTROL",
+      "repeating": false
+    },
+    {
+      "num": 6,
+      "title": "DELIVERY CONFIRMATION AT SITE",
+      "repeating": false
+    },
+    {
+      "num": 7,
+      "title": "RETURNS, CLAIMS & INVOICING LINK",
+      "repeating": false
+    },
+    {
+      "num": 8,
+      "title": "APPROVALS, ATTACHMENTS & AUDIT",
+      "repeating": false
+    }
+  ],
+  "fields": [
+    {
+      "ref": "1.1",
+      "field": "Delivery challan number",
+      "dataType": "Text (20)",
+      "mandatory": "System",
+      "validation": "Auto-generated, unique, gapless and immutable.",
+      "sampleEntry": "SSIT-DC-2026-008891",
+      "section": 1
+    },
+    {
+      "ref": "1.2",
+      "field": "Challan date & time of issue",
+      "dataType": "Date-time",
+      "mandatory": "Yes",
+      "validation": "Time stamped at issue; governs the gate-out window.",
+      "sampleEntry": "46314.52777777778",
+      "section": 1
+    },
+    {
+      "ref": "1.3",
+      "field": "Dispatch / trip reference",
+      "dataType": "Text (20)",
+      "mandatory": "System",
+      "validation": "Dispatch instruction under which this consignment moves.",
+      "sampleEntry": "DSP-2026-004512",
+      "section": 1
+    },
+    {
+      "ref": "1.4",
+      "field": "Challan type",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Sale delivery / Stock transfer between locations / Sample or free issue / Return to supplier / Job work.",
+      "sampleEntry": "Sale delivery",
+      "section": 1
+    },
+    {
+      "ref": "1.5",
+      "field": "Sales order reference",
+      "dataType": "Lookup",
+      "mandatory": "Conditional",
+      "validation": "Mandatory for sale deliveries; the challan cannot exceed the open order quantity.",
+      "sampleEntry": "SO-2026-002211",
+      "section": 1
+    },
+    {
+      "ref": "1.6",
+      "field": "Enterprise entity & supplying plant",
+      "dataType": "Lookup",
+      "mandatory": "Yes",
+      "validation": "Dispatching entity and location; determines the province of supply.",
+      "sampleEntry": "ENT-000145 / PLANT-01 Nooriabad",
+      "section": 1
+    },
+    {
+      "ref": "1.7",
+      "field": "Delivery mode",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Bag / Bulker - must match the delivery point registered for the customer.",
+      "sampleEntry": "Bulker",
+      "section": 1
+    },
+    {
+      "ref": "1.8",
+      "field": "Delivery basis / Incoterm",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Ex-works collection / FOR destination / Delivered at site.",
+      "sampleEntry": "FOR destination",
+      "section": 1
+    },
+    {
+      "ref": "1.9",
+      "field": "Expected delivery date & time",
+      "dataType": "Date-time",
+      "mandatory": "Yes",
+      "validation": "Committed arrival at the delivery point; drives the OTIF measurement.",
+      "sampleEntry": "46316.583333333336",
+      "section": 1
+    },
+    {
+      "ref": "1.10",
+      "field": "Freight payable by",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Seller / Customer / To-pay by consignee.",
+      "sampleEntry": "Seller",
+      "section": 1
+    },
+    {
+      "ref": "1.11",
+      "field": "Printed copies issued",
+      "dataType": "Text (60)",
+      "mandatory": "System",
+      "validation": "Original for consignee, duplicate for transporter, triplicate for the plant record.",
+      "sampleEntry": "3 copies",
+      "section": 1
+    },
+    {
+      "ref": "1.12",
+      "field": "Challan status",
+      "dataType": "Dropdown",
+      "mandatory": "System",
+      "validation": "Issued / In transit / Delivered / Partially delivered / Returned / Cancelled.",
+      "sampleEntry": "Issued",
+      "section": 1
+    },
+    {
+      "ref": "2.1",
+      "field": "Customer code & name",
+      "dataType": "Lookup",
+      "mandatory": "Yes",
+      "validation": "Pulled from the customer or distributor register.",
+      "sampleEntry": "CUST-00512 - Zameen Builders (Pvt) Ltd",
+      "section": 2
+    },
+    {
+      "ref": "2.2",
+      "field": "Customer NTN / STRN",
+      "dataType": "Text (40)",
+      "mandatory": "Yes",
+      "validation": "Pulled from the customer record for the invoice that follows.",
+      "sampleEntry": "0077331-2 / 3277800773312",
+      "section": 2
+    },
+    {
+      "ref": "2.3",
+      "field": "Bill-to address",
+      "dataType": "Text (250)",
+      "mandatory": "Yes",
+      "validation": "Registered billing address of the customer.",
+      "sampleEntry": "78-A, Gulberg II, Lahore",
+      "section": 2
+    },
+    {
+      "ref": "2.4",
+      "field": "Ship-to delivery point",
+      "dataType": "Lookup",
+      "mandatory": "Yes",
+      "validation": "Bag or bulker delivery point registered for this customer.",
+      "sampleEntry": "BULK-01 Batching Plant, Raiwind Road",
+      "section": 2
+    },
+    {
+      "ref": "2.5",
+      "field": "Ship-to full address",
+      "dataType": "Text (250)",
+      "mandatory": "Yes",
+      "validation": "Printed on the challan for the driver.",
+      "sampleEntry": "Plot 22, Sundar Industrial Estate, Raiwind Road, Lahore",
+      "section": 2
+    },
+    {
+      "ref": "2.6",
+      "field": "Delivery point geo-coordinates",
+      "dataType": "Text (30)",
+      "mandatory": "No",
+      "validation": "Used for driver routing and proof-of-delivery geo-tagging.",
+      "sampleEntry": "31.3200, 74.1980",
+      "section": 2
+    },
+    {
+      "ref": "2.7",
+      "field": "Site contact name & mobile",
+      "dataType": "Text (120)",
+      "mandatory": "Yes",
+      "validation": "Person who will receive the consignment and sign the challan.",
+      "sampleEntry": "Engr. Umar Farooq / +92-321-7788990",
+      "section": 2
+    },
+    {
+      "ref": "2.8",
+      "field": "Site receiving hours & access constraints",
+      "dataType": "Text (150)",
+      "mandatory": "System",
+      "validation": "Pulled from the customer delivery point record.",
+      "sampleEntry": "24 hours; max 50 MT tanker",
+      "section": 2
+    },
+    {
+      "ref": "2.9",
+      "field": "Distance to delivery point (km)",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Used for freight calculation and expected transit time.",
+      "sampleEntry": "1180",
+      "section": 2
+    },
+    {
+      "ref": "2.10",
+      "field": "Customer credit status at dispatch",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Within limit / Limit exceeded / Overdue block. A blocked customer cannot be dispatched without approval.",
+      "sampleEntry": "Within limit",
+      "section": 2
+    },
+    {
+      "ref": "2.11",
+      "field": "Dispatch approval reference (if over limit)",
+      "dataType": "Text (40)",
+      "mandatory": "Conditional",
+      "validation": "Approval note permitting dispatch beyond the credit limit.",
+      "sampleEntry": "N/A",
+      "section": 2
+    },
+    {
+      "ref": "3.1",
+      "field": "Transporter code & name",
+      "dataType": "Lookup",
+      "mandatory": "Yes",
+      "validation": "From the transporter register on sheet 05.",
+      "sampleEntry": "TRN-00007 - Shaheen Goods Transport Company",
+      "section": 3
+    },
+    {
+      "ref": "3.2",
+      "field": "Vehicle registration number",
+      "dataType": "Lookup",
+      "mandatory": "Yes",
+      "validation": "From the vehicle register on sheet 06; only Available vehicles can be selected.",
+      "sampleEntry": "TLE-1234",
+      "section": 3
+    },
+    {
+      "ref": "3.3",
+      "field": "Vehicle type & payload capacity",
+      "dataType": "Text (80)",
+      "mandatory": "System",
+      "validation": "Pulled from the vehicle master; the load must not exceed the payload.",
+      "sampleEntry": "Bulk tanker / 30 MT",
+      "section": 3
+    },
+    {
+      "ref": "3.4",
+      "field": "Vehicle compliance status at dispatch",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Pulled from the vehicle register. A vehicle with an expired permit, fitness, token tax or insurance CANNOT be allocated.",
+      "sampleEntry": "Compliant",
+      "section": 3
+    },
+    {
+      "ref": "3.5",
+      "field": "Driver name & CNIC",
+      "dataType": "Lookup",
+      "mandatory": "Yes",
+      "validation": "ANY active, compliant driver from the driver register may be assigned; the driver-vehicle link is created here at dispatch.",
+      "sampleEntry": "Muhammad Ilyas / 42201-5566778-9",
+      "section": 3
+    },
+    {
+      "ref": "3.6",
+      "field": "Driver licence number & class",
+      "dataType": "Text (60)",
+      "mandatory": "System",
+      "validation": "Pulled from the driver register.",
+      "sampleEntry": "SIN-HTV-2016-44821 / HTV",
+      "section": 3
+    },
+    {
+      "ref": "3.7",
+      "field": "Driver compliance status at dispatch",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "A driver with an expired CNIC, licence, medical or police verification CANNOT be assigned.",
+      "sampleEntry": "Compliant",
+      "section": 3
+    },
+    {
+      "ref": "3.8",
+      "field": "Driver mobile number",
+      "dataType": "Phone",
+      "mandatory": "Yes",
+      "validation": "Used for trip tracking and site coordination.",
+      "sampleEntry": "+92-345-6677889",
+      "section": 3
+    },
+    {
+      "ref": "3.9",
+      "field": "GPS tracking device & live link",
+      "dataType": "Text (80)",
+      "mandatory": "System",
+      "validation": "Device ID from the vehicle master; the customer may be sent a tracking link.",
+      "sampleEntry": "TPL Trakker 860123045678901",
+      "section": 3
+    },
+    {
+      "ref": "3.10",
+      "field": "Trailer / secondary vehicle registration",
+      "dataType": "Text (20)",
+      "mandatory": "Conditional",
+      "validation": "Where a prime mover and trailer combination is used.",
+      "sampleEntry": "N/A",
+      "section": 3
+    },
+    {
+      "ref": "3.11",
+      "field": "Freight rate applied & amount (PKR)",
+      "dataType": "Formula",
+      "mandatory": "System",
+      "validation": "From the transporter rate schedule; forms the basis of the freight bill.",
+      "sampleEntry": "PKR 3,850 per MT - 115,500",
+      "section": 3
+    },
+    {
+      "ref": "3.12",
+      "field": "Route & expected transit time",
+      "dataType": "Text (120)",
+      "mandatory": "Yes",
+      "validation": "Planned route and hours; deviations are flagged by the tracking system.",
+      "sampleEntry": "Nooriabad-Lahore via M-9/M-5, 26 hours",
+      "section": 3
+    },
+    {
+      "ref": "4.1",
+      "field": "Line number",
+      "dataType": "Integer",
+      "mandatory": "Yes",
+      "validation": "REPEATING BLOCK - one row set per material and packing type on the vehicle.",
+      "sampleEntry": "1",
+      "section": 4
+    },
+    {
+      "ref": "4.2",
+      "field": "Material code & description",
+      "dataType": "Lookup",
+      "mandatory": "Yes",
+      "validation": "From the material definition sheet.",
+      "sampleEntry": "MAT-CEM-OPC53-BULK - OPC 53 Grade, bulk",
+      "section": 4
+    },
+    {
+      "ref": "4.3",
+      "field": "Batch / lot number & date of manufacture",
+      "dataType": "Text (60)",
+      "mandatory": "Conditional",
+      "validation": "Mandatory for batch-tracked materials; supports traceability and shelf life.",
+      "sampleEntry": "B-2026-1018 / 18-Oct-2026",
+      "section": 4
+    },
+    {
+      "ref": "4.4",
+      "field": "Packing type",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Bulk / 50 kg PP bag / 50 kg paper bag / Jumbo bag.",
+      "sampleEntry": "Bulk",
+      "section": 4
+    },
+    {
+      "ref": "4.5",
+      "field": "Unit of measure",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "MT / Bag.",
+      "sampleEntry": "MT",
+      "section": 4
+    },
+    {
+      "ref": "4.6",
+      "field": "Quantity ordered (open balance)",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Remaining quantity on the sales order before this dispatch.",
+      "sampleEntry": "18000",
+      "section": 4
+    },
+    {
+      "ref": "4.7",
+      "field": "Quantity dispatched",
+      "dataType": "Number",
+      "mandatory": "Yes",
+      "validation": "Cannot exceed the open order balance or the vehicle payload.",
+      "sampleEntry": "30",
+      "section": 4
+    },
+    {
+      "ref": "4.8",
+      "field": "Number of bags loaded",
+      "dataType": "Formula",
+      "mandatory": "System",
+      "validation": "Derived from the quantity and the bags-per-MT conversion, for bagged dispatches.",
+      "sampleEntry": "N/A",
+      "section": 4
+    },
+    {
+      "ref": "4.9",
+      "field": "Rate per unit (for information)",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Pulled from the order; the challan itself carries no tax.",
+      "sampleEntry": "14300",
+      "section": 4
+    },
+    {
+      "ref": "4.10",
+      "field": "Value of goods dispatched (PKR)",
+      "dataType": "Formula",
+      "mandatory": "System",
+      "validation": "For insurance and gate control; the tax invoice is raised separately.",
+      "sampleEntry": "429000",
+      "section": 4
+    },
+    {
+      "ref": "4.11",
+      "field": "Mill test certificate number",
+      "dataType": "Text (40)",
+      "mandatory": "Conditional",
+      "validation": "Issued with the consignment where required by the customer.",
+      "sampleEntry": "MTC-2026-3345",
+      "section": 4
+    },
+    {
+      "ref": "4.12",
+      "field": "Stock movement posted at plant",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Inventory is reduced at the supplying location on gate-out.",
+      "sampleEntry": "Posted",
+      "section": 4
+    },
+    {
+      "ref": "5.1",
+      "field": "Weighbridge slip number",
+      "dataType": "Text (30)",
+      "mandatory": "Yes",
+      "validation": "Slip generated by the calibrated weighbridge at the plant.",
+      "sampleEntry": "WB-44112",
+      "section": 5
+    },
+    {
+      "ref": "5.2",
+      "field": "Weighbridge calibration valid until",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Pulled from the weighbridge record; an expired calibration blocks the challan.",
+      "sampleEntry": "46387",
+      "section": 5
+    },
+    {
+      "ref": "5.3",
+      "field": "Tare weight at entry (MT)",
+      "dataType": "Number",
+      "mandatory": "Yes",
+      "validation": "Empty vehicle weight recorded on arrival.",
+      "sampleEntry": "14.5",
+      "section": 5
+    },
+    {
+      "ref": "5.4",
+      "field": "Gross weight at exit (MT)",
+      "dataType": "Number",
+      "mandatory": "Yes",
+      "validation": "Loaded vehicle weight recorded before gate-out.",
+      "sampleEntry": "44.5",
+      "section": 5
+    },
+    {
+      "ref": "5.5",
+      "field": "Net weight loaded (MT)",
+      "dataType": "Formula",
+      "mandatory": "System",
+      "validation": "Gross less tare; this is the quantity governing invoicing.",
+      "sampleEntry": "30",
+      "section": 5
+    },
+    {
+      "ref": "5.6",
+      "field": "Variance against quantity dispatched",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Difference between the net weight and the entered quantity; beyond tolerance the challan is held.",
+      "sampleEntry": "Nil",
+      "section": 5
+    },
+    {
+      "ref": "5.7",
+      "field": "Overload check against payload capacity",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Pass / Fail against the vehicle payload and legal axle load.",
+      "sampleEntry": "Pass",
+      "section": 5
+    },
+    {
+      "ref": "5.8",
+      "field": "Seal number(s) applied",
+      "dataType": "Text (60)",
+      "mandatory": "Conditional",
+      "validation": "Tamper seals on tanker hatches or truck covers.",
+      "sampleEntry": "SEAL-88231, SEAL-88232",
+      "section": 5
+    },
+    {
+      "ref": "5.9",
+      "field": "Loading start & completion time",
+      "dataType": "Text (60)",
+      "mandatory": "Yes",
+      "validation": "Used to measure loading efficiency and vehicle turnaround.",
+      "sampleEntry": "11:10 to 12:25",
+      "section": 5
+    },
+    {
+      "ref": "5.10",
+      "field": "Gate-out time & security officer",
+      "dataType": "Text (120)",
+      "mandatory": "Yes",
+      "validation": "Time the vehicle left the plant and the officer who cleared it.",
+      "sampleEntry": "12:40 - Security, R. Khan",
+      "section": 5
+    },
+    {
+      "ref": "5.11",
+      "field": "Documents handed to driver",
+      "dataType": "Multi-select",
+      "mandatory": "Yes",
+      "validation": "Delivery challan / weighbridge slip / mill test certificate / tax invoice / gate pass.",
+      "sampleEntry": "All five",
+      "section": 5
+    },
+    {
+      "ref": "6.1",
+      "field": "Arrival date & time at delivery point",
+      "dataType": "Date-time",
+      "mandatory": "Yes",
+      "validation": "Recorded by the driver or the site contact; drives the OTIF measurement.",
+      "sampleEntry": "46316.555555555555",
+      "section": 6
+    },
+    {
+      "ref": "6.2",
+      "field": "Unloading start & completion time",
+      "dataType": "Text (60)",
+      "mandatory": "Yes",
+      "validation": "Free unloading time is measured from arrival.",
+      "sampleEntry": "13:40 to 16:10",
+      "section": 6
+    },
+    {
+      "ref": "6.3",
+      "field": "Detention / demurrage incurred (hours & PKR)",
+      "dataType": "Formula",
+      "mandatory": "System",
+      "validation": "Time beyond the free period, charged at the agreed rate.",
+      "sampleEntry": "Nil",
+      "section": 6
+    },
+    {
+      "ref": "6.4",
+      "field": "Quantity received at site",
+      "dataType": "Number",
+      "mandatory": "Yes",
+      "validation": "Quantity acknowledged by the consignee.",
+      "sampleEntry": "30",
+      "section": 6
+    },
+    {
+      "ref": "6.5",
+      "field": "Weighbridge reading at site (if available)",
+      "dataType": "Text (80)",
+      "mandatory": "No",
+      "validation": "Customer weighbridge reading, where the site has one.",
+      "sampleEntry": "29.95 MT",
+      "section": 6
+    },
+    {
+      "ref": "6.6",
+      "field": "Shortage or excess (system-derived)",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Difference between dispatched and received quantity; beyond tolerance a claim is raised automatically.",
+      "sampleEntry": "0.05 MT within tolerance",
+      "section": 6
+    },
+    {
+      "ref": "6.7",
+      "field": "Condition of goods on receipt",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Good / Wet or damaged bags / Contaminated / Partially damaged.",
+      "sampleEntry": "Good",
+      "section": 6
+    },
+    {
+      "ref": "6.8",
+      "field": "Seal intact on arrival",
+      "dataType": "Yes / No",
+      "mandatory": "Yes",
+      "validation": "A broken seal triggers a mandatory investigation.",
+      "sampleEntry": "Yes",
+      "section": 6
+    },
+    {
+      "ref": "6.9",
+      "field": "Received by - name, designation & CNIC",
+      "dataType": "Text (150)",
+      "mandatory": "Yes",
+      "validation": "Must be a contact authorised to sign challans on the customer record.",
+      "sampleEntry": "Engr. Umar Farooq / Plant Manager / 35201-4455663-2",
+      "section": 6
+    },
+    {
+      "ref": "6.10",
+      "field": "Consignee signature & stamp",
+      "dataType": "File upload / e-sign",
+      "mandatory": "Yes",
+      "validation": "Signed challan copy or a digital proof of delivery with geo-tag.",
+      "sampleEntry": "Attached",
+      "section": 6
+    },
+    {
+      "ref": "6.11",
+      "field": "Proof of delivery uploaded on & by",
+      "dataType": "Text (120)",
+      "mandatory": "Yes",
+      "validation": "Driver or site officer who uploaded the acknowledged copy.",
+      "sampleEntry": "Driver app - 21-Oct-2026 16:30",
+      "section": 6
+    },
+    {
+      "ref": "7.1",
+      "field": "Goods returned (quantity & reason)",
+      "dataType": "Text (150)",
+      "mandatory": "Conditional",
+      "validation": "Rejected or undelivered quantity returned to the plant.",
+      "sampleEntry": "Nil",
+      "section": 7
+    },
+    {
+      "ref": "7.2",
+      "field": "Return challan reference",
+      "dataType": "Text (30)",
+      "mandatory": "Conditional",
+      "validation": "Raised where material comes back; stock is reinstated on receipt.",
+      "sampleEntry": "N/A",
+      "section": 7
+    },
+    {
+      "ref": "7.3",
+      "field": "Claim raised (type & amount)",
+      "dataType": "Text (150)",
+      "mandatory": "Conditional",
+      "validation": "Shortage, damage or quality claim; recovered from the transporter or credited to the customer.",
+      "sampleEntry": "N/A",
+      "section": 7
+    },
+    {
+      "ref": "7.4",
+      "field": "Claim status",
+      "dataType": "Dropdown",
+      "mandatory": "Conditional",
+      "validation": "Not applicable / Under review / Accepted / Rejected / Settled.",
+      "sampleEntry": "Not applicable",
+      "section": 7
+    },
+    {
+      "ref": "7.5",
+      "field": "Tax invoice raised against this challan",
+      "dataType": "Lookup",
+      "mandatory": "Yes",
+      "validation": "Invoice number and date; a challan cannot remain uninvoiced beyond the tax period.",
+      "sampleEntry": "SSIT-INV-2026-004512, 20-Oct-2026",
+      "section": 7
+    },
+    {
+      "ref": "7.6",
+      "field": "Invoiced quantity versus delivered quantity",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Must reconcile; any difference requires a credit note.",
+      "sampleEntry": "Matched",
+      "section": 7
+    },
+    {
+      "ref": "7.7",
+      "field": "Freight bill raised by transporter",
+      "dataType": "Lookup",
+      "mandatory": "Conditional",
+      "validation": "Freight bill covering this trip; links to sheet 08.",
+      "sampleEntry": "Pending",
+      "section": 7
+    },
+    {
+      "ref": "7.8",
+      "field": "OTIF result for this delivery",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "On-time in-full outcome; feeds the transporter and plant scorecards.",
+      "sampleEntry": "On time, in full",
+      "section": 7
+    },
+    {
+      "ref": "7.9",
+      "field": "Delivery closed on & by",
+      "dataType": "Text (120)",
+      "mandatory": "System",
+      "validation": "Closure after invoicing, claim settlement and freight billing.",
+      "sampleEntry": "Logistics - 22-Oct-2026",
+      "section": 7
+    },
+    {
+      "ref": "8.1",
+      "field": "Prepared by (dispatch officer) & date",
+      "dataType": "Text (120)",
+      "mandatory": "System",
+      "validation": "Officer who raised the challan.",
+      "sampleEntry": "Dispatch - A. Nadeem, 19-Oct-2026",
+      "section": 8
+    },
+    {
+      "ref": "8.2",
+      "field": "Store / silo issue authorised by",
+      "dataType": "Text (120)",
+      "mandatory": "Yes",
+      "validation": "Store officer authorising the physical issue of material.",
+      "sampleEntry": "Store In-charge - M. Akram",
+      "section": 8
+    },
+    {
+      "ref": "8.3",
+      "field": "Quality clearance for dispatch",
+      "dataType": "Text (120)",
+      "mandatory": "Conditional",
+      "validation": "QA release where batch testing is required before dispatch.",
+      "sampleEntry": "QA - cleared 19-Oct-2026",
+      "section": 8
+    },
+    {
+      "ref": "8.4",
+      "field": "Approved by (plant dispatch head) & date",
+      "dataType": "Text (120)",
+      "mandatory": "Yes",
+      "validation": "Approval before gate-out.",
+      "sampleEntry": "Dispatch Head - 19-Oct-2026",
+      "section": 8
+    },
+    {
+      "ref": "8.5",
+      "field": "Signed challan copy (consignee acknowledged)",
+      "dataType": "File upload",
+      "mandatory": "Yes",
+      "validation": "Returned copy filed against the delivery.",
+      "sampleEntry": "Attached",
+      "section": 8
+    },
+    {
+      "ref": "8.6",
+      "field": "Weighbridge slip",
+      "dataType": "File upload",
+      "mandatory": "Yes",
+      "validation": "Supports Section 5.",
+      "sampleEntry": "Attached",
+      "section": 8
+    },
+    {
+      "ref": "8.7",
+      "field": "Mill test certificate",
+      "dataType": "File upload",
+      "mandatory": "Conditional",
+      "validation": "Supports field 4.11.",
+      "sampleEntry": "Attached",
+      "section": 8
+    },
+    {
+      "ref": "8.8",
+      "field": "Gate pass & security register entry",
+      "dataType": "File upload",
+      "mandatory": "Yes",
+      "validation": "Gate-out record.",
+      "sampleEntry": "Attached",
+      "section": 8
+    },
+    {
+      "ref": "8.9",
+      "field": "Photographs of loaded vehicle & seals",
+      "dataType": "File upload",
+      "mandatory": "No",
+      "validation": "Evidence of condition and sealing at dispatch.",
+      "sampleEntry": "Attached",
+      "section": 8
+    },
+    {
+      "ref": "8.10",
+      "field": "Audit trail",
+      "dataType": "Note - system",
+      "mandatory": "System",
+      "validation": "Issued challans cannot be edited; corrections require a cancellation with reason and a fresh challan. Every change is logged with user and timestamp.",
+      "sampleEntry": "Enabled",
+      "section": 8
+    },
+    {
+      "ref": "8.11",
+      "field": "Cancellation reference & reason",
+      "dataType": "Text (150)",
+      "mandatory": "Conditional",
+      "validation": "Recorded where the challan is cancelled before gate-out.",
+      "sampleEntry": "N/A",
+      "section": 8
+    }
+  ]
+}

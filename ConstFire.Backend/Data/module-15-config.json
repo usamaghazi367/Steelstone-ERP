@@ -1,0 +1,969 @@
+{
+  "code": "15",
+  "name": "PAYMENT RECEIPT  (CUSTOMER RECEIPT)",
+  "category": "ERP Module",
+  "recordCodePrefix": "RCT",
+  "listColumns": [
+    "_recordCode",
+    "1.1",
+    "1.2",
+    "1.3"
+  ],
+  "sections": [
+    {
+      "num": 1,
+      "title": "RECEIPT HEADER",
+      "repeating": false
+    },
+    {
+      "num": 2,
+      "title": "PAYER (CUSTOMER) DETAILS",
+      "repeating": false
+    },
+    {
+      "num": 3,
+      "title": "COLLECTION MODES & INSTRUMENT DETAILS  (repeating tender block - split payment across cash, cheque and IBFT supported)",
+      "repeating": false
+    },
+    {
+      "num": 4,
+      "title": "INVOICE ALLOCATION  (repeating block)",
+      "repeating": true
+    },
+    {
+      "num": 5,
+      "title": "WITHHOLDING TAX & RECONCILIATION",
+      "repeating": false
+    },
+    {
+      "num": 6,
+      "title": "REALISATION, CREDIT & ACCOUNTING EFFECT",
+      "repeating": false
+    },
+    {
+      "num": 7,
+      "title": "APPROVAL, ISSUE, ATTACHMENTS & AUDIT",
+      "repeating": false
+    }
+  ],
+  "fields": [
+    {
+      "ref": "1.1",
+      "field": "Receipt number",
+      "dataType": "Text (20)",
+      "mandatory": "System",
+      "validation": "Auto-generated, unique, gapless and immutable.",
+      "sampleEntry": "SSIT-RCPT-2026-002214",
+      "section": 1
+    },
+    {
+      "ref": "1.2",
+      "field": "Receipt date",
+      "dataType": "Date",
+      "mandatory": "Yes",
+      "validation": "Date the money is received; must fall in an open accounting period.",
+      "sampleEntry": "46344",
+      "section": 1
+    },
+    {
+      "ref": "1.3",
+      "field": "Receipt type (GATING FIELD)",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Against invoice / Advance from customer / Security deposit / Refund received / Miscellaneous income. Drives which allocation fields are mandatory.",
+      "sampleEntry": "Against invoice",
+      "section": 1
+    },
+    {
+      "ref": "1.4",
+      "field": "Enterprise entity receiving the money",
+      "dataType": "Lookup",
+      "mandatory": "Yes",
+      "validation": "Receiving entity from sheet 01.",
+      "sampleEntry": "ENT-000145 - Steelstone IT (Pvt) Ltd",
+      "section": 1
+    },
+    {
+      "ref": "1.5",
+      "field": "Location / plant or office",
+      "dataType": "Lookup",
+      "mandatory": "Yes",
+      "validation": "Where the receipt was collected.",
+      "sampleEntry": "Head Office, Lahore",
+      "section": 1
+    },
+    {
+      "ref": "1.6",
+      "field": "Currency & exchange rate",
+      "dataType": "Text (40)",
+      "mandatory": "Yes",
+      "validation": "PKR by default; rate required for foreign currency receipts.",
+      "sampleEntry": "PKR / 1.0000",
+      "section": 1
+    },
+    {
+      "ref": "1.7",
+      "field": "Amount received (PKR)",
+      "dataType": "Number",
+      "mandatory": "Yes",
+      "validation": "Gross amount received from the customer before any allocation.",
+      "sampleEntry": "566220",
+      "section": 1
+    },
+    {
+      "ref": "1.8",
+      "field": "Amount in words",
+      "dataType": "Formula",
+      "mandatory": "System",
+      "validation": "Generated from the amount received.",
+      "sampleEntry": "Rupees five hundred sixty six thousand two hundred twenty only",
+      "section": 1
+    },
+    {
+      "ref": "1.9",
+      "field": "Received by (cashier / officer)",
+      "dataType": "Text (120)",
+      "mandatory": "Yes",
+      "validation": "Person who collected or recorded the receipt.",
+      "sampleEntry": "Cashier - T. Mehmood",
+      "section": 1
+    },
+    {
+      "ref": "1.10",
+      "field": "Collected by (sales officer, if collected at site)",
+      "dataType": "Text (120)",
+      "mandatory": "Conditional",
+      "validation": "Field collections must be deposited within the timeframe set by policy.",
+      "sampleEntry": "RSM - A. Sheikh",
+      "section": 1
+    },
+    {
+      "ref": "1.11",
+      "field": "Deposit due date for field collections",
+      "dataType": "Formula",
+      "mandatory": "System",
+      "validation": "Cash collected in the field must be banked within 24 hours; overdue deposits are flagged.",
+      "sampleEntry": "46345",
+      "section": 1
+    },
+    {
+      "ref": "1.12",
+      "field": "Receipt status",
+      "dataType": "Dropdown",
+      "mandatory": "System",
+      "validation": "Draft / Issued (provisional) / Realised / Bounced / Cancelled / Reversed.",
+      "sampleEntry": "Issued (provisional)",
+      "section": 1
+    },
+    {
+      "ref": "2.1",
+      "field": "Payer type",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "End-user customer / Distributor / Employee / Other party.",
+      "sampleEntry": "End-user customer",
+      "section": 2
+    },
+    {
+      "ref": "2.2",
+      "field": "Customer code & registered name",
+      "dataType": "Lookup",
+      "mandatory": "Yes",
+      "validation": "Pulled from the customer or distributor register.",
+      "sampleEntry": "CUST-00512 - Zameen Builders (Pvt) Ltd",
+      "section": 2
+    },
+    {
+      "ref": "2.3",
+      "field": "Customer NTN / STRN",
+      "dataType": "Text (40)",
+      "mandatory": "System",
+      "validation": "Pulled from the customer record for withholding reconciliation.",
+      "sampleEntry": "0077331-2 / 3277800773312",
+      "section": 2
+    },
+    {
+      "ref": "2.4",
+      "field": "Payer name on the instrument",
+      "dataType": "Text (120)",
+      "mandatory": "Yes",
+      "validation": "If the payer differs from the customer, a written authority is required.",
+      "sampleEntry": "Zameen Builders (Pvt) Ltd",
+      "section": 2
+    },
+    {
+      "ref": "2.5",
+      "field": "Third-party payment authority reference",
+      "dataType": "Text (60)",
+      "mandatory": "Conditional",
+      "validation": "Mandatory where the payer is not the registered customer.",
+      "sampleEntry": "N/A",
+      "section": 2
+    },
+    {
+      "ref": "2.6",
+      "field": "Customer outstanding before this receipt (PKR)",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Total receivable across all open invoices.",
+      "sampleEntry": "566220",
+      "section": 2
+    },
+    {
+      "ref": "2.7",
+      "field": "Customer overdue amount before receipt (PKR)",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Amount past the due date; drives order blocking.",
+      "sampleEntry": "0",
+      "section": 2
+    },
+    {
+      "ref": "2.8",
+      "field": "Credit limit utilised before receipt (PKR)",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Exposure against the approved limit.",
+      "sampleEntry": "566220",
+      "section": 2
+    },
+    {
+      "ref": "2.9",
+      "field": "Contact & mobile for receipt acknowledgement",
+      "dataType": "Text (120)",
+      "mandatory": "Yes",
+      "validation": "Receipt is emailed or messaged to this contact on issue.",
+      "sampleEntry": "Bilal Nadeem / +92-300-1239876",
+      "section": 2
+    },
+    {
+      "ref": "2.10",
+      "field": "Project / site reference",
+      "dataType": "Lookup",
+      "mandatory": "No",
+      "validation": "Where the customer operates project-wise accounts.",
+      "sampleEntry": "Zameen Heights - Block C",
+      "section": 2
+    },
+    {
+      "ref": "3.1",
+      "field": "Number of collection modes used in this receipt",
+      "dataType": "Integer",
+      "mandatory": "Yes",
+      "validation": "Default 1. SPLIT PAYMENT IS ALLOWED - a single receipt may be collected partly in cash, partly by cheque and partly by IBFT. Enter one tender line below for each mode used.",
+      "sampleEntry": "2",
+      "section": 3
+    },
+    {
+      "ref": "3.2",
+      "field": "Tender line number",
+      "dataType": "Integer",
+      "mandatory": "Yes",
+      "validation": "REPEATING BLOCK - one complete row set per collection mode used. Example: line 1 cash PKR 2,500,000 and line 2 IBFT PKR 2,500,000 against a receipt of PKR 5,000,000.",
+      "sampleEntry": "1",
+      "section": 3
+    },
+    {
+      "ref": "3.3",
+      "field": "Collection mode for this line (GATING FIELD)",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "CASH COLLECTION / CHEQUE COLLECTION / IBFT or online bank transfer. Only the matching block below is opened and made mandatory for this line.",
+      "sampleEntry": "Cash collection",
+      "section": 3
+    },
+    {
+      "ref": "3.4",
+      "field": "Amount received in this line (PKR)",
+      "dataType": "Number",
+      "mandatory": "Yes",
+      "validation": "Must be greater than zero. The sum of all tender lines must equal the total amount received in field 1.7.",
+      "sampleEntry": "2500000",
+      "section": 3
+    },
+    {
+      "ref": "3.5",
+      "field": "Enterprise account or cash counter credited for this line",
+      "dataType": "Lookup",
+      "mandatory": "Yes",
+      "validation": "Bank account for cheque and IBFT lines; cash counter or till for cash lines.",
+      "sampleEntry": "Head office cash counter",
+      "section": 3
+    },
+    {
+      "ref": "3.6",
+      "field": "Line realisation status (system-derived)",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Provisional / Realised / Bounced or Failed. Each tender line is realised independently.",
+      "sampleEntry": "Realised",
+      "section": 3
+    },
+    {
+      "ref": "3.7",
+      "field": "CASH - collected by (name, designation & CNIC)",
+      "dataType": "Text (150)",
+      "mandatory": "Cash line only",
+      "validation": "Cashier or sales officer who physically received the cash.",
+      "sampleEntry": "Cashier - T. Mehmood / 35202-8899776-1",
+      "section": 3
+    },
+    {
+      "ref": "3.8",
+      "field": "CASH - place of collection",
+      "dataType": "Dropdown",
+      "mandatory": "Cash line only",
+      "validation": "Head office cash counter / Plant cash counter / Customer premises / Delivery site.",
+      "sampleEntry": "Head office cash counter",
+      "section": 3
+    },
+    {
+      "ref": "3.9",
+      "field": "CASH - manual cash receipt book serial",
+      "dataType": "Text (30)",
+      "mandatory": "Cash line only",
+      "validation": "Serial of the pre-printed receipt handed over at the time of collection.",
+      "sampleEntry": "CR-2026-08812",
+      "section": 3
+    },
+    {
+      "ref": "3.10",
+      "field": "CASH - denomination count sheet attached",
+      "dataType": "Yes / No",
+      "mandatory": "Cash line only",
+      "validation": "Signed by the person receiving and the person handing over the cash.",
+      "sampleEntry": "Yes",
+      "section": 3
+    },
+    {
+      "ref": "3.11",
+      "field": "CASH - custody until deposit",
+      "dataType": "Text (120)",
+      "mandatory": "Cash line only",
+      "validation": "Who holds the cash and where, until it is banked.",
+      "sampleEntry": "Cashier safe, head office",
+      "section": 3
+    },
+    {
+      "ref": "3.12",
+      "field": "CASH - deposit slip number & bank deposit date",
+      "dataType": "Text (60)",
+      "mandatory": "Cash line only",
+      "validation": "Evidence of the cash reaching the enterprise bank account.",
+      "sampleEntry": "DS-99112, 19-Nov-2026",
+      "section": 3
+    },
+    {
+      "ref": "3.13",
+      "field": "CASH - deposit due date (within 24 hours)",
+      "dataType": "Formula",
+      "mandatory": "System",
+      "validation": "Collection date plus one working day. DATE FIELD - amber on the due date, red once overdue; overdue deposits are escalated to finance.",
+      "sampleEntry": "46345",
+      "section": 3
+    },
+    {
+      "ref": "3.14",
+      "field": "CASH - deposit status (system-derived)",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Deposited on time / Deposit pending / OVERDUE. This tender line stays provisional until the cash is banked.",
+      "sampleEntry": "Deposited on time",
+      "section": 3
+    },
+    {
+      "ref": "3.15",
+      "field": "CHEQUE - cheque number",
+      "dataType": "Text (30)",
+      "mandatory": "Cheque line only",
+      "validation": "Number printed on the instrument; also covers pay orders and demand drafts.",
+      "sampleEntry": "N/A",
+      "section": 3
+    },
+    {
+      "ref": "3.16",
+      "field": "CHEQUE - cheque date",
+      "dataType": "Date",
+      "mandatory": "Cheque line only",
+      "validation": "Date written on the instrument.",
+      "sampleEntry": "N/A",
+      "section": 3
+    },
+    {
+      "ref": "3.17",
+      "field": "CHEQUE - amount on the instrument (PKR)",
+      "dataType": "Number",
+      "mandatory": "Cheque line only",
+      "validation": "Must equal the amount of this tender line.",
+      "sampleEntry": "N/A",
+      "section": 3
+    },
+    {
+      "ref": "3.18",
+      "field": "CHEQUE - drawee bank & branch",
+      "dataType": "Text (120)",
+      "mandatory": "Cheque line only",
+      "validation": "Bank on which the cheque is drawn.",
+      "sampleEntry": "N/A",
+      "section": 3
+    },
+    {
+      "ref": "3.19",
+      "field": "CHEQUE - post-dated?",
+      "dataType": "Yes / No",
+      "mandatory": "Cheque line only",
+      "validation": "If Yes, the instrument is held and presented on the due date below.",
+      "sampleEntry": "N/A",
+      "section": 3
+    },
+    {
+      "ref": "3.20",
+      "field": "CHEQUE - presentation due date",
+      "dataType": "Date",
+      "mandatory": "Cheque line only",
+      "validation": "DATE FIELD - amber 3 days before, red once passed without presentation.",
+      "sampleEntry": "N/A",
+      "section": 3
+    },
+    {
+      "ref": "3.21",
+      "field": "CHEQUE - physical custody until presentation",
+      "dataType": "Text (120)",
+      "mandatory": "Cheque line only",
+      "validation": "Location and custodian of the instrument, controlled under the cheque register.",
+      "sampleEntry": "N/A",
+      "section": 3
+    },
+    {
+      "ref": "3.22",
+      "field": "CHEQUE - date presented to bank",
+      "dataType": "Date",
+      "mandatory": "Cheque line only",
+      "validation": "Date the instrument was deposited for clearing.",
+      "sampleEntry": "N/A",
+      "section": 3
+    },
+    {
+      "ref": "3.23",
+      "field": "CHEQUE - clearing status & clearing date",
+      "dataType": "Dropdown",
+      "mandatory": "Cheque line only",
+      "validation": "In clearing / Cleared / Returned unpaid, with the date. This line stays provisional until cleared.",
+      "sampleEntry": "N/A",
+      "section": 3
+    },
+    {
+      "ref": "3.24",
+      "field": "CHEQUE - return reason & charges recovered (PKR)",
+      "dataType": "Text (150)",
+      "mandatory": "Conditional",
+      "validation": "Mandatory where the cheque bounced; charges are debited to the customer account.",
+      "sampleEntry": "N/A",
+      "section": 3
+    },
+    {
+      "ref": "3.25",
+      "field": "IBFT - payer bank & account / IBAN",
+      "dataType": "Text (60)",
+      "mandatory": "IBFT line only",
+      "validation": "Source account from which the funds were transferred.",
+      "sampleEntry": "United Bank Limited / PK19UNIL0003120010055443",
+      "section": 3
+    },
+    {
+      "ref": "3.26",
+      "field": "IBFT - transaction reference (UTR / IBFT ID)",
+      "dataType": "Text (40)",
+      "mandatory": "IBFT line only",
+      "validation": "Reference quoted on the bank statement; used to trace the credit.",
+      "sampleEntry": "IBFT-20261118-44821",
+      "section": 3
+    },
+    {
+      "ref": "3.27",
+      "field": "IBFT - date & time of transfer",
+      "dataType": "Date-time",
+      "mandatory": "IBFT line only",
+      "validation": "As shown on the customer's transfer confirmation.",
+      "sampleEntry": "46344.4875",
+      "section": 3
+    },
+    {
+      "ref": "3.28",
+      "field": "IBFT - amount credited per bank statement (PKR)",
+      "dataType": "Number",
+      "mandatory": "IBFT line only",
+      "validation": "Actual credit received; a variance against this tender line is flagged for investigation.",
+      "sampleEntry": "2500000",
+      "section": 3
+    },
+    {
+      "ref": "3.29",
+      "field": "IBFT - credit identification status",
+      "dataType": "Dropdown",
+      "mandatory": "IBFT line only",
+      "validation": "Identified and matched to customer / Unidentified credit held in suspense. Unidentified credits are not allocated to invoices.",
+      "sampleEntry": "Identified and matched",
+      "section": 3
+    },
+    {
+      "ref": "3.30",
+      "field": "Bank charges deducted on this line (PKR)",
+      "dataType": "Number",
+      "mandatory": "No",
+      "validation": "Charges borne by the enterprise are posted to the bank charges account.",
+      "sampleEntry": "0",
+      "section": 3
+    },
+    {
+      "ref": "3.31",
+      "field": "Line completeness check (system-derived)",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Pass only when every mandatory field of the mode selected for this line is complete.",
+      "sampleEntry": "Pass",
+      "section": 3
+    },
+    {
+      "ref": "3.32",
+      "field": "TOTAL OF ALL TENDER LINES (PKR)",
+      "dataType": "Formula",
+      "mandatory": "System",
+      "validation": "Sum of the amounts of every tender line entered above.",
+      "sampleEntry": "5000000",
+      "section": 3
+    },
+    {
+      "ref": "3.33",
+      "field": "Difference against amount received (field 1.7)",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "MUST BE ZERO. The receipt cannot be issued while the tender lines do not add up to the total amount received.",
+      "sampleEntry": "0",
+      "section": 3
+    },
+    {
+      "ref": "3.34",
+      "field": "Split payment summary (system-derived)",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Readable summary printed on the receipt, e.g. 'Cash PKR 2,500,000 + IBFT PKR 2,500,000'.",
+      "sampleEntry": "Cash PKR 2,500,000 + IBFT PKR 2,500,000",
+      "section": 3
+    },
+    {
+      "ref": "3.35",
+      "field": "Overall receipt realisation (system-derived)",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Realised only when EVERY tender line is realised. If any line bounces or a cash deposit is overdue, the receipt stays provisional and the credit limit is restored only to the extent of the realised lines.",
+      "sampleEntry": "Realised",
+      "section": 3
+    },
+    {
+      "ref": "4.1",
+      "field": "Line number",
+      "dataType": "Integer",
+      "mandatory": "Yes",
+      "validation": "REPEATING BLOCK - one line per invoice settled by this receipt.",
+      "sampleEntry": "1",
+      "section": 4
+    },
+    {
+      "ref": "4.2",
+      "field": "Invoice number & date",
+      "dataType": "Lookup",
+      "mandatory": "Conditional",
+      "validation": "Open invoice from sheet 11; mandatory for receipts against invoices.",
+      "sampleEntry": "SSIT-INV-2026-004512, 20-Oct-2026",
+      "section": 4
+    },
+    {
+      "ref": "4.3",
+      "field": "Invoice gross value (PKR)",
+      "dataType": "Formula",
+      "mandatory": "System",
+      "validation": "Pulled from the invoice.",
+      "sampleEntry": "566220",
+      "section": 4
+    },
+    {
+      "ref": "4.4",
+      "field": "Amount already received against the invoice",
+      "dataType": "Formula",
+      "mandatory": "System",
+      "validation": "Prior receipts allocated to the same invoice.",
+      "sampleEntry": "0",
+      "section": 4
+    },
+    {
+      "ref": "4.5",
+      "field": "Balance outstanding before this receipt (PKR)",
+      "dataType": "Formula",
+      "mandatory": "System",
+      "validation": "Invoice value less prior receipts and credit notes.",
+      "sampleEntry": "566220",
+      "section": 4
+    },
+    {
+      "ref": "4.6",
+      "field": "Amount allocated in this receipt (PKR)",
+      "dataType": "Number",
+      "mandatory": "Yes",
+      "validation": "Cannot exceed the outstanding balance of the invoice.",
+      "sampleEntry": "540740",
+      "section": 4
+    },
+    {
+      "ref": "4.7",
+      "field": "Discount allowed on settlement (PKR)",
+      "dataType": "Number",
+      "mandatory": "No",
+      "validation": "Prompt-payment discount, only if within the qualifying period.",
+      "sampleEntry": "0",
+      "section": 4
+    },
+    {
+      "ref": "4.8",
+      "field": "Withholding tax claimed by customer (PKR)",
+      "dataType": "Number",
+      "mandatory": "Conditional",
+      "validation": "Tax the customer deducted; must be supported by a CPR or certificate.",
+      "sampleEntry": "25480",
+      "section": 4
+    },
+    {
+      "ref": "4.9",
+      "field": "Credit note adjusted (PKR)",
+      "dataType": "Number",
+      "mandatory": "No",
+      "validation": "Credit note reference applied against this invoice.",
+      "sampleEntry": "0",
+      "section": 4
+    },
+    {
+      "ref": "4.10",
+      "field": "Balance remaining on the invoice (PKR)",
+      "dataType": "Formula",
+      "mandatory": "System",
+      "validation": "Updates the invoice to Paid or Partially paid on realisation.",
+      "sampleEntry": "0",
+      "section": 4
+    },
+    {
+      "ref": "4.11",
+      "field": "Allocation method",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Manual allocation / Oldest invoice first (FIFO) / On account (unallocated).",
+      "sampleEntry": "Manual allocation",
+      "section": 4
+    },
+    {
+      "ref": "4.12",
+      "field": "Unallocated / on-account balance (PKR)",
+      "dataType": "Formula",
+      "mandatory": "System",
+      "validation": "Amount received but not yet matched to an invoice; held as a customer advance.",
+      "sampleEntry": "0",
+      "section": 4
+    },
+    {
+      "ref": "5.1",
+      "field": "Withholding tax deducted by customer - section",
+      "dataType": "Text (60)",
+      "mandatory": "Conditional",
+      "validation": "Section under which the customer withheld tax on the payment.",
+      "sampleEntry": "Sec. 153(1)(a) - goods",
+      "section": 5
+    },
+    {
+      "ref": "5.2",
+      "field": "Withholding rate applied (%)",
+      "dataType": "Number",
+      "mandatory": "Conditional",
+      "validation": "Rate applied by the customer; must match the enterprise's filer status.",
+      "sampleEntry": "0.045",
+      "section": 5
+    },
+    {
+      "ref": "5.3",
+      "field": "Withholding tax amount (PKR)",
+      "dataType": "Formula",
+      "mandatory": "System",
+      "validation": "Total tax deducted across all allocated invoices.",
+      "sampleEntry": "25480",
+      "section": 5
+    },
+    {
+      "ref": "5.4",
+      "field": "CPR / challan number & date",
+      "dataType": "Text (60)",
+      "mandatory": "Conditional",
+      "validation": "FBR payment receipt evidencing the deposit by the customer.",
+      "sampleEntry": "Pending",
+      "section": 5
+    },
+    {
+      "ref": "5.5",
+      "field": "Withholding tax certificate received",
+      "dataType": "Yes / No + Date",
+      "mandatory": "Yes",
+      "validation": "Certificate must be obtained to claim the credit in the annual return.",
+      "sampleEntry": "Pending",
+      "section": 5
+    },
+    {
+      "ref": "5.6",
+      "field": "CPR verified on the FBR portal",
+      "dataType": "Yes / No + Date",
+      "mandatory": "Yes",
+      "validation": "Verification that the tax was actually deposited against the enterprise NTN.",
+      "sampleEntry": "Pending",
+      "section": 5
+    },
+    {
+      "ref": "5.7",
+      "field": "Tax credit claimed in return (period)",
+      "dataType": "Text (30)",
+      "mandatory": "System",
+      "validation": "Tax year and return in which the credit is claimed.",
+      "sampleEntry": "Tax year 2027",
+      "section": 5
+    },
+    {
+      "ref": "5.8",
+      "field": "Sales tax withheld by customer (PKR)",
+      "dataType": "Number",
+      "mandatory": "Conditional",
+      "validation": "Where the customer is a designated sales tax withholding agent.",
+      "sampleEntry": "0",
+      "section": 5
+    },
+    {
+      "ref": "5.9",
+      "field": "Short recovery / unexplained deduction (PKR)",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Difference between the invoice value and the amount received plus supported deductions; followed up with the customer.",
+      "sampleEntry": "0",
+      "section": 5
+    },
+    {
+      "ref": "5.10",
+      "field": "Follow-up action on unsupported deductions",
+      "dataType": "Text (200)",
+      "mandatory": "Conditional",
+      "validation": "Action taken where the customer deducted without a valid certificate.",
+      "sampleEntry": "N/A",
+      "section": 5
+    },
+    {
+      "ref": "6.1",
+      "field": "Realisation status",
+      "dataType": "Dropdown",
+      "mandatory": "System",
+      "validation": "Provisional / Realised / Bounced / Under clearing - the receipt is provisional until the funds clear.",
+      "sampleEntry": "Realised",
+      "section": 6
+    },
+    {
+      "ref": "6.2",
+      "field": "Date of realisation / clearing",
+      "dataType": "Date",
+      "mandatory": "Conditional",
+      "validation": "Value date on which the funds were confirmed in the enterprise account.",
+      "sampleEntry": "46344",
+      "section": 6
+    },
+    {
+      "ref": "6.3",
+      "field": "Bounce / return reason",
+      "dataType": "Text (200)",
+      "mandatory": "Conditional",
+      "validation": "Mandatory where the instrument was returned unpaid.",
+      "sampleEntry": "N/A",
+      "section": 6
+    },
+    {
+      "ref": "6.4",
+      "field": "Bounce charges recovered from customer (PKR)",
+      "dataType": "Number",
+      "mandatory": "Conditional",
+      "validation": "Charges levied and debited to the customer account.",
+      "sampleEntry": "N/A",
+      "section": 6
+    },
+    {
+      "ref": "6.5",
+      "field": "Customer outstanding after this receipt (PKR)",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Updated receivable balance.",
+      "sampleEntry": "0",
+      "section": 6
+    },
+    {
+      "ref": "6.6",
+      "field": "Credit limit restored (PKR)",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Limit is restored only on realisation, not on provisional receipt.",
+      "sampleEntry": "566220",
+      "section": 6
+    },
+    {
+      "ref": "6.7",
+      "field": "Order block released",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Where an overdue block existed, it is lifted automatically once the overdue amount is cleared.",
+      "sampleEntry": "Not applicable",
+      "section": 6
+    },
+    {
+      "ref": "6.8",
+      "field": "Receivable ageing effect",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Bucket from which the amount is removed in the ageing report.",
+      "sampleEntry": "Current bucket cleared",
+      "section": 6
+    },
+    {
+      "ref": "6.9",
+      "field": "GL posting reference & date",
+      "dataType": "Text (60)",
+      "mandatory": "System",
+      "validation": "Journal voucher debiting bank and crediting the customer account.",
+      "sampleEntry": "JV-2026-010455, 18-Nov-2026",
+      "section": 6
+    },
+    {
+      "ref": "6.10",
+      "field": "Bank reconciliation status",
+      "dataType": "Dropdown",
+      "mandatory": "System",
+      "validation": "Unreconciled / Reconciled / Exception - matched against the bank statement.",
+      "sampleEntry": "Reconciled",
+      "section": 6
+    },
+    {
+      "ref": "6.11",
+      "field": "Effect on invoice status",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Sets the referenced invoice to Paid or Partially paid on realisation.",
+      "sampleEntry": "Invoice marked Paid",
+      "section": 6
+    },
+    {
+      "ref": "7.1",
+      "field": "Prepared by & date",
+      "dataType": "Text (120)",
+      "mandatory": "System",
+      "validation": "Officer who recorded the receipt.",
+      "sampleEntry": "AR Officer - S. Bano, 18-Nov-2026",
+      "section": 7
+    },
+    {
+      "ref": "7.2",
+      "field": "Verified by (accounts) & date",
+      "dataType": "Text (120)",
+      "mandatory": "Yes",
+      "validation": "Verifies the instrument, the allocation and any deduction claimed.",
+      "sampleEntry": "Manager Accounts - 18-Nov-2026",
+      "section": 7
+    },
+    {
+      "ref": "7.3",
+      "field": "Approved by & date",
+      "dataType": "Text (120)",
+      "mandatory": "Conditional",
+      "validation": "Required for write-offs, discounts and on-account receipts above the threshold.",
+      "sampleEntry": "CFO - 19-Nov-2026",
+      "section": 7
+    },
+    {
+      "ref": "7.4",
+      "field": "Receipt issued to customer - date & mode",
+      "dataType": "Text (80)",
+      "mandatory": "Yes",
+      "validation": "Signed or system-generated receipt sent to the customer.",
+      "sampleEntry": "18-Nov-2026, email",
+      "section": 7
+    },
+    {
+      "ref": "7.5",
+      "field": "Statement of account sent",
+      "dataType": "Yes / No + Date",
+      "mandatory": "No",
+      "validation": "Updated statement issued to the customer after allocation.",
+      "sampleEntry": "Yes - 19-Nov-2026",
+      "section": 7
+    },
+    {
+      "ref": "7.6",
+      "field": "Bank deposit slip / credit advice",
+      "dataType": "File upload",
+      "mandatory": "Yes",
+      "validation": "Evidence of the money reaching the enterprise account.",
+      "sampleEntry": "Attached",
+      "section": 7
+    },
+    {
+      "ref": "7.7",
+      "field": "Cheque or instrument scan",
+      "dataType": "File upload",
+      "mandatory": "Conditional",
+      "validation": "Both sides of the instrument, where applicable.",
+      "sampleEntry": "N/A",
+      "section": 7
+    },
+    {
+      "ref": "7.8",
+      "field": "Withholding tax certificate / CPR copy",
+      "dataType": "File upload",
+      "mandatory": "Conditional",
+      "validation": "Supports the deduction claimed in Section 5.",
+      "sampleEntry": "Pending",
+      "section": 7
+    },
+    {
+      "ref": "7.9",
+      "field": "Customer remittance advice",
+      "dataType": "File upload",
+      "mandatory": "No",
+      "validation": "Advice showing which invoices the customer intended to settle.",
+      "sampleEntry": "Attached",
+      "section": 7
+    },
+    {
+      "ref": "7.10",
+      "field": "Segregation of duties check",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "The person collecting, recording and reconciling the receipt must not be the same user.",
+      "sampleEntry": "Pass",
+      "section": 7
+    },
+    {
+      "ref": "7.11",
+      "field": "Audit trail",
+      "dataType": "Note - system",
+      "mandatory": "System",
+      "validation": "Issued receipts cannot be edited. Cancellation or reversal requires an approved reversal entry, and every action is logged with user and timestamp.",
+      "sampleEntry": "Enabled",
+      "section": 7
+    },
+    {
+      "ref": "7.12",
+      "field": "Cancellation / reversal reference & reason",
+      "dataType": "Text (150)",
+      "mandatory": "Conditional",
+      "validation": "Reversal entry raised where the receipt is cancelled or the instrument bounces.",
+      "sampleEntry": "N/A",
+      "section": 7
+    }
+  ]
+}

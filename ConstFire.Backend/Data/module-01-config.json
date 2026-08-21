@@ -1,0 +1,1006 @@
+{
+  "code": "01",
+  "name": "ENTERPRISE REGISTRATION",
+  "category": "ERP Module",
+  "recordCodePrefix": "ENT",
+  "listColumns": [
+    "_recordCode",
+    "1.4",
+    "1.13",
+    "1.21"
+  ],
+  "sections": [
+    {
+      "num": 1,
+      "title": "ENTITY CLASSIFICATION & LEGAL REGISTRATION",
+      "repeating": false
+    },
+    {
+      "num": 2,
+      "title": "TAX & STATUTORY REGISTRATIONS",
+      "repeating": false
+    },
+    {
+      "num": 3,
+      "title": "REGISTERED OFFICE & OTHER ADDRESSES",
+      "repeating": false
+    },
+    {
+      "num": 4,
+      "title": "OWNERS / SUBSCRIBERS / PARTNERS  (repeating block - one row set per owner)",
+      "repeating": true
+    },
+    {
+      "num": 5,
+      "title": "CHIEF EXECUTIVE / DIRECTORS  (Company)  /  MANAGING PARTNERS  (AOP)  - repeating block",
+      "repeating": true
+    },
+    {
+      "num": 6,
+      "title": "POINTS OF CONTACT (POC)",
+      "repeating": false
+    },
+    {
+      "num": 7,
+      "title": "ADMIN USER (PRIMARY ERP ACCOUNT)",
+      "repeating": false
+    },
+    {
+      "num": 8,
+      "title": "BANKING DETAILS - multiple options",
+      "repeating": true
+    },
+    {
+      "num": 9,
+      "title": "SUPPORTING DOCUMENTS CHECKLIST",
+      "repeating": false
+    }
+  ],
+  "fields": [
+    {
+      "ref": "1.1",
+      "field": "Is the entity registered with SECP? (ENTITY-TYPE CHECK)",
+      "dataType": "Yes / No",
+      "mandatory": "Yes",
+      "validation": "GATING FIELD - answered first. Yes = Company track; No = AOP / Firm / Sole Proprietor track. Drives which fields below are mandatory.",
+      "sampleEntry": "Yes",
+      "section": 1
+    },
+    {
+      "ref": "1.2",
+      "field": "Registering authority",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "If Company then SECP By Deafult else, Registrar of Firms (Provincial) / FBR only (Sole Proprietor) as dropdown. Must be SECP if 1.1 = Yes.",
+      "sampleEntry": "SECP",
+      "section": 1
+    },
+    {
+      "ref": "1.3",
+      "field": "Legal status / entity type",
+      "dataType": "Dependent dropdown",
+      "mandatory": "Yes",
+      "validation": "If 1.2 = Yes: SMC-Private / Private Limited / Public Limited (Unlisted) / Public Limited (Listed) / Foreign Company Branch. If 1.2 = No: Registered Partnership / Unregistered Partnership / Joint Venture / Sole Proprietor.",
+      "sampleEntry": "Private Limited Company",
+      "section": 1
+    },
+    {
+      "ref": "1.4",
+      "field": "Registered legal name",
+      "dataType": "Text (150)",
+      "mandatory": "Yes",
+      "validation": "Must match Certificate of Incorporation (Company) or Form II / partnership deed (AOP), exactly.",
+      "sampleEntry": "Steelstone IT (Private) Limited",
+      "section": 1
+    },
+    {
+      "ref": "1.5",
+      "field": "Trading / brand name",
+      "dataType": "Text (100)",
+      "mandatory": "No",
+      "validation": "Printed on ERP documents if provided.",
+      "sampleEntry": "Steelstone IT",
+      "section": 1
+    },
+    {
+      "ref": "1.6",
+      "field": "SECP incorporation number (CUIN)",
+      "dataType": "Text (7)",
+      "mandatory": "Company only",
+      "validation": "7 digits. Mandatory if 1.2 = Yes; field disabled and left invisible otherwise.",
+      "sampleEntry": "123456",
+      "section": 1
+    },
+    {
+      "ref": "1.7",
+      "field": "Date of incorporation (SECP)",
+      "dataType": "Date",
+      "mandatory": "Company only",
+      "validation": "DD-MMM-YYYY, not in the future. Mandatory if 1.2 = Yes.",
+      "sampleEntry": "43539",
+      "section": 1
+    },
+    {
+      "ref": "1.8",
+      "field": "SECP Company Registration Office (CRO)",
+      "dataType": "Dropdown",
+      "mandatory": "Company only",
+      "validation": "Karachi / Lahore / Islamabad / Faisalabad / Multan / Peshawar / Quetta / Sukkur / Gilgit if 1.2 = Yes.",
+      "sampleEntry": "Lahore",
+      "section": 1
+    },
+    {
+      "ref": "1.9",
+      "field": "Registrar of Firms registration number",
+      "dataType": "Text (30)",
+      "mandatory": "Registered Partnership",
+      "validation": "Mandatory if 1.2 = No and 1.2 = Registrar of Firms. Disabled for Companies.",
+      "sampleEntry": "N/A",
+      "section": 1
+    },
+    {
+      "ref": "1.10",
+      "field": "Province of Registrar of Firms",
+      "dataType": "Dropdown",
+      "mandatory": "Registered Partnership",
+      "validation": "Punjab / Sindh / KPK / Balochistan / ICT",
+      "sampleEntry": "N/A",
+      "section": 1
+    },
+    {
+      "ref": "1.11",
+      "field": "Partnership deed / AOP formation date",
+      "dataType": "Date",
+      "mandatory": "Partnership",
+      "validation": "DD-MMM-YYYY. Deed must be uploaded in the documents section.",
+      "sampleEntry": "N/A",
+      "section": 1
+    },
+    {
+      "ref": "1.12",
+      "field": "Date of commencement of business",
+      "dataType": "Date",
+      "mandatory": "Yes",
+      "validation": "On or after 1.8 (Company) or 1.12 (AOP).",
+      "sampleEntry": "43556",
+      "section": 1
+    },
+    {
+      "ref": "1.13",
+      "field": "Industry / sector",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Manufacturing / Distribution / IT & Software / Construction / Textile / Services / Trading / Other",
+      "sampleEntry": "IT & Software",
+      "section": 1
+    },
+    {
+      "ref": "1.14",
+      "field": "Principal business activity",
+      "dataType": "Text (250)",
+      "mandatory": "Yes",
+      "validation": "Should match SECP object clause or FBR business activity on the NTN.",
+      "sampleEntry": "Software development and IT enabled services",
+      "section": 1
+    },
+    {
+      "ref": "1.15",
+      "field": "Authorised capital (PKR)",
+      "dataType": "Number",
+      "mandatory": "Company only",
+      "validation": "As per Memorandum of Association. Not applicable to AOP.  if 1.2 = Yes; field disabled and left invisible otherwise.",
+      "sampleEntry": "10000000",
+      "section": 1
+    },
+    {
+      "ref": "1.16",
+      "field": "Paid-up capital / partners' capital (PKR)",
+      "dataType": "Number",
+      "mandatory": "Yes",
+      "validation": "Company: <= authorised capital. AOP: total capital contribution per deed; must equal the sum of contributions in Section 4.  if 1.2 = Yes; field disabled and left invisible otherwise.",
+      "sampleEntry": "5000000",
+      "section": 1
+    },
+    {
+      "ref": "1.17",
+      "field": "Number of owners / subscribers / partners",
+      "dataType": "Integer",
+      "mandatory": "Yes",
+      "validation": "If SMC-Private Limited = 1 else Min 2",
+      "sampleEntry": "3",
+      "section": 1
+    },
+    {
+      "ref": "1.18",
+      "field": "Number of directors",
+      "dataType": "Integer",
+      "mandatory": "Company only",
+      "validation": "Must equal rows completed in Section 5. SMC = 1; Private Ltd >= 2; Public Ltd >= 3. Not applicable to AOP.",
+      "sampleEntry": "3",
+      "section": 1
+    },
+    {
+      "ref": "1.19",
+      "field": "Financial year end",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "30-Jun (Pakistan default) / 31-Dec / Other. Must align with the fiscal year start in the ERP configuration section.",
+      "sampleEntry": "46203",
+      "section": 1
+    },
+    {
+      "ref": "1.20",
+      "field": "Main business address (principal place of business)",
+      "dataType": "Text (300)",
+      "mandatory": "Yes",
+      "validation": "Address where operations are actually carried out; may differ from the registered office in Section 3.",
+      "sampleEntry": "Office 402, Arfa Software Technology Park, 346-B Ferozepur Road",
+      "section": 1
+    },
+    {
+      "ref": "1.21",
+      "field": "Main business email address",
+      "dataType": "Email",
+      "mandatory": "Yes",
+      "validation": "Primary official mailbox of the enterprise; used for all system correspondence and invoices.",
+      "sampleEntry": "info@steelstone.com.pk",
+      "section": 1
+    },
+    {
+      "ref": "1.22",
+      "field": "Main business phone number",
+      "dataType": "Phone",
+      "mandatory": "Yes",
+      "validation": "Format +92-XX-XXXXXXXX or +92-3XX-XXXXXXX.",
+      "sampleEntry": "+92-42-35880011",
+      "section": 1
+    },
+    {
+      "ref": "1.23",
+      "field": "Company website / URL",
+      "dataType": "URL",
+      "mandatory": "No",
+      "validation": "Valid URL format.",
+      "sampleEntry": "https://www.steelstone.com.pk",
+      "section": 1
+    },
+    {
+      "ref": "2.1",
+      "field": "National Tax Number (NTN)",
+      "dataType": "Text (9)",
+      "mandatory": "Yes",
+      "validation": "7 digits + '-' + check digit (FBR format); unique per tenant.",
+      "sampleEntry": "1234567-8",
+      "section": 2
+    },
+    {
+      "ref": "2.2",
+      "field": "NTN issue date",
+      "dataType": "Date",
+      "mandatory": "No",
+      "validation": "DD-MMM-YYYY",
+      "sampleEntry": "43544",
+      "section": 2
+    },
+    {
+      "ref": "2.3",
+      "field": "Sales Tax Registration No. (STRN - FBR)",
+      "dataType": "Yes / No",
+      "mandatory": "Yes",
+      "validation": "",
+      "sampleEntry": "Yes",
+      "section": 2
+    },
+    {
+      "ref": "2.4",
+      "field": "FBR filer status (Active Taxpayer List)",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Filer / Non-filer - drives withholding tax rates in the ERP.",
+      "sampleEntry": "Filer",
+      "section": 2
+    },
+    {
+      "ref": "2.5",
+      "field": "Provincial revenue authority",
+      "dataType": "Multi-select",
+      "mandatory": "Conditional",
+      "validation": "PRA (Punjab) / SRB (Sindh) / KPRA / BRA (Balochistan) / ICT / Not applicable. Defaults from province in 1.22.",
+      "sampleEntry": "PRA (Punjab)",
+      "section": 2
+    },
+    {
+      "ref": "2.6",
+      "field": "Provincial sales tax on services registration no.",
+      "dataType": "Text (20)",
+      "mandatory": "Conditional",
+      "validation": "Mandatory if services are provided and 2.5 is not 'Not applicable'.",
+      "sampleEntry": "PRA-1234567-8",
+      "section": 2
+    },
+    {
+      "ref": "2.7",
+      "field": "Withholding agent status",
+      "dataType": "Yes / No",
+      "mandatory": "Yes",
+      "validation": "If 1.2 = Yes, By Default Yes else Yes / No - enables the WHT deduction module.",
+      "sampleEntry": "Yes",
+      "section": 2
+    },
+    {
+      "ref": "3.1",
+      "field": "Registered office - address line 1",
+      "dataType": "Text (150)",
+      "mandatory": "Yes",
+      "validation": "Company: as per SECP Form A / Form 29. AOP: as per Form II / deed.",
+      "sampleEntry": "Office 402, 4th Floor, Arfa Software Technology Park",
+      "section": 3
+    },
+    {
+      "ref": "3.2",
+      "field": "Registered office - address line 2",
+      "dataType": "Text (150)",
+      "mandatory": "No",
+      "validation": "Street / sector / landmark.",
+      "sampleEntry": "346-B, Ferozepur Road",
+      "section": 3
+    },
+    {
+      "ref": "3.3",
+      "field": "City",
+      "dataType": "Text (100)",
+      "mandatory": "Yes",
+      "validation": "Master list of Pakistani cities.",
+      "sampleEntry": "Lahore",
+      "section": 3
+    },
+    {
+      "ref": "3.4",
+      "field": "District / Tehsil",
+      "dataType": "Text (50)",
+      "mandatory": "No",
+      "validation": "Auto-filled from city where available.",
+      "sampleEntry": "Lahore",
+      "section": 3
+    },
+    {
+      "ref": "3.5",
+      "field": "Province / Territory",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Punjab / Sindh / KPK / Balochistan / Gilgit-Baltistan / AJK / Islamabad ICT",
+      "sampleEntry": "Punjab",
+      "section": 3
+    },
+    {
+      "ref": "3.7",
+      "field": "Country",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Default: Pakistan",
+      "sampleEntry": "Pakistan",
+      "section": 3
+    },
+    {
+      "ref": "3.8",
+      "field": "Is the registered office the same as the main business address (1.21)?",
+      "dataType": "Yes / No",
+      "mandatory": "Yes",
+      "validation": "If No, both addresses are stored separately against the tenant.",
+      "sampleEntry": "Yes",
+      "section": 3
+    },
+    {
+      "ref": "3.9",
+      "field": "Correspondence / mailing address (if different)",
+      "dataType": "Text (300)",
+      "mandatory": "Conditional",
+      "validation": "Include city, province and postal code.",
+      "sampleEntry": "12-C, Gulberg III, Lahore, Punjab 54660",
+      "section": 3
+    },
+    {
+      "ref": "3.10",
+      "field": "Branch / factory / warehouse address(es)",
+      "dataType": "Repeating table",
+      "mandatory": "Conditional",
+      "validation": "One row per site: site type, address, city, province, provincial tax jurisdiction. Required if multi-branch is enabled.",
+      "sampleEntry": "Warehouse - Plot 45, Sundar Industrial Estate, Lahore",
+      "section": 3
+    },
+    {
+      "ref": "3.11",
+      "field": "Landline number",
+      "dataType": "Phone",
+      "mandatory": "No",
+      "validation": "Format +92-XX-XXXXXXXX",
+      "sampleEntry": "+92-42-35880011",
+      "section": 3
+    },
+    {
+      "ref": "3.12",
+      "field": "Geo-coordinates of main business address (lat, long)",
+      "dataType": "Text (30)",
+      "mandatory": "No",
+      "validation": "Decimal degrees; used by the logistics / delivery module.",
+      "sampleEntry": "31.4697, 74.2728",
+      "section": 3
+    },
+    {
+      "ref": "4.2",
+      "field": "Owner category",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Company: Subscriber / Shareholder. AOP: Partner. Label switches automatically from field 1.3.",
+      "sampleEntry": "Shareholder (Subscriber)",
+      "section": 4
+    },
+    {
+      "ref": "4.3",
+      "field": "Owner type",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Individual (Pakistani) / Individual (Foreign national) / Body corporate",
+      "sampleEntry": "Individual (Pakistani)",
+      "section": 4
+    },
+    {
+      "ref": "4.4",
+      "field": "Full name (as per CNIC / certificate of incorporation)",
+      "dataType": "Text (100)",
+      "mandatory": "Yes",
+      "validation": "Must match the CNIC or corporate registration document uploaded.",
+      "sampleEntry": "Ahmed Raza Khan",
+      "section": 4
+    },
+    {
+      "ref": "4.5",
+      "field": "Father's / husband's name",
+      "dataType": "Text (100)",
+      "mandatory": "Individual only",
+      "validation": "As printed on the CNIC.",
+      "sampleEntry": "Muhammad Raza Khan",
+      "section": 4
+    },
+    {
+      "ref": "4.6",
+      "field": "CNIC / NICOP number",
+      "dataType": "Text (15)",
+      "mandatory": "Individual (Pak) only",
+      "validation": "Format XXXXX-XXXXXXX-X; must be unique within the owner list.",
+      "sampleEntry": "35202-1234567-1",
+      "section": 4
+    },
+    {
+      "ref": "4.7",
+      "field": "Passport no. & nationality",
+      "dataType": "Text (40)",
+      "mandatory": "Foreign national only",
+      "validation": "Passport number plus country of nationality.",
+      "sampleEntry": "N/A",
+      "section": 4
+    },
+    {
+      "ref": "4.8",
+      "field": "CUIN / registration no. & NTN of corporate owner",
+      "dataType": "Text (40)",
+      "mandatory": "Body corporate only",
+      "validation": "SECP CUIN (or foreign equivalent) and NTN of the owning entity.",
+      "sampleEntry": "N/A",
+      "section": 4
+    },
+    {
+      "ref": "4.10",
+      "field": "Residential / registered address of owner",
+      "dataType": "Text (250)",
+      "mandatory": "Yes",
+      "validation": "Full address including city and country.",
+      "sampleEntry": "45-B, Model Town, Lahore, Pakistan",
+      "section": 4
+    },
+    {
+      "ref": "4.11",
+      "field": "Mobile number",
+      "dataType": "Phone",
+      "mandatory": "Yes",
+      "validation": "+92-3XX-XXXXXXX or international format.",
+      "sampleEntry": "+92-321-4567890",
+      "section": 4
+    },
+    {
+      "ref": "4.12",
+      "field": "Email address",
+      "dataType": "Email",
+      "mandatory": "Yes",
+      "validation": "Unique per owner; used for UBO and KYC confirmations.",
+      "sampleEntry": "ahmed.raza@steelstone.com.pk",
+      "section": 4
+    },
+    {
+      "ref": "5.1",
+      "field": "Is the Director OWNERS / SUBSCRIBERS / PARTNERS?",
+      "dataType": "Yes / No",
+      "mandatory": "Yes",
+      "validation": "If Yes, Full Name will be dropdown from Section 4 and fill all corresponding values.",
+      "sampleEntry": "1",
+      "section": 5
+    },
+    {
+      "ref": "5.2",
+      "field": "Full name",
+      "dataType": "Text (100)",
+      "mandatory": "Yes",
+      "validation": "As per CNIC and as filed on SECP Form 29.",
+      "sampleEntry": "Ahmed Raza Khan",
+      "section": 5
+    },
+    {
+      "ref": "5.3",
+      "field": "Father's / husband's name",
+      "dataType": "Text (100)",
+      "mandatory": "Yes",
+      "validation": "As printed on the CNIC.",
+      "sampleEntry": "Muhammad Raza Khan",
+      "section": 5
+    },
+    {
+      "ref": "5.4",
+      "field": "CNIC / NICOP / passport number",
+      "dataType": "Text (20)",
+      "mandatory": "Yes",
+      "validation": "Format XXXXX-XXXXXXX-X for Pakistani nationals; passport no. for foreign directors.",
+      "sampleEntry": "35202-1234567-1",
+      "section": 5
+    },
+    {
+      "ref": "5.5",
+      "field": "Nationality",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Pakistani / Other (specify). Foreign directors require SECP security clearance evidence.",
+      "sampleEntry": "Pakistani",
+      "section": 5
+    },
+    {
+      "ref": "5.6",
+      "field": "Designation / office held",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Director / Chief Executive / Nominee Director / Independent Director / Managing Partner (AOP)",
+      "sampleEntry": "Chief Executive",
+      "section": 5
+    },
+    {
+      "ref": "5.7",
+      "field": "Date of appointment",
+      "dataType": "Date",
+      "mandatory": "Yes",
+      "validation": "On or after the incorporation date.",
+      "sampleEntry": "43539",
+      "section": 5
+    },
+    {
+      "ref": "5.8",
+      "field": "Term / date of retirement or cessation",
+      "dataType": "Date",
+      "mandatory": "No",
+      "validation": "Leave blank if currently serving; required if status is Resigned or Retired.",
+      "sampleEntry": "(blank)",
+      "section": 5
+    },
+    {
+      "ref": "5.9",
+      "field": "Form 29 filed with SECP for this director?",
+      "dataType": "Yes / No + Date",
+      "mandatory": "Company only",
+      "validation": "Form 29 must be filed within 15 days of appointment or change.",
+      "sampleEntry": "Yes - 25-Mar-2019",
+      "section": 5
+    },
+    {
+      "ref": "5.10",
+      "field": "Residential address",
+      "dataType": "Text (250)",
+      "mandatory": "Yes",
+      "validation": "Full address including city and country.",
+      "sampleEntry": "45-B, Model Town, Lahore, Pakistan",
+      "section": 5
+    },
+    {
+      "ref": "5.11",
+      "field": "Mobile number",
+      "dataType": "Phone",
+      "mandatory": "Yes",
+      "validation": "+92-3XX-XXXXXXX",
+      "sampleEntry": "+92-321-4567890",
+      "section": 5
+    },
+    {
+      "ref": "5.12",
+      "field": "Email address",
+      "dataType": "Email",
+      "mandatory": "Yes",
+      "validation": "Unique per director.",
+      "sampleEntry": "ahmed.raza@steelstone.com.pk",
+      "section": 5
+    },
+    {
+      "ref": "5.14",
+      "field": "Authorised to sign on behalf of the entity?",
+      "dataType": "Yes / No",
+      "mandatory": "Yes",
+      "validation": "If Yes, a board resolution or authority letter must be attached.",
+      "sampleEntry": "Yes",
+      "section": 5
+    },
+    {
+      "ref": "5.15",
+      "field": "Director status",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Active / Resigned / Retired - with effective date.",
+      "sampleEntry": "Active",
+      "section": 5
+    },
+    {
+      "ref": "7.1",
+      "field": "Primary POC - full name",
+      "dataType": "Text (100)",
+      "mandatory": "Yes",
+      "validation": "As per CNIC.",
+      "sampleEntry": "Ahmed Raza Khan",
+      "section": 6
+    },
+    {
+      "ref": "7.2",
+      "field": "Primary POC - designation",
+      "dataType": "Text (60)",
+      "mandatory": "Yes",
+      "validation": "Free text.",
+      "sampleEntry": "Chief Executive Officer",
+      "section": 6
+    },
+    {
+      "ref": "7.3",
+      "field": "Primary POC - CNIC",
+      "dataType": "Text (15)",
+      "mandatory": "Yes",
+      "validation": "Format XXXXX-XXXXXXX-X",
+      "sampleEntry": "35202-1234567-1",
+      "section": 6
+    },
+    {
+      "ref": "7.4",
+      "field": "Primary POC - mobile",
+      "dataType": "Phone",
+      "mandatory": "Yes",
+      "validation": "+92-3XX-XXXXXXX",
+      "sampleEntry": "+92-321-4567890",
+      "section": 6
+    },
+    {
+      "ref": "7.5",
+      "field": "Primary POC - email",
+      "dataType": "Email",
+      "mandatory": "Yes",
+      "validation": "Unique; receives all onboarding notifications.",
+      "sampleEntry": "ahmed.raza@steelstone.com.pk",
+      "section": 6
+    },
+    {
+      "ref": "8.1",
+      "field": "Admin user - full name",
+      "dataType": "Text (100)",
+      "mandatory": "Yes",
+      "validation": "As per CNIC.",
+      "sampleEntry": "Ahmed Raza Khan",
+      "section": 7
+    },
+    {
+      "ref": "8.2",
+      "field": "Admin user - CNIC",
+      "dataType": "Text (15)",
+      "mandatory": "Yes",
+      "validation": "XXXXX-XXXXXXX-X; used for identity verification.",
+      "sampleEntry": "35202-1234567-1",
+      "section": 7
+    },
+    {
+      "ref": "8.3",
+      "field": "Admin user - designation",
+      "dataType": "Text (60)",
+      "mandatory": "Yes",
+      "validation": "Free text.",
+      "sampleEntry": "Chief Executive Officer",
+      "section": 7
+    },
+    {
+      "ref": "8.4",
+      "field": "Admin user - official email (Login ID)",
+      "dataType": "Email",
+      "mandatory": "Yes",
+      "validation": "Unique across the tenant; corporate domain preferred; verification link sent on submission.",
+      "sampleEntry": "ahmed.raza@steelstone.com.pk",
+      "section": 7
+    },
+    {
+      "ref": "8.5",
+      "field": "Admin user - mobile (OTP / 2FA)",
+      "dataType": "Phone",
+      "mandatory": "Yes",
+      "validation": "+92-3XX-XXXXXXX; verified by OTP at activation.",
+      "sampleEntry": "+92-321-4567890",
+      "section": 7
+    },
+    {
+      "ref": "8.6",
+      "field": "Preferred username",
+      "dataType": "Text (30)",
+      "mandatory": "No",
+      "validation": "Alphanumeric, no spaces; defaults to the email if left blank.",
+      "sampleEntry": "ahmed.raza",
+      "section": 7
+    },
+    {
+      "ref": "8.7",
+      "field": "Temporary password issuance",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "System-generated (emailed) / Set at first login - forced change on first login.",
+      "sampleEntry": "System-generated",
+      "section": 7
+    },
+    {
+      "ref": "8.8",
+      "field": "Password policy acknowledged",
+      "dataType": "Checkbox",
+      "mandatory": "Yes",
+      "validation": "Minimum 12 characters, upper / lower / number / symbol, 90-day rotation.",
+      "sampleEntry": "Yes",
+      "section": 7
+    },
+    {
+      "ref": "8.9",
+      "field": "Role / permission set",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Enterprise Admin (default) / Finance Admin / Operations Admin / Read-only",
+      "sampleEntry": "Enterprise Admin",
+      "section": 7
+    },
+    {
+      "ref": "8.10",
+      "field": "Two-factor authentication (2FA)",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "SMS OTP / Authenticator app / Email OTP - mandatory for the admin role.",
+      "sampleEntry": "Authenticator app",
+      "section": 7
+    },
+    {
+      "ref": "8.11",
+      "field": "Is the admin user an owner, director or officer of the entity?",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Owner (Sec 4) / Director (Sec 5) / Officer (Sec 6) / Employee under authority letter - evidence required.",
+      "sampleEntry": "Director (Sec 5, #1)",
+      "section": 7
+    },
+    {
+      "ref": "8.12",
+      "field": "Access valid from",
+      "dataType": "Date",
+      "mandatory": "Yes",
+      "validation": "Activation date of the subscription.",
+      "sampleEntry": "46266",
+      "section": 7
+    },
+    {
+      "ref": "8.13",
+      "field": "Preferred language / time zone",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "English (default) or Urdu; (UTC+05:00) Pakistan Standard Time.",
+      "sampleEntry": "English / (UTC+05:00) PKT",
+      "section": 7
+    },
+    {
+      "ref": "9.1",
+      "field": "Bank name",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "SBP-licensed scheduled bank.",
+      "sampleEntry": "Meezan Bank Limited",
+      "section": 8
+    },
+    {
+      "ref": "9.2",
+      "field": "Branch name & branch code",
+      "dataType": "Text (80)",
+      "mandatory": "Yes",
+      "validation": "Branch code numeric.",
+      "sampleEntry": "Gulberg Branch, Lahore - 0123",
+      "section": 8
+    },
+    {
+      "ref": "9.3",
+      "field": "Title of account",
+      "dataType": "Text (100)",
+      "mandatory": "Yes",
+      "validation": "Must match the registered legal name in field 1.5.",
+      "sampleEntry": "Steelstone IT (Private) Limited",
+      "section": 8
+    },
+    {
+      "ref": "9.4",
+      "field": "Account number",
+      "dataType": "Text (20)",
+      "mandatory": "Yes",
+      "validation": "Numeric, as issued by the bank.",
+      "sampleEntry": "1230010012345",
+      "section": 8
+    },
+    {
+      "ref": "9.5",
+      "field": "IBAN",
+      "dataType": "Text (24)",
+      "mandatory": "Yes",
+      "validation": "PK + 2 check digits + 4-letter bank code + 16 alphanumeric characters.",
+      "sampleEntry": "PK36MEZN0001230010012345",
+      "section": 8
+    },
+    {
+      "ref": "9.6",
+      "field": "Account currency",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "PKR (default) / USD / EUR / GBP",
+      "sampleEntry": "PKR",
+      "section": 8
+    },
+    {
+      "ref": "9.7",
+      "field": "SWIFT / BIC code",
+      "dataType": "Text (11)",
+      "mandatory": "Conditional",
+      "validation": "Required for foreign-currency or export collections.",
+      "sampleEntry": "MEZNPKKA",
+      "section": 8
+    },
+    {
+      "ref": "11.1",
+      "field": "Certificate of Incorporation (SECP)",
+      "dataType": "File upload",
+      "mandatory": "Company only",
+      "validation": "PDF, max 5 MB. Required when field 1.1 = Yes.",
+      "sampleEntry": "Attached",
+      "section": 9
+    },
+    {
+      "ref": "11.2",
+      "field": "Memorandum & Articles of Association",
+      "dataType": "File upload",
+      "mandatory": "Company only",
+      "validation": "PDF, max 10 MB.",
+      "sampleEntry": "Attached",
+      "section": 9
+    },
+    {
+      "ref": "11.3",
+      "field": "Form A / Form B (latest annual return)",
+      "dataType": "File upload",
+      "mandatory": "Company only",
+      "validation": "Establishes registered address and shareholding.",
+      "sampleEntry": "Attached",
+      "section": 9
+    },
+    {
+      "ref": "11.4",
+      "field": "Form 29 (particulars of directors & officers)",
+      "dataType": "File upload",
+      "mandatory": "Company only",
+      "validation": "Latest filed version; must support Sections 5 and 6.",
+      "sampleEntry": "Attached",
+      "section": 9
+    },
+    {
+      "ref": "11.5",
+      "field": "Registered partnership deed",
+      "dataType": "File upload",
+      "mandatory": "AOP only",
+      "validation": "Stamped and registered deed. Required when field 1.1 = No.",
+      "sampleEntry": "N/A",
+      "section": 9
+    },
+    {
+      "ref": "11.6",
+      "field": "Form II - Registrar of Firms certificate",
+      "dataType": "File upload",
+      "mandatory": "AOP only",
+      "validation": "Proof of firm / AOP registration.",
+      "sampleEntry": "N/A",
+      "section": 9
+    },
+    {
+      "ref": "11.7",
+      "field": "NTN certificate (FBR)",
+      "dataType": "File upload",
+      "mandatory": "Yes",
+      "validation": "PDF downloaded from the IRIS portal.",
+      "sampleEntry": "Attached",
+      "section": 9
+    },
+    {
+      "ref": "11.8",
+      "field": "Sales Tax Registration certificate (FBR / provincial)",
+      "dataType": "File upload",
+      "mandatory": "Conditional",
+      "validation": "Required if an STRN is entered in field 2.3 or 2.6.",
+      "sampleEntry": "Attached",
+      "section": 9
+    },
+    {
+      "ref": "11.9",
+      "field": "CNIC copies of all owners / partners (Section 4)",
+      "dataType": "File upload",
+      "mandatory": "Yes",
+      "validation": "Both sides; one file per owner listed.",
+      "sampleEntry": "Attached (3 files)",
+      "section": 9
+    },
+    {
+      "ref": "11.10",
+      "field": "CNIC copies of all directors (Section 5)",
+      "dataType": "File upload",
+      "mandatory": "Company only",
+      "validation": "Both sides; one file per director listed.",
+      "sampleEntry": "Attached (3 files)",
+      "section": 9
+    },
+    {
+      "ref": "11.11",
+      "field": "Ultimate Beneficial Owner (UBO) declaration",
+      "dataType": "File upload",
+      "mandatory": "Yes",
+      "validation": "Required for every owner flagged Yes in field 4.16.",
+      "sampleEntry": "Attached",
+      "section": 9
+    },
+    {
+      "ref": "11.12",
+      "field": "Board resolution / authority letter for the admin user",
+      "dataType": "File upload",
+      "mandatory": "Yes",
+      "validation": "On company letterhead, signed and stamped; authorises the signatory in field 7.15.",
+      "sampleEntry": "Attached",
+      "section": 9
+    },
+    {
+      "ref": "11.13",
+      "field": "Bank account maintenance certificate",
+      "dataType": "File upload",
+      "mandatory": "Yes",
+      "validation": "Issued within the last 6 months.",
+      "sampleEntry": "Attached",
+      "section": 9
+    },
+    {
+      "ref": "11.14",
+      "field": "Sector licence (PSEB / DRAP / PEC / other)",
+      "dataType": "File upload",
+      "mandatory": "Conditional",
+      "validation": "Required where the business activity is regulated.",
+      "sampleEntry": "PSEB certificate attached",
+      "section": 9
+    },
+    {
+      "ref": "11.15",
+      "field": "Proof of main business address (utility bill / tenancy agreement)",
+      "dataType": "File upload",
+      "mandatory": "Yes",
+      "validation": "Not older than 3 months; supports field 1.21.",
+      "sampleEntry": "Attached",
+      "section": 9
+    }
+  ]
+}

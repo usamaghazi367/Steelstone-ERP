@@ -1,0 +1,68 @@
+# Push to main → build Vue + .NET → FTP upload to SmarterASP (site files only).
+# Server appsettings.Production.json is NOT overwritten (see exclude list).
+
+name: Deploy to SmarterASP
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: smarterasp-deploy
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: ConstFire.Frontend/package-lock.json
+
+      - name: Build frontend
+        working-directory: ConstFire.Frontend
+        run: |
+          npm ci
+          npm run build
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Publish backend
+        run: dotnet publish ConstFire.Backend/ConstFire.Backend.csproj -c Release -o "${{ github.workspace }}/publish"
+
+      - name: Assemble wwwroot and logs
+        run: |
+          rm -rf publish/wwwroot
+          cp -r ConstFire.Frontend/dist publish/wwwroot
+          mkdir -p publish/logs
+          rm -f publish/appsettings.Production.json publish/appsettings.Production.local.json || true
+
+      - name: Deploy via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.6
+        with:
+          server: ${{ secrets.SMARTERASP_FTP_SERVER }}
+          username: ${{ secrets.SMARTERASP_FTP_USERNAME }}
+          password: ${{ secrets.SMARTERASP_FTP_PASSWORD }}
+          local-dir: publish/
+          server-dir: ${{ secrets.SMARTERASP_FTP_REMOTE_DIR }}
+          protocol: ftps
+          log-level: standard
+          dangerous-clean-slate: false
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/appsettings.Production.json
+            **/appsettings.Production.local.json
+            **/appsettings.Development.json

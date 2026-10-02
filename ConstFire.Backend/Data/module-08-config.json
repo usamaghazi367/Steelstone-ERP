@@ -17,12 +17,12 @@
     },
     {
       "num": 2,
-      "title": "VENDOR DETAILS",
+      "title": "VENDOR DETAILS  (single search on vendor code or name - every other field is pulled from the vendor register and is read-only)",
       "repeating": false
     },
     {
       "num": 3,
-      "title": "REFERENCE DOCUMENTS & THREE-WAY MATCH",
+      "title": "REFERENCE DOCUMENTS",
       "repeating": false
     },
     {
@@ -49,39 +49,83 @@
       "num": 8,
       "title": "PAYMENT TERMS & SCHEDULING",
       "repeating": false
-    },
-    {
-      "num": 9,
-      "title": "VERIFICATION, APPROVAL & AUDIT TRAIL",
-      "repeating": false
-    },
-    {
-      "num": 10,
-      "title": "SUPPORTING ATTACHMENTS",
-      "repeating": false
     }
   ],
   "fields": [
     {
       "ref": "1.1",
-      "field": "Bill booking number",
-      "dataType": "Text (15)",
-      "mandatory": "System",
-      "validation": "Auto-generated, unique and immutable, using the enterprise document prefix (e.g. SSIT-BILL-2026-00145).",
-      "sampleEntry": "SSIT-BILL-2026-00145",
+      "field": "Vendor identity (search)",
+      "dataType": "Lookup - search",
+      "mandatory": "Yes",
+      "validation": "STAGE 1 - DIARY. Type-ahead search on vendor code OR registered name against the vendor register; the user must pick an existing active record. This single selection populates the whole of Section 2. No manual vendor entry anywhere on the form.",
+      "sampleEntry": "MFR-00021 - Pak Cement Industries Limited",
       "section": 1
     },
     {
       "ref": "1.2",
-      "field": "Bill type (GATING FIELD)",
-      "dataType": "Dropdown",
+      "field": "Vendor bill / invoice number",
+      "dataType": "Text (30)",
       "mandatory": "Yes",
-      "validation": "Purchase bill (goods) / Freight bill (transport) / Service bill / Utility bill / Expense claim / Debit note. Drives which reference and tax fields are mandatory.",
-      "sampleEntry": "Purchase bill (goods)",
+      "validation": "STAGE 1 - DIARY. Number printed on the vendor's own document; must be unique per vendor per financial year. A duplicate is rejected at diary stage, before the document is accepted from the vendor.",
+      "sampleEntry": "PCI-INV-2026-8891",
       "section": 1
     },
     {
       "ref": "1.3",
+      "field": "System diary number",
+      "dataType": "Text (20)",
+      "mandatory": "System",
+      "validation": "STAGE 1 - DIARY. Auto-generated on save as soon as fields 1.1 and 1.2 are entered; unique, gapless and immutable (e.g. SSIT-DRY-2026-001188). This is the acknowledgement reference shared with the vendor and quoted in every later query. It is NOT the bill booking number in field 1.7.",
+      "sampleEntry": "SSIT-DRY-2026-001188",
+      "section": 1
+    },
+    {
+      "ref": "1.4",
+      "field": "Diary date & time (system stamp)",
+      "dataType": "Date-time",
+      "mandatory": "System",
+      "validation": "STAGE 1 - DIARY. Stamped when the diary record is saved; starts the bill turnaround clock and cannot be back-dated.",
+      "sampleEntry": "46247.475",
+      "section": 1
+    },
+    {
+      "ref": "1.5",
+      "field": "Diary acknowledgement issued to vendor",
+      "dataType": "Yes / No + Date",
+      "mandatory": "Yes",
+      "validation": "STAGE 1 - DIARY. Acknowledgement carrying the diary number, vendor name, vendor bill number and diary date is sent to the vendor contact and printable as a bill-receipt slip; it is the vendor's proof of submission and confers no approval.",
+      "sampleEntry": "Yes - 13-Aug-2026",
+      "section": 1
+    },
+    {
+      "ref": "1.6",
+      "field": "Diary / completion status (system-derived)",
+      "dataType": "Formula - read only",
+      "mandatory": "System",
+      "validation": "Diary - awaiting completion / Completed - under verification / Cancelled. The record is saved and shareable at Diary stage with fields 1.1 to 1.5 only. All Stage-2 data (bill type, dates, cost centre, amounts, taxes and references) may be added later and ALTERED BY MANAGEMENT while the status is Diary or Pending verification; every change is written to the system audit log. Once the bill is Approved no field can be edited - only reversed by credit note.",
+      "sampleEntry": "Diary - awaiting completion",
+      "section": 1
+    },
+    {
+      "ref": "1.7",
+      "field": "Bill booking number",
+      "dataType": "Text (15)",
+      "mandatory": "System",
+      "validation": "STAGE 2. Auto-generated on completion of the header, unique and immutable, using the enterprise document prefix (e.g. SSIT-BILL-2026-00145). Issued once the diary record is completed; the diary number in field 1.3 stays linked to it for the vendor's reference.",
+      "sampleEntry": "SSIT-BILL-2026-00145",
+      "section": 1
+    },
+    {
+      "ref": "1.8",
+      "field": "Bill type (GATING FIELD)",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Purchase bill (goods) / Freight bill (transport) / Fuel bill / Maintenance or repair bill / Spare parts, tyres & consumables bill / Vehicle or equipment hire bill / Insurance bill / Service bill / Utility bill / Debit note. Drives which reference and tax fields are mandatory. Tax, government fee and staff salary payments are NOT booked on this form.",
+      "sampleEntry": "Purchase bill (goods)",
+      "section": 1
+    },
+    {
+      "ref": "1.9",
       "field": "Booking date",
       "dataType": "Date",
       "mandatory": "Yes",
@@ -90,16 +134,7 @@
       "section": 1
     },
     {
-      "ref": "1.4",
-      "field": "Vendor bill / invoice number",
-      "dataType": "Text (30)",
-      "mandatory": "Yes",
-      "validation": "Number printed on the vendor's own document; must be unique per vendor per financial year.",
-      "sampleEntry": "PCI-INV-2026-8891",
-      "section": 1
-    },
-    {
-      "ref": "1.5",
+      "ref": "1.10",
       "field": "Vendor bill date",
       "dataType": "Date",
       "mandatory": "Yes",
@@ -108,7 +143,7 @@
       "section": 1
     },
     {
-      "ref": "1.6",
+      "ref": "1.11",
       "field": "Accounting period / posting month",
       "dataType": "Month-Year",
       "mandatory": "System",
@@ -117,7 +152,7 @@
       "section": 1
     },
     {
-      "ref": "1.7",
+      "ref": "1.12",
       "field": "Currency",
       "dataType": "Dropdown",
       "mandatory": "Yes",
@@ -126,7 +161,7 @@
       "section": 1
     },
     {
-      "ref": "1.8",
+      "ref": "1.13",
       "field": "Exchange rate to base currency",
       "dataType": "Number",
       "mandatory": "Conditional",
@@ -135,7 +170,7 @@
       "section": 1
     },
     {
-      "ref": "1.9",
+      "ref": "1.14",
       "field": "Enterprise entity / company",
       "dataType": "Lookup",
       "mandatory": "Yes",
@@ -144,7 +179,7 @@
       "section": 1
     },
     {
-      "ref": "1.10",
+      "ref": "1.15",
       "field": "Business location / plant receiving the supply",
       "dataType": "Lookup",
       "mandatory": "Yes",
@@ -153,16 +188,16 @@
       "section": 1
     },
     {
-      "ref": "1.11",
+      "ref": "1.16",
       "field": "Cost centre / department to be charged",
       "dataType": "Lookup",
       "mandatory": "Yes",
-      "validation": "General ledger cost centre for the expense or inventory posting.",
+      "validation": "STAGE 2 - alterable by management until the bill is approved. General ledger cost centre to which the expense or inventory is posted.",
       "sampleEntry": "CC-2100 Packing Plant",
       "section": 1
     },
     {
-      "ref": "1.12",
+      "ref": "1.17",
       "field": "Project / job reference",
       "dataType": "Lookup",
       "mandatory": "Conditional",
@@ -171,7 +206,7 @@
       "section": 1
     },
     {
-      "ref": "1.13",
+      "ref": "1.18",
       "field": "Bill received date & mode",
       "dataType": "Text (60)",
       "mandatory": "Yes",
@@ -180,120 +215,93 @@
       "section": 1
     },
     {
-      "ref": "1.14",
+      "ref": "1.19",
       "field": "Bill status",
       "dataType": "Dropdown",
       "mandatory": "System",
-      "validation": "Draft / Pending verification / Matched / On hold / Approved / Partially paid / Paid / Rejected / Cancelled.",
+      "validation": "Diary - awaiting completion / Draft / Pending verification / Matched / On hold / Approved / Partially paid / Paid / Rejected / Cancelled. A record sits at Diary from the moment the diary number is issued until the Stage-2 header is completed.",
       "sampleEntry": "Pending verification",
       "section": 1
     },
     {
       "ref": "2.1",
       "field": "Vendor type",
-      "dataType": "Dropdown",
-      "mandatory": "Yes",
-      "validation": "Manufacturer (sheet 02) / Distributor (sheet 03) / Transporter (sheet 05) / Service vendor / Utility / Employee (expense claim).",
+      "dataType": "Lookup - read only",
+      "mandatory": "System",
+      "validation": "NO MANUAL ENTRY. Derived from the vendor record selected in field 2.2: Manufacturer (sheet 02) / Distributor (sheet 03) / Transporter (sheet 05) / Fuel supplier / Workshop or maintenance vendor / Spare parts & tyre supplier / Vehicle or equipment hire vendor / Insurance company / Service vendor / Utility. Every payee must exist in the vendor register before a bill can be booked.",
       "sampleEntry": "Manufacturer",
       "section": 2
     },
     {
       "ref": "2.2",
       "field": "Vendor code & registered name",
-      "dataType": "Lookup",
+      "dataType": "Lookup - search",
       "mandatory": "Yes",
-      "validation": "Pulled from the vendor register; the legal name must match the bill.",
+      "validation": "THE ONLY SEARCHABLE FIELD IN THIS SECTION. Type-ahead search on vendor code OR registered name against the vendor register; the user must pick an existing active record. Selecting it populates fields 2.1 and 2.3 to 2.12 automatically. Free-text entry of a new vendor is not permitted here - unregistered vendors must first be onboarded on sheet 02, 03 or 05.",
       "sampleEntry": "MFR-00021 - Pak Cement Industries Limited",
       "section": 2
     },
     {
       "ref": "2.3",
       "field": "Vendor NTN",
-      "dataType": "Text (9)",
-      "mandatory": "Yes",
-      "validation": "Pulled from the vendor master; a mismatch with the bill blocks booking.",
+      "dataType": "Lookup - read only",
+      "mandatory": "System",
+      "validation": "NO MANUAL ENTRY. Pulled from the vendor master; a mismatch against the NTN printed on the bill blocks booking.",
       "sampleEntry": "0098765-4",
-      "section": 2
-    },
-    {
-      "ref": "2.4",
-      "field": "Vendor STRN",
-      "dataType": "Text (13)",
-      "mandatory": "Conditional",
-      "validation": "Required where input sales tax is claimed.",
-      "sampleEntry": "3277800098765",
       "section": 2
     },
     {
       "ref": "2.5",
       "field": "Vendor filer status on the bill date",
-      "dataType": "Dropdown",
+      "dataType": "Lookup - read only",
       "mandatory": "System",
-      "validation": "Pulled from the vendor master; if the ATL validity has lapsed the system applies non-filer withholding rates.",
+      "validation": "NO MANUAL ENTRY. Pulled from the vendor master as at the bill date; if the ATL validity has lapsed the system applies non-filer withholding rates.",
       "sampleEntry": "Filer",
       "section": 2
     },
     {
       "ref": "2.6",
-      "field": "Vendor exemption certificate applied",
-      "dataType": "Lookup",
-      "mandatory": "Conditional",
-      "validation": "Certificate from the vendor record; only applied if valid on the bill date.",
+      "field": "Vendor withholding exemption applied",
+      "dataType": "Lookup - read only",
+      "mandatory": "System",
+      "validation": "NO MANUAL ENTRY. Pulled from the vendor's Withholding Tax Exemption section; the exemption rate is applied only where the bill date falls within its validity, otherwise normal rates apply.",
       "sampleEntry": "None",
-      "section": 2
-    },
-    {
-      "ref": "2.7",
-      "field": "Vendor address & city",
-      "dataType": "Text (250)",
-      "mandatory": "Yes",
-      "validation": "Address printed on the bill; used for provincial tax determination.",
-      "sampleEntry": "5th Floor, Corporate Tower, I.I. Chundrigar Road, Karachi",
       "section": 2
     },
     {
       "ref": "2.8",
       "field": "Vendor contact person & mobile",
-      "dataType": "Text (120)",
-      "mandatory": "Yes",
-      "validation": "Person to contact for bill queries.",
+      "dataType": "Lookup - read only",
+      "mandatory": "System",
+      "validation": "NO MANUAL ENTRY. Contact selected from the points-of-contact block of the vendor record; where the record holds several contacts the user picks one from that list only.",
       "sampleEntry": "Kamran Baig / +92-333-1122334",
       "section": 2
     },
     {
       "ref": "2.9",
       "field": "Vendor bank account for payment",
-      "dataType": "Lookup",
-      "mandatory": "Yes",
-      "validation": "Primary account from the vendor record; verified before payment release.",
+      "dataType": "Lookup - read only",
+      "mandatory": "System",
+      "validation": "NO MANUAL ENTRY. Defaults to the account flagged primary on the vendor record; where the vendor holds several verified accounts the user selects from that list only. Unverified accounts are not offered and block payment release.",
       "sampleEntry": "PK24HABB0007867900123456",
       "section": 2
     },
     {
       "ref": "2.10",
       "field": "Payment terms from vendor contract",
-      "dataType": "Dropdown",
+      "dataType": "Lookup - read only",
       "mandatory": "System",
-      "validation": "Pulled from the vendor record (Advance / COD / Net 15 / Net 30 / Net 45 / LC).",
+      "validation": "NO MANUAL ENTRY. Pulled from the vendor contract (Advance / COD / Net 15 / Net 30 / Net 45 / LC); an override requires finance approval and is logged.",
       "sampleEntry": "Net 30",
       "section": 2
     },
     {
       "ref": "2.11",
       "field": "Vendor credit balance / advance held (PKR)",
-      "dataType": "Number",
-      "mandatory": "System",
-      "validation": "Advances or credit notes available for adjustment against this bill.",
-      "sampleEntry": "0",
-      "section": 2
-    },
-    {
-      "ref": "2.12",
-      "field": "Vendor compliance status on the bill date",
       "dataType": "Formula - read only",
       "mandatory": "System",
-      "validation": "Compliant only when the vendor's tax registrations, licences and (for transporters) permits are valid. A non-compliant vendor can be booked but payment release is blocked.",
-      "sampleEntry": "Compliant",
+      "validation": "NO MANUAL ENTRY. Advances and credit notes available for adjustment against this bill, computed from the vendor ledger.",
+      "sampleEntry": "0",
       "section": 2
     },
     {
@@ -310,7 +318,7 @@
       "field": "Purchase order date & value",
       "dataType": "Text (60)",
       "mandatory": "System",
-      "validation": "Pulled from the purchase order for the three-way match.",
+      "validation": "Pulled from the purchase order; the billed value is checked against it within the enterprise tolerance.",
       "sampleEntry": "01-Aug-2026 / PKR 4,260,000",
       "section": 3
     },
@@ -321,87 +329,6 @@
       "mandatory": "No",
       "validation": "Master supply or transport agreement governing the rate.",
       "sampleEntry": "MSA-2026-014",
-      "section": 3
-    },
-    {
-      "ref": "3.4",
-      "field": "Goods receipt note (GRN) number(s)",
-      "dataType": "Lookup",
-      "mandatory": "Conditional",
-      "validation": "One or more GRNs; mandatory for goods bills. Quantity billed must not exceed quantity received.",
-      "sampleEntry": "GRN-2026-011245, GRN-2026-011248",
-      "section": 3
-    },
-    {
-      "ref": "3.5",
-      "field": "GRN date(s) & quantity received",
-      "dataType": "Text (80)",
-      "mandatory": "System",
-      "validation": "Pulled from the GRN for the three-way match.",
-      "sampleEntry": "10-Aug-2026 - 300 MT",
-      "section": 3
-    },
-    {
-      "ref": "3.6",
-      "field": "Dispatch / delivery challan number(s)",
-      "dataType": "Text (80)",
-      "mandatory": "Conditional",
-      "validation": "Vendor's delivery documents supporting the quantity billed.",
-      "sampleEntry": "DC-8891, DC-8892",
-      "section": 3
-    },
-    {
-      "ref": "3.7",
-      "field": "Weighbridge slip number(s) & net weight",
-      "dataType": "Text (80)",
-      "mandatory": "Conditional",
-      "validation": "Required for bulk and bagged cement receipts; net weight governs the payable quantity.",
-      "sampleEntry": "WB-44112 - 29.8 MT",
-      "section": 3
-    },
-    {
-      "ref": "3.8",
-      "field": "Quality / mill test certificate reference",
-      "dataType": "Text (60)",
-      "mandatory": "Conditional",
-      "validation": "Required where incoming quality inspection applies.",
-      "sampleEntry": "MTC-2026-3345",
-      "section": 3
-    },
-    {
-      "ref": "3.9",
-      "field": "Transporter & vehicle reference",
-      "dataType": "Lookup",
-      "mandatory": "Conditional",
-      "validation": "For freight bills: transporter code, vehicle registration and trip reference.",
-      "sampleEntry": "TRN-00007 / TLE-1234 / DSP-2026-004512",
-      "section": 3
-    },
-    {
-      "ref": "3.10",
-      "field": "Inspection / acceptance status",
-      "dataType": "Dropdown",
-      "mandatory": "Conditional",
-      "validation": "Accepted / Accepted with deduction / Rejected - drives any short payment.",
-      "sampleEntry": "Accepted with deduction",
-      "section": 3
-    },
-    {
-      "ref": "3.11",
-      "field": "Shortage, damage or quality claim (PKR)",
-      "dataType": "Number",
-      "mandatory": "Conditional",
-      "validation": "Recovery raised against the vendor; deducted in Section 6.",
-      "sampleEntry": "18500",
-      "section": 3
-    },
-    {
-      "ref": "3.12",
-      "field": "THREE-WAY MATCH RESULT (system-derived)",
-      "dataType": "Formula - read only",
-      "mandatory": "System",
-      "validation": "Matched only when PO, GRN and bill agree on item, quantity, rate and value within the tolerance set by the enterprise. Unmatched bills cannot be approved for payment.",
-      "sampleEntry": "Matched within tolerance",
       "section": 3
     },
     {
@@ -433,42 +360,33 @@
     },
     {
       "ref": "4.4",
-      "field": "HS code / service code",
-      "dataType": "Text (12)",
-      "mandatory": "Yes",
-      "validation": "PCT heading for goods or the service code for services; drives the tax treatment.",
-      "sampleEntry": "2523.29",
-      "section": 4
-    },
-    {
-      "ref": "4.5",
       "field": "Unit of measure",
       "dataType": "Dropdown",
       "mandatory": "Yes",
-      "validation": "MT / Bag / Litre / Kilometre / Trip / Hour / Lump sum.",
+      "validation": "MT / Kg / Bag / Litre / Piece / Set / Kilometre / Trip / Job / Hour / Day / Lump sum.",
       "sampleEntry": "MT",
       "section": 4
     },
     {
-      "ref": "4.6",
+      "ref": "4.5",
       "field": "Quantity billed",
       "dataType": "Number",
       "mandatory": "Yes",
-      "validation": "Must not exceed the quantity received on the GRN beyond tolerance.",
+      "validation": "Quantity billed by the vendor; checked against the goods receipt note(s) referenced in Section 3 within tolerance.",
       "sampleEntry": "300",
       "section": 4
     },
     {
-      "ref": "4.7",
+      "ref": "4.6",
       "field": "Quantity accepted",
       "dataType": "Number",
       "mandatory": "Yes",
-      "validation": "Quantity after inspection deductions; the payable quantity.",
+      "validation": "Quantity accepted after any deduction; this is the payable quantity.",
       "sampleEntry": "298.5",
       "section": 4
     },
     {
-      "ref": "4.8",
+      "ref": "4.7",
       "field": "Rate per unit (PKR)",
       "dataType": "Number",
       "mandatory": "Yes",
@@ -477,7 +395,7 @@
       "section": 4
     },
     {
-      "ref": "4.9",
+      "ref": "4.8",
       "field": "Gross line amount (PKR)",
       "dataType": "Formula",
       "mandatory": "System",
@@ -486,26 +404,17 @@
       "section": 4
     },
     {
-      "ref": "4.10",
-      "field": "Line discount (% / amount)",
-      "dataType": "Number",
-      "mandatory": "No",
-      "validation": "Trade or volume discount agreed with the vendor.",
-      "sampleEntry": "0",
-      "section": 4
-    },
-    {
-      "ref": "4.11",
+      "ref": "4.9",
       "field": "Taxable value of the line (PKR)",
       "dataType": "Formula",
       "mandatory": "System",
-      "validation": "Gross line amount less discount; the base for sales tax and FED.",
+      "validation": "Gross line amount; the base for sales tax and any other tax on the line.",
       "sampleEntry": "4238700",
       "section": 4
     },
     {
-      "ref": "4.12",
-      "field": "Sales tax rate & amount",
+      "ref": "4.10",
+      "field": "Sales tax rate",
       "dataType": "Text (60)",
       "mandatory": "Yes",
       "validation": "Standard rate or the rate applicable to the PCT heading.",
@@ -513,48 +422,12 @@
       "section": 4
     },
     {
-      "ref": "4.13",
-      "field": "Federal Excise Duty rate & amount",
+      "ref": "4.11",
+      "field": "Other Tax",
       "dataType": "Text (60)",
-      "mandatory": "Conditional",
+      "mandatory": "Yes",
       "validation": "Applies to cement and other excisable goods.",
       "sampleEntry": "PKR 2 per kg - PKR 597,000",
-      "section": 4
-    },
-    {
-      "ref": "4.14",
-      "field": "Line total including taxes (PKR)",
-      "dataType": "Formula",
-      "mandatory": "System",
-      "validation": "Taxable value plus sales tax plus FED.",
-      "sampleEntry": "5598666",
-      "section": 4
-    },
-    {
-      "ref": "4.15",
-      "field": "GL account / expense head",
-      "dataType": "Lookup",
-      "mandatory": "Yes",
-      "validation": "Inventory, expense or asset account to be debited.",
-      "sampleEntry": "1300-Raw Material Inventory",
-      "section": 4
-    },
-    {
-      "ref": "4.16",
-      "field": "Cost centre / project for the line",
-      "dataType": "Lookup",
-      "mandatory": "Conditional",
-      "validation": "Overrides the header cost centre where a line is charged elsewhere.",
-      "sampleEntry": "CC-2100",
-      "section": 4
-    },
-    {
-      "ref": "4.17",
-      "field": "Line remarks",
-      "dataType": "Text (200)",
-      "mandatory": "No",
-      "validation": "Any note relevant to this line, such as a partial delivery.",
-      "sampleEntry": "1.5 MT short - claim raised",
       "section": 4
     },
     {
@@ -567,17 +440,8 @@
       "section": 5
     },
     {
-      "ref": "5.2",
-      "field": "Sales tax - input claimable (PKR)",
-      "dataType": "Formula",
-      "mandatory": "System",
-      "validation": "Claimable only where the vendor STRN is valid and the bill is a compliant tax invoice.",
-      "sampleEntry": "762966",
-      "section": 5
-    },
-    {
       "ref": "5.3",
-      "field": "Further tax (PKR)",
+      "field": "Other Tax",
       "dataType": "Formula",
       "mandatory": "System",
       "validation": "Applied automatically where the vendor is unregistered for sales tax.",
@@ -586,24 +450,6 @@
     },
     {
       "ref": "5.4",
-      "field": "Federal Excise Duty (PKR)",
-      "dataType": "Formula",
-      "mandatory": "System",
-      "validation": "Total FED across all lines.",
-      "sampleEntry": "597000",
-      "section": 5
-    },
-    {
-      "ref": "5.5",
-      "field": "Provincial sales tax on services (PKR)",
-      "dataType": "Formula",
-      "mandatory": "System",
-      "validation": "SRB / PRA / KPRA / BRA rate applied to service and freight bills.",
-      "sampleEntry": "0",
-      "section": 5
-    },
-    {
-      "ref": "5.6",
       "field": "Income tax withheld - section & rate",
       "dataType": "Text (60)",
       "mandatory": "System",
@@ -612,7 +458,7 @@
       "section": 5
     },
     {
-      "ref": "5.7",
+      "ref": "5.5",
       "field": "Income tax withheld (PKR)",
       "dataType": "Formula",
       "mandatory": "System",
@@ -621,16 +467,7 @@
       "section": 5
     },
     {
-      "ref": "5.8",
-      "field": "Sales tax withheld at source (PKR)",
-      "dataType": "Formula",
-      "mandatory": "System",
-      "validation": "Withholding of sales tax where the enterprise is a designated withholding agent.",
-      "sampleEntry": "152593",
-      "section": 5
-    },
-    {
-      "ref": "5.9",
+      "ref": "5.6",
       "field": "Exemption or reduced rate applied",
       "dataType": "Text (120)",
       "mandatory": "System",
@@ -639,34 +476,25 @@
       "section": 5
     },
     {
-      "ref": "5.10",
-      "field": "Provincial / local levies (PKR)",
-      "dataType": "Number",
-      "mandatory": "No",
-      "validation": "Any cess, infrastructure or local levy charged on the bill.",
-      "sampleEntry": "0",
-      "section": 5
-    },
-    {
-      "ref": "5.11",
+      "ref": "5.7",
       "field": "Total tax charged by vendor (PKR)",
       "dataType": "Formula",
       "mandatory": "System",
-      "validation": "Sales tax plus FED plus provincial sales tax on the bill.",
+      "validation": "Total tax charged by the vendor on the bill.",
       "sampleEntry": "1359966",
       "section": 5
     },
     {
-      "ref": "5.12",
+      "ref": "5.8",
       "field": "Total tax withheld by enterprise (PKR)",
       "dataType": "Formula",
       "mandatory": "System",
-      "validation": "Income tax plus sales tax withheld; reduces the amount payable to the vendor.",
+      "validation": "Income tax withheld by the enterprise; reduces the amount payable to the vendor.",
       "sampleEntry": "364528",
       "section": 5
     },
     {
-      "ref": "5.13",
+      "ref": "5.9",
       "field": "WHT deposit due date & CPR reference",
       "dataType": "Text (80)",
       "mandatory": "System",
@@ -675,7 +503,7 @@
       "section": 5
     },
     {
-      "ref": "5.14",
+      "ref": "5.10",
       "field": "Withholding tax certificate issued to vendor",
       "dataType": "Yes / No + Date",
       "mandatory": "Yes",
@@ -685,15 +513,6 @@
     },
     {
       "ref": "6.1",
-      "field": "Freight / delivery charges (PKR)",
-      "dataType": "Number",
-      "mandatory": "No",
-      "validation": "Charged by the vendor where the price basis is FOR destination.",
-      "sampleEntry": "0",
-      "section": 6
-    },
-    {
-      "ref": "6.2",
       "field": "Loading, unloading & handling charges (PKR)",
       "dataType": "Number",
       "mandatory": "No",
@@ -702,34 +521,7 @@
       "section": 6
     },
     {
-      "ref": "6.3",
-      "field": "Detention / demurrage charges (PKR)",
-      "dataType": "Number",
-      "mandatory": "No",
-      "validation": "Charged by the transporter beyond the free unloading time.",
-      "sampleEntry": "0",
-      "section": 6
-    },
-    {
-      "ref": "6.4",
-      "field": "Other charges (packing, insurance, misc.)",
-      "dataType": "Number",
-      "mandatory": "No",
-      "validation": "Any other charge appearing on the bill.",
-      "sampleEntry": "0",
-      "section": 6
-    },
-    {
-      "ref": "6.5",
-      "field": "Shortage / damage recovery (PKR)",
-      "dataType": "Number",
-      "mandatory": "No",
-      "validation": "Deduction for shortage, wet or torn bags, or off-spec material; from field 3.11.",
-      "sampleEntry": "18500",
-      "section": 6
-    },
-    {
-      "ref": "6.6",
+      "ref": "6.2",
       "field": "Penalty / late delivery deduction (PKR)",
       "dataType": "Number",
       "mandatory": "No",
@@ -738,7 +530,7 @@
       "section": 6
     },
     {
-      "ref": "6.7",
+      "ref": "6.3",
       "field": "Advance adjustment (PKR)",
       "dataType": "Number",
       "mandatory": "No",
@@ -747,16 +539,7 @@
       "section": 6
     },
     {
-      "ref": "6.8",
-      "field": "Debit / credit note adjustment (PKR)",
-      "dataType": "Number",
-      "mandatory": "No",
-      "validation": "Prior notes settled against this bill, with the note reference.",
-      "sampleEntry": "0",
-      "section": 6
-    },
-    {
-      "ref": "6.9",
+      "ref": "6.4",
       "field": "Retention money withheld (PKR)",
       "dataType": "Number",
       "mandatory": "Conditional",
@@ -765,7 +548,7 @@
       "section": 6
     },
     {
-      "ref": "6.10",
+      "ref": "6.5",
       "field": "Rounding adjustment (PKR)",
       "dataType": "Formula",
       "mandatory": "System",
@@ -787,7 +570,7 @@
       "field": "Add: total taxes charged by vendor (PKR)",
       "dataType": "Formula",
       "mandatory": "System",
-      "validation": "From field 5.11.",
+      "validation": "From field 5.7.",
       "sampleEntry": "1359966",
       "section": 7
     },
@@ -796,7 +579,7 @@
       "field": "Add: freight and other charges (PKR)",
       "dataType": "Formula",
       "mandatory": "System",
-      "validation": "Sum of fields 6.1 to 6.4.",
+      "validation": "Handling and other charges from field 6.1.",
       "sampleEntry": "0",
       "section": 7
     },
@@ -811,33 +594,24 @@
     },
     {
       "ref": "7.5",
-      "field": "Difference against vendor bill total (PKR)",
-      "dataType": "Formula",
-      "mandatory": "System",
-      "validation": "Any variance must be zero before approval; a non-zero variance holds the bill.",
-      "sampleEntry": "0",
-      "section": 7
-    },
-    {
-      "ref": "7.6",
       "field": "Less: taxes withheld by enterprise (PKR)",
       "dataType": "Formula",
       "mandatory": "System",
-      "validation": "From field 5.12.",
+      "validation": "From field 5.8.",
       "sampleEntry": "364528",
       "section": 7
     },
     {
-      "ref": "7.7",
+      "ref": "7.6",
       "field": "Less: deductions and recoveries (PKR)",
       "dataType": "Formula",
       "mandatory": "System",
-      "validation": "Sum of fields 6.5 to 6.9.",
+      "validation": "Sum of fields 6.2, 6.3 and 6.4.",
       "sampleEntry": "18500",
       "section": 7
     },
     {
-      "ref": "7.8",
+      "ref": "7.7",
       "field": "Net amount payable to vendor (PKR)",
       "dataType": "Formula",
       "mandatory": "System",
@@ -846,7 +620,7 @@
       "section": 7
     },
     {
-      "ref": "7.9",
+      "ref": "7.8",
       "field": "Amount in words",
       "dataType": "Formula",
       "mandatory": "System",
@@ -855,7 +629,7 @@
       "section": 7
     },
     {
-      "ref": "7.10",
+      "ref": "7.9",
       "field": "Amount paid to date (PKR)",
       "dataType": "Formula",
       "mandatory": "System",
@@ -864,7 +638,7 @@
       "section": 7
     },
     {
-      "ref": "7.11",
+      "ref": "7.10",
       "field": "Balance outstanding (PKR)",
       "dataType": "Formula",
       "mandatory": "System",
@@ -873,7 +647,7 @@
       "section": 7
     },
     {
-      "ref": "7.12",
+      "ref": "7.11",
       "field": "Input tax claimed in which sales tax return",
       "dataType": "Text (30)",
       "mandatory": "System",
@@ -884,9 +658,9 @@
     {
       "ref": "8.1",
       "field": "Payment terms applied",
-      "dataType": "Dropdown",
+      "dataType": "Lookup - default",
       "mandatory": "Yes",
-      "validation": "Pulled from the vendor contract; may be overridden with approval.",
+      "validation": "Defaults from the payment terms on the vendor contract; an override requires finance approval and is logged.",
       "sampleEntry": "Net 30",
       "section": 8
     },
@@ -901,24 +675,6 @@
     },
     {
       "ref": "8.3",
-      "field": "Early payment discount available",
-      "dataType": "Text (60)",
-      "mandatory": "System",
-      "validation": "Discount and the last date on which it can be claimed.",
-      "sampleEntry": "1.0% if paid by 22-Aug-2026",
-      "section": 8
-    },
-    {
-      "ref": "8.4",
-      "field": "Late payment mark-up applicable",
-      "dataType": "Percentage",
-      "mandatory": "No",
-      "validation": "Charged by the vendor on overdue balances under the contract.",
-      "sampleEntry": "2.0% per month",
-      "section": 8
-    },
-    {
-      "ref": "8.5",
       "field": "Planned payment date",
       "dataType": "Date",
       "mandatory": "Yes",
@@ -927,7 +683,7 @@
       "section": 8
     },
     {
-      "ref": "8.6",
+      "ref": "8.4",
       "field": "Payment method",
       "dataType": "Dropdown",
       "mandatory": "Yes",
@@ -936,7 +692,7 @@
       "section": 8
     },
     {
-      "ref": "8.7",
+      "ref": "8.5",
       "field": "Payment priority",
       "dataType": "Dropdown",
       "mandatory": "Yes",
@@ -945,7 +701,7 @@
       "section": 8
     },
     {
-      "ref": "8.8",
+      "ref": "8.6",
       "field": "Hold reason (if on hold)",
       "dataType": "Text (200)",
       "mandatory": "Conditional",
@@ -954,7 +710,7 @@
       "section": 8
     },
     {
-      "ref": "8.9",
+      "ref": "8.7",
       "field": "Part payment allowed",
       "dataType": "Yes / No",
       "mandatory": "Yes",
@@ -963,7 +719,7 @@
       "section": 8
     },
     {
-      "ref": "8.10",
+      "ref": "8.8",
       "field": "Payment voucher reference(s)",
       "dataType": "Lookup",
       "mandatory": "System",
@@ -972,202 +728,22 @@
       "section": 8
     },
     {
-      "ref": "9.1",
-      "field": "Entered by & date",
-      "dataType": "Text (120)",
-      "mandatory": "System",
-      "validation": "User who booked the bill, with the timestamp.",
-      "sampleEntry": "AP Clerk - S. Nawaz, 14-Aug-2026",
-      "section": 9
-    },
-    {
-      "ref": "9.2",
-      "field": "Quantity & receipt verified by",
+      "ref": "8.9",
+      "field": "Verified by (accounts) & date",
       "dataType": "Text (120)",
       "mandatory": "Yes",
-      "validation": "Store or gate officer confirming the GRN and weighbridge quantities.",
-      "sampleEntry": "Store In-charge - M. Akram",
-      "section": 9
+      "validation": "Officer who checked the vendor bill against the purchase order and the quantity received before approval.",
+      "sampleEntry": "Manager Accounts - 15-Aug-2026",
+      "section": 8
     },
     {
-      "ref": "9.3",
-      "field": "Rate & contract verified by",
+      "ref": "8.10",
+      "field": "Approved for payment by & date",
       "dataType": "Text (120)",
       "mandatory": "Yes",
-      "validation": "Procurement officer confirming the rate against the PO or contract.",
-      "sampleEntry": "Procurement - S. Ahmed",
-      "section": 9
-    },
-    {
-      "ref": "9.4",
-      "field": "Tax treatment verified by",
-      "dataType": "Text (120)",
-      "mandatory": "Yes",
-      "validation": "Tax officer confirming the sales tax, FED and withholding treatment.",
-      "sampleEntry": "Tax - B. Ahmad",
-      "section": 9
-    },
-    {
-      "ref": "9.5",
-      "field": "Budget availability checked",
-      "dataType": "Yes / No",
-      "mandatory": "Yes",
-      "validation": "Confirms the cost centre or project budget covers the expense.",
-      "sampleEntry": "Yes",
-      "section": 9
-    },
-    {
-      "ref": "9.6",
-      "field": "Approval level 1 - name, role & date",
-      "dataType": "Text (120)",
-      "mandatory": "Yes",
-      "validation": "First approver as per the delegation of authority matrix.",
-      "sampleEntry": "Manager Finance - 15-Aug-2026",
-      "section": 9
-    },
-    {
-      "ref": "9.7",
-      "field": "Approval level 2 - name, role & date",
-      "dataType": "Text (120)",
-      "mandatory": "Conditional",
-      "validation": "Required where the bill value exceeds the level 1 authority limit.",
-      "sampleEntry": "CFO - 16-Aug-2026",
-      "section": 9
-    },
-    {
-      "ref": "9.8",
-      "field": "Approval level 3 - name, role & date",
-      "dataType": "Text (120)",
-      "mandatory": "Conditional",
-      "validation": "Required for high-value bills above the CFO limit.",
-      "sampleEntry": "N/A",
-      "section": 9
-    },
-    {
-      "ref": "9.9",
-      "field": "Rejection / query raised - reason & date",
-      "dataType": "Text (200)",
-      "mandatory": "Conditional",
-      "validation": "Query sent to the vendor; the payment clock is paused until resolved.",
-      "sampleEntry": "N/A",
-      "section": 9
-    },
-    {
-      "ref": "9.10",
-      "field": "GL posting reference & date",
-      "dataType": "Text (60)",
-      "mandatory": "System",
-      "validation": "Journal voucher number created on approval.",
-      "sampleEntry": "JV-2026-007781, 16-Aug-2026",
-      "section": 9
-    },
-    {
-      "ref": "9.11",
-      "field": "Audit trail",
-      "dataType": "Note - system",
-      "mandatory": "System",
-      "validation": "Every change to a booked bill is logged with the user, timestamp, old value and new value; approved bills cannot be edited, only reversed by credit note.",
-      "sampleEntry": "Enabled",
-      "section": 9
-    },
-    {
-      "ref": "9.12",
-      "field": "Final bill status",
-      "dataType": "Dropdown",
-      "mandatory": "System",
-      "validation": "Approved / On hold / Rejected / Paid / Partially paid / Cancelled - with the effective date.",
-      "sampleEntry": "Approved",
-      "section": 9
-    },
-    {
-      "ref": "10.1",
-      "field": "Vendor's original bill / tax invoice",
-      "dataType": "File upload",
-      "mandatory": "Yes",
-      "validation": "PDF or scan of the signed and stamped original; mandatory for input tax claims.",
-      "sampleEntry": "Attached",
-      "section": 10
-    },
-    {
-      "ref": "10.2",
-      "field": "Purchase order copy",
-      "dataType": "File upload",
-      "mandatory": "Conditional",
-      "validation": "Supports field 3.1.",
-      "sampleEntry": "Attached",
-      "section": 10
-    },
-    {
-      "ref": "10.3",
-      "field": "Goods receipt note(s)",
-      "dataType": "File upload",
-      "mandatory": "Conditional",
-      "validation": "Supports fields 3.4 and 3.5.",
-      "sampleEntry": "Attached",
-      "section": 10
-    },
-    {
-      "ref": "10.4",
-      "field": "Delivery challan(s) / consignment note",
-      "dataType": "File upload",
-      "mandatory": "Conditional",
-      "validation": "Supports field 3.6.",
-      "sampleEntry": "Attached",
-      "section": 10
-    },
-    {
-      "ref": "10.5",
-      "field": "Weighbridge slips",
-      "dataType": "File upload",
-      "mandatory": "Conditional",
-      "validation": "Supports field 3.7.",
-      "sampleEntry": "Attached",
-      "section": 10
-    },
-    {
-      "ref": "10.6",
-      "field": "Mill test / quality certificate",
-      "dataType": "File upload",
-      "mandatory": "Conditional",
-      "validation": "Supports field 3.8.",
-      "sampleEntry": "Attached",
-      "section": 10
-    },
-    {
-      "ref": "10.7",
-      "field": "Inspection or claim report",
-      "dataType": "File upload",
-      "mandatory": "Conditional",
-      "validation": "Supports fields 3.10 and 3.11.",
-      "sampleEntry": "Attached",
-      "section": 10
-    },
-    {
-      "ref": "10.8",
-      "field": "Vendor exemption certificate applied",
-      "dataType": "File upload",
-      "mandatory": "Conditional",
-      "validation": "Supports field 5.9; must be valid on the bill date.",
-      "sampleEntry": "N/A",
-      "section": 10
-    },
-    {
-      "ref": "10.9",
-      "field": "Freight bill / trip sheet",
-      "dataType": "File upload",
-      "mandatory": "Conditional",
-      "validation": "Required for freight bills; supports field 3.9.",
-      "sampleEntry": "N/A",
-      "section": 10
-    },
-    {
-      "ref": "10.10",
-      "field": "Approval emails or notes",
-      "dataType": "File upload",
-      "mandatory": "No",
-      "validation": "Any correspondence supporting the approval or a deviation.",
-      "sampleEntry": "Attached",
-      "section": 10
+      "validation": "Approver as per the delegation of authority. Approval sets the bill status in field 1.19 to Approved - the only status that allows a payment voucher to be raised on sheet 10. Approved bills cannot be edited, only reversed by credit note.",
+      "sampleEntry": "Manager Finance - 16-Aug-2026",
+      "section": 8
     }
   ]
 }

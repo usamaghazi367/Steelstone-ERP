@@ -1,0 +1,1352 @@
+Audit: Excel vs modules-schema.json
+Excel: C:/Users/Engr Kamran Ghazi/Downloads/Steelstone IT (1).xlsx
+Schema: D:\Usama Data\ConstFire\ConstFire.Backend\Data\modules-schema.json
+Generated: 2026-09-29T02:29:38.038Z
+
+========================================================================
+Module 01 (sheet "01")
+  App name: ENTERPRISE REGISTRATION
+  Counts: excel=21 app=105 | missingInApp=4 extraInApp=88 fieldDiff=17 dataTypeDiff=14 mandatoryDiff=4 validationDiff=17
+  Missing in app (4):
+    - 2.8
+    - 2.9
+    - 2.10
+    - 2.11
+  Extra in app (88):
+    - 1.5
+    - 1.6
+    - 1.7
+    - 1.8
+    - 1.9
+    - 1.10
+    - 1.11
+    - 1.12
+    - 1.13
+    - 1.14
+    - 1.15
+    - 1.16
+    - 1.17
+    - 1.18
+    - 1.19
+    - 1.20
+    - 1.21
+    - 1.22
+    - 1.23
+    - 3.4
+    - 3.5
+    - 3.6
+    - 3.7
+    - 3.8
+    - 3.9
+    - 3.10
+    - 3.11
+    - 4.4
+    - 4.5
+    - 4.6
+    - 4.7
+    - 4.8
+    - 4.9
+    - 4.10
+    - 5.1
+    - 5.2
+    - 5.3
+    - 5.4
+    - 5.5
+    - 5.6
+    - 5.7
+    - 5.8
+    - 5.9
+    - 5.10
+    - 5.11
+    - 5.12
+    - 5.13
+    - 5.14
+    - 6.1
+    - 6.2
+    ... and 38 more
+  Field name mismatch (17):
+    - 1.1: excel="Business name (Title)" | app="Is the entity registered with SECP? (ENTITY-TYPE CHECK)"
+    - 1.2: excel="Legal status" | app="Registering authority"
+    - 1.3: excel="NTN / CNIC number" | app="Legal status / entity type"
+    - 1.4: excel="Filer status" | app="Registered legal name"
+    - 2.1: excel="Registered office - address line 1" | app="National Tax Number (NTN)"
+    - 2.2: excel="Registered office - address line 2" | app="NTN issue date"
+    - 2.3: excel="City" | app="Sales Tax Registration No. (STRN - FBR)"
+    - 2.4: excel="District / Tehsil" | app="FBR filer status (Active Taxpayer List)"
+    - 2.5: excel="Province / Territory" | app="Provincial revenue authority"
+    - 2.6: excel="Country" | app="Provincial sales tax on services registration no."
+    - 2.7: excel="Is the registered office the same as the main business address?" | app="Withholding agent status"
+    - 3.1: excel="Primary POC - full name" | app="Registered office - address line 1"
+    - 3.2: excel="Primary POC - designation" | app="Registered office - address line 2"
+    - 3.3: excel="Primary POC - mobile" | app="City"
+    - 4.1: excel="Bank name" | app="Owner category"
+    - 4.2: excel="Title of account" | app="Owner type"
+    - 4.3: excel="Account number" | app="Full name (as per CNIC / certificate of incorporation)"
+  Data type mismatch (14):
+    - 1.1: excel="Text (150)" | app="Yes / No"
+    - 1.3: excel="Text (15)" | app="Dependent dropdown"
+    - 1.4: excel="Dropdown" | app="Text (150)"
+    - 2.1: excel="Text (150)" | app="Text (9)"
+    - 2.2: excel="Text (150)" | app="Date"
+    - 2.3: excel="Dropdown" | app="Yes / No"
+    - 2.4: excel="Text (50)" | app="Dropdown"
+    - 2.5: excel="Dropdown" | app="Multi-select"
+    - 2.6: excel="Dropdown" | app="Text (20)"
+    - 3.1: excel="Text (100)" | app="Text (150)"
+    - 3.2: excel="Text (60)" | app="Text (150)"
+    - 3.3: excel="Phone" | app="Dropdown"
+    - 4.2: excel="Text (100)" | app="Dropdown"
+    - 4.3: excel="Text (20)" | app="Text (100)"
+  Mandatory mismatch (4):
+    - 2.4: excel="No" | app="Yes"
+    - 2.5: excel="Yes" | app="Conditional"
+    - 2.6: excel="Yes" | app="Conditional"
+    - 3.2: excel="Yes" | app="No"
+  Validation mismatch (17):
+    - 1.1 (validation differs)
+    - 1.2 (validation differs)
+    - 1.3 (validation differs)
+    - 1.4 (validation differs)
+    - 2.1 (validation differs)
+    - 2.2 (validation differs)
+    - 2.3 (validation differs)
+    - 2.4 (validation differs)
+    - 2.5 (validation differs)
+    - 2.6 (validation differs)
+    - 2.7 (validation differs)
+    - 3.1 (validation differs)
+    - 3.2 (validation differs)
+    - 3.3 (validation differs)
+    - 4.1 (validation differs)
+    - 4.2 (validation differs)
+    - 4.3 (validation differs)
+========================================================================
+Module 02 (sheet "02")
+  App name: MANUFACTURER (SUPPLIER) REGISTRATION
+  Counts: excel=44 app=143 | missingInApp=0 extraInApp=99 fieldDiff=44 dataTypeDiff=40 mandatoryDiff=12 validationDiff=44
+  Extra in app (99):
+    - 1.5
+    - 1.6
+    - 1.7
+    - 1.8
+    - 1.9
+    - 1.10
+    - 1.11
+    - 1.12
+    - 1.13
+    - 1.14
+    - 1.15
+    - 1.16
+    - 2.14
+    - 2.15
+    - 2.16
+    - 3.4
+    - 3.5
+    - 3.6
+    - 3.7
+    - 3.8
+    - 3.9
+    - 3.10
+    - 3.11
+    - 3.12
+    - 3.13
+    - 4.4
+    - 4.5
+    - 4.6
+    - 4.7
+    - 4.8
+    - 4.9
+    - 4.10
+    - 4.11
+    - 4.12
+    - 4.13
+    - 4.14
+    - 6.6
+    - 6.7
+    - 6.8
+    - 6.9
+    - 6.10
+    - 6.11
+    - 7.4
+    - 7.5
+    - 7.6
+    - 7.7
+    - 7.8
+    - 7.9
+    - 7.10
+    - 7.11
+    ... and 49 more
+  Field name mismatch (44):
+    - 1.1: excel="Business name (Title)" | app="Supplier / manufacturer code"
+    - 1.2: excel="Legal status" | app="Registering enterprise (buyer tenant)"
+    - 1.3: excel="NTN / CNIC number" | app="Is the manufacturer registered with SECP? (ENTITY-TYPE CHECK)"
+    - 1.4: excel="Filer status" | app="Registering authority"
+    - 2.1: excel="Plant serial no." | app="National Tax Number (NTN)"
+    - 2.2: excel="Plant name" | app="Sales Tax Registration No. (STRN - FBR)"
+    - 2.3: excel="Plant code" | app="Sales tax registration category"
+    - 2.4: excel="Plant address (full)" | app="FBR filer status (Active Taxpayer List)"
+    - 2.5: excel="Plant city / province" | app="Filer status - date last verified against ATL"
+    - 2.6: excel="Plant geo-coordinates (lat, long)" | app="Filer status - valid until (next verification due)"
+    - 2.7: excel="Plant Manager - full name & designation" | app="ATL re-verification frequency"
+    - 2.8: excel="Plant Manager - mobile" | app="Provincial revenue authority & registration no."
+    - 2.9: excel="Production Manager - full name & designation" | app="Federal Excise Duty (FED) registration"
+    - 2.10: excel="Production Manager - mobile" | app="Sales tax withholding regime applicable"
+    - 2.11: excel="Plant landline / control room number" | app="Withholding tax exemption / reduced-rate certificate no. & issuing authority"
+    - 2.12: excel="Products manufactured at this plant" | app="FBR filer status - status flag (system-derived)"
+    - 2.13: excel="Plant operational status" | app="Exemption certificate - valid from"
+    - 3.1: excel="Full name" | app="Location serial no."
+    - 3.2: excel="Designation" | app="Location type"
+    - 3.3: excel="Mobile number" | app="Location name / code"
+    - 4.1: excel="Bank name" | app="Plant serial no."
+    - 4.2: excel="Title of account" | app="Plant name"
+    - 4.3: excel="Account number" | app="Plant code"
+    - 5.1: excel="Working days per week" | app="POC serial no."
+    - 5.2: excel="Weekly off day(s)" | app="Contact role"
+    - 5.3: excel="Plant operating pattern" | app="Full name"
+    - 5.4: excel="Shift timings" | app="Designation"
+    - 5.5: excel="Dispatch / loading hours" | app="Mobile number"
+    - 5.6: excel="Order cut-off time for same-day dispatch" | app="Landline / extension"
+    - 5.7: excel="Office / commercial working hours" | app="Email address"
+    - 5.8: excel="Annual maintenance shutdown period" | app="Location / plant assigned"
+    - 5.9: excel="Public / religious holidays observed" | app="Available hours / days"
+    - 5.10: excel="Ramadan / seasonal timing changes" | app="Escalation level"
+    - 5.11: excel="Emergency / after-hours dispatch available?" | app="Authorised to confirm orders and prices?"
+    - 5.12: excel="Calendar applies to (plant)" | app="Receives system notifications?"
+    - 5.13: excel="Calendar effective from / to" | app="Contact status"
+    - 6.1: excel="Name of product" | app="Bank account serial no."
+    - 6.2: excel="Unit of measure (UoM)" | app="Bank name"
+    - 6.3: excel="Price per UoM (PKR)" | app="Branch name & code"
+    - 6.4: excel="Discount" | app="Title of account"
+    - 6.5: excel="Discount validity (from / to)" | app="Account number"
+    - 7.1: excel="Exemption availed?" | app="Working days per week"
+    - 7.2: excel="Exemption validity (from / to)" | app="Weekly off day(s)"
+    - 7.3: excel="Withholding tax rate during exemption (%)" | app="Plant operating pattern"
+  Data type mismatch (40):
+    - 1.1: excel="Text (150)" | app="Text (10)"
+    - 1.2: excel="Dropdown" | app="Lookup"
+    - 1.3: excel="Text (15)" | app="Yes / No"
+    - 2.1: excel="Integer" | app="Text (9)"
+    - 2.2: excel="Text (80)" | app="Yes / No"
+    - 2.3: excel="Text (15)" | app="Dropdown"
+    - 2.4: excel="Text (300)" | app="Dropdown"
+    - 2.5: excel="Text (80)" | app="Date"
+    - 2.6: excel="Text (30)" | app="Date"
+    - 2.7: excel="Text (150)" | app="Dropdown"
+    - 2.8: excel="Phone" | app="Text (60)"
+    - 2.9: excel="Text (150)" | app="Text (20)"
+    - 2.10: excel="Phone" | app="Dropdown"
+    - 2.11: excel="Phone" | app="Text (80)"
+    - 2.12: excel="Multi-select" | app="Formula - read only"
+    - 2.13: excel="Dropdown" | app="Date"
+    - 3.1: excel="Text (100)" | app="Integer"
+    - 3.2: excel="Text (60)" | app="Dropdown"
+    - 3.3: excel="Phone" | app="Text (60)"
+    - 4.1: excel="Dropdown" | app="Integer"
+    - 4.2: excel="Text (100)" | app="Text (80)"
+    - 4.3: excel="Text (20)" | app="Text (15)"
+    - 5.1: excel="Multi-select" | app="Integer"
+    - 5.3: excel="Dropdown" | app="Text (100)"
+    - 5.4: excel="Text (120)" | app="Text (60)"
+    - 5.5: excel="Text (80)" | app="Phone"
+    - 5.6: excel="Time" | app="Phone"
+    - 5.7: excel="Text (80)" | app="Email"
+    - 5.8: excel="Date range" | app="Lookup"
+    - 5.9: excel="Multi-select" | app="Text (80)"
+    - 5.10: excel="Text (120)" | app="Dropdown"
+    - 5.12: excel="Lookup" | app="Multi-select"
+    - 5.13: excel="Date range" | app="Dropdown"
+    - 6.1: excel="Dropdown" | app="Integer"
+    - 6.3: excel="Number" | app="Text (80)"
+    - 6.4: excel="Number / %" | app="Text (100)"
+    - 6.5: excel="Date range" | app="Text (20)"
+    - 7.1: excel="Dropdown" | app="Multi-select"
+    - 7.2: excel="Date range" | app="Dropdown"
+    - 7.3: excel="Number / %" | app="Dropdown"
+  Mandatory mismatch (12):
+    - 1.1: excel="Yes" | app="System"
+    - 2.6: excel="No" | app="Yes"
+    - 2.8: excel="Yes" | app="Conditional"
+    - 2.11: excel="No" | app="Conditional"
+    - 2.12: excel="Yes" | app="System"
+    - 2.13: excel="Yes" | app="Conditional"
+    - 5.6: excel="Yes" | app="No"
+    - 5.10: excel="No" | app="Yes"
+    - 6.4: excel="No" | app="Yes"
+    - 6.5: excel="Yes, if 6.4 is entered" | app="Yes"
+    - 7.2: excel="Yes, if 7.1 = Yes" | app="Yes"
+    - 7.3: excel="Yes, if 7.1 = Yes" | app="Yes"
+  Validation mismatch (44):
+    - 1.1 (validation differs)
+    - 1.2 (validation differs)
+    - 1.3 (validation differs)
+    - 1.4 (validation differs)
+    - 2.1 (validation differs)
+    - 2.2 (validation differs)
+    - 2.3 (validation differs)
+    - 2.4 (validation differs)
+    - 2.5 (validation differs)
+    - 2.6 (validation differs)
+    - 2.7 (validation differs)
+    - 2.8 (validation differs)
+    - 2.9 (validation differs)
+    - 2.10 (validation differs)
+    - 2.11 (validation differs)
+    - 2.12 (validation differs)
+    - 2.13 (validation differs)
+    - 3.1 (validation differs)
+    - 3.2 (validation differs)
+    - 3.3 (validation differs)
+    - 4.1 (validation differs)
+    - 4.2 (validation differs)
+    - 4.3 (validation differs)
+    - 5.1 (validation differs)
+    - 5.2 (validation differs)
+    - 5.3 (validation differs)
+    - 5.4 (validation differs)
+    - 5.5 (validation differs)
+    - 5.6 (validation differs)
+    - 5.7 (validation differs)
+    ... and 14 more
+========================================================================
+Module 03 (sheet "03")
+  App name: DISTRIBUTOR REGISTRATION
+  Counts: excel=12 app=85 | missingInApp=0 extraInApp=73 fieldDiff=12 dataTypeDiff=11 mandatoryDiff=2 validationDiff=12
+  Extra in app (73):
+    - 1.5
+    - 1.6
+    - 1.7
+    - 1.8
+    - 1.9
+    - 1.10
+    - 1.11
+    - 1.12
+    - 1.13
+    - 1.14
+    - 1.15
+    - 1.16
+    - 1.17
+    - 1.18
+    - 1.19
+    - 2.4
+    - 2.5
+    - 2.6
+    - 2.7
+    - 2.8
+    - 2.9
+    - 2.10
+    - 2.11
+    - 2.12
+    - 2.13
+    - 2.14
+    - 2.15
+    - 2.16
+    - 2.17
+    - 3.4
+    - 3.5
+    - 3.6
+    - 3.7
+    - 3.8
+    - 3.9
+    - 3.10
+    - 3.11
+    - 3.12
+    - 3.13
+    - 4.3
+    - 4.4
+    - 4.5
+    - 4.6
+    - 4.7
+    - 4.8
+    - 4.9
+    - 4.10
+    - 4.11
+    - 4.12
+    - 4.13
+    ... and 23 more
+  Field name mismatch (12):
+    - 1.1: excel="Business name (Title)" | app="Distributor code"
+    - 1.2: excel="Legal status" | app="Registering enterprise (principal)"
+    - 1.3: excel="NTN / CNIC number" | app="Is the distributor registered with SECP? (ENTITY-TYPE CHECK)"
+    - 1.4: excel="Filer status" | app="Registering authority"
+    - 2.1: excel="Full name" | app="National Tax Number (NTN)"
+    - 2.2: excel="Designation" | app="Sales Tax Registration No. (STRN - FBR)"
+    - 2.3: excel="Mobile number" | app="Sales tax registration category"
+    - 3.1: excel="Bank name" | app="POC serial no."
+    - 3.2: excel="Title of account" | app="Contact role"
+    - 3.3: excel="Account number" | app="Full name"
+    - 4.1: excel="Payment terms" | app="Bank account serial no."
+    - 4.2: excel="Early payment / prompt settlement discount" | app="Bank name"
+  Data type mismatch (11):
+    - 1.1: excel="Text (150)" | app="Text (10)"
+    - 1.2: excel="Dropdown" | app="Lookup"
+    - 1.3: excel="Text (15)" | app="Yes / No"
+    - 2.1: excel="Text (100)" | app="Text (9)"
+    - 2.2: excel="Text (60)" | app="Yes / No"
+    - 2.3: excel="Phone" | app="Dropdown"
+    - 3.1: excel="Dropdown" | app="Integer"
+    - 3.2: excel="Text (100)" | app="Dropdown"
+    - 3.3: excel="Text (20)" | app="Text (100)"
+    - 4.1: excel="Dropdown" | app="Integer"
+    - 4.2: excel="Percentage" | app="Dropdown"
+  Mandatory mismatch (2):
+    - 1.1: excel="Yes" | app="System"
+    - 4.2: excel="No" | app="Yes"
+  Validation mismatch (12):
+    - 1.1 (validation differs)
+    - 1.2 (validation differs)
+    - 1.3 (validation differs)
+    - 1.4 (validation differs)
+    - 2.1 (validation differs)
+    - 2.2 (validation differs)
+    - 2.3 (validation differs)
+    - 3.1 (validation differs)
+    - 3.2 (validation differs)
+    - 3.3 (validation differs)
+    - 4.1 (validation differs)
+    - 4.2 (validation differs)
+========================================================================
+Module 04 (sheet "04")
+  App name: CUSTOMER REGISTRATION - END USER
+  Counts: excel=49 app=151 | missingInApp=4 extraInApp=106 fieldDiff=45 dataTypeDiff=40 mandatoryDiff=21 validationDiff=45
+  Missing in app (4):
+    - 3.11
+    - 3.12
+    - 3.13
+    - 3.14
+  Extra in app (106):
+    - 1.5
+    - 1.6
+    - 1.7
+    - 1.8
+    - 1.9
+    - 1.10
+    - 1.11
+    - 1.12
+    - 1.13
+    - 1.14
+    - 1.15
+    - 1.16
+    - 1.17
+    - 1.18
+    - 1.19
+    - 1.20
+    - 2.11
+    - 2.12
+    - 4.5
+    - 4.6
+    - 4.7
+    - 4.8
+    - 4.9
+    - 4.10
+    - 4.11
+    - 4.12
+    - 4.13
+    - 4.14
+    - 5.4
+    - 5.5
+    - 5.6
+    - 5.7
+    - 5.8
+    - 5.9
+    - 5.10
+    - 5.11
+    - 5.12
+    - 5.13
+    - 5.14
+    - 5.15
+    - 5.16
+    - 5.17
+    - 6.4
+    - 6.5
+    - 6.6
+    - 6.7
+    - 6.8
+    - 6.9
+    - 6.10
+    - 6.11
+    ... and 56 more
+  Field name mismatch (45):
+    - 1.1: excel="Business name (Title)" | app="Customer code"
+    - 1.2: excel="Legal status" | app="Registering enterprise (seller)"
+    - 1.3: excel="NTN / CNIC number" | app="Customer constitution (ENTITY-TYPE CHECK)"
+    - 1.4: excel="Filer status" | app="Registering authority"
+    - 2.1: excel="Delivery mode required (DELIVERY-TYPE CHECK)" | app="Sales tax status"
+    - 2.2: excel="Number of bag delivery points" | app="FBR filer status (Active Taxpayer List)"
+    - 2.3: excel="Number of bulker delivery points" | app="Filer status - date last verified against ATL"
+    - 2.4: excel="Delivery basis / Incoterm" | app="Filer status - valid until (next verification due)"
+    - 2.5: excel="Transport arrangement" | app="FBR filer status - status flag (system-derived)"
+    - 2.6: excel="Preferred delivery days" | app="ATL re-verification frequency"
+    - 2.7: excel="Preferred delivery time window" | app="Further tax applicable"
+    - 2.8: excel="Advance notice required before delivery (hours)" | app="Withholding agent status of customer"
+    - 2.9: excel="Site access constraints" | app="Provincial revenue authority & registration no."
+    - 2.10: excel="Delivery documentation required at gate" | app="DELIVERY MODE SELECTION (bag / bulker / both - controls Sections 4 and 5)"
+    - 3.1: excel="Bag delivery point serial no." | app="Delivery basis / Incoterm"
+    - 3.2: excel="Delivery point name / code" | app="Transport arrangement"
+    - 3.3: excel="Address line 1" | app="Preferred delivery days"
+    - 3.4: excel="Address line 2 / landmark" | app="Preferred delivery time window"
+    - 3.5: excel="City / District" | app="Advance notice required before delivery (hours)"
+    - 3.6: excel="Province" | app="Site access constraints"
+    - 3.7: excel="Geo-coordinates (lat, long)" | app="Delivery documentation required at gate"
+    - 3.8: excel="Site contact - name & mobile" | app="BAG DELIVERY POINTS (repeating - default 1, unlimited additional points)"
+    - 3.9: excel="Receiving hours at this point" | app="Bag delivery point serial no."
+    - 3.10: excel="Covered storage available & capacity (bags)" | app="Delivery point name / code"
+    - 4.1: excel="Delivery point name" | app="Address line 2 / landmark"
+    - 4.2: excel="Address" | app="City / District"
+    - 4.3: excel="POC name" | app="Province"
+    - 4.4: excel="Mobile number" | app="Geo-coordinates (lat, long)"
+    - 5.1: excel="Full name" | app="Address line 2 / landmark"
+    - 5.2: excel="Designation" | app="City / District"
+    - 5.3: excel="Mobile number" | app="Province"
+    - 6.1: excel="Bank name" | app="Project site address & city"
+    - 6.2: excel="Title of account" | app="Project start date"
+    - 6.3: excel="Account number" | app="Project completion date"
+    - 7.1: excel="Certificate number" | app="Designation"
+    - 7.2: excel="Issuing authority / tax office" | app="CNIC"
+    - 7.3: excel="Section / statutory reference" | app="Mobile number"
+    - 7.4: excel="Applicable tax type & normal rate" | app="Landline / extension"
+    - 7.5: excel="Exempted / reduced rate granted" | app="Email address"
+    - 7.6: excel="Valid from" | app="Delivery point / project assigned"
+    - 7.7: excel="Valid until" | app="Available hours / days"
+    - 7.8: excel="Renewal reminder lead time (days)" | app="Authorised to place orders / accept prices?"
+    - 7.9: excel="Certificate copy attached" | app="Authorised to receive material & sign challan?"
+    - 7.10: excel="Verified by & date (internal)" | app="Receives system notifications?"
+    - 7.11: excel="Certificate status" | app="Contact status"
+  Data type mismatch (40):
+    - 1.1: excel="Text (150)" | app="Text (10)"
+    - 1.2: excel="Dropdown" | app="Lookup"
+    - 1.3: excel="Text (15)" | app="Dropdown"
+    - 2.2: excel="Integer" | app="Dropdown"
+    - 2.3: excel="Integer" | app="Date"
+    - 2.4: excel="Dropdown" | app="Date"
+    - 2.5: excel="Dropdown" | app="Formula - read only"
+    - 2.6: excel="Multi-select" | app="Dropdown"
+    - 2.7: excel="Text (60)" | app="Yes / No"
+    - 2.8: excel="Integer" | app="Yes / No"
+    - 2.9: excel="Text (200)" | app="Text (60)"
+    - 2.10: excel="Multi-select" | app=""
+    - 3.1: excel="Integer" | app="Dropdown"
+    - 3.2: excel="Text (60)" | app="Dropdown"
+    - 3.3: excel="Text (150)" | app="Multi-select"
+    - 3.4: excel="Text (150)" | app="Text (60)"
+    - 3.5: excel="Text (60)" | app="Integer"
+    - 3.6: excel="Dropdown" | app="Text (200)"
+    - 3.7: excel="Text (30)" | app="Multi-select"
+    - 3.8: excel="Text (120)" | app=""
+    - 3.9: excel="Text (60)" | app="Integer"
+    - 4.1: excel="Text (60)" | app="Text (150)"
+    - 4.2: excel="Text (250)" | app="Text (60)"
+    - 4.3: excel="Text (100)" | app="Dropdown"
+    - 4.4: excel="Phone" | app="Text (30)"
+    - 5.1: excel="Text (100)" | app="Text (150)"
+    - 5.3: excel="Phone" | app="Dropdown"
+    - 6.1: excel="Dropdown" | app="Text (250)"
+    - 6.2: excel="Text (100)" | app="Date"
+    - 6.3: excel="Text (20)" | app="Date"
+    - 7.1: excel="Text (40)" | app="Text (60)"
+    - 7.2: excel="Text (100)" | app="Text (15)"
+    - 7.3: excel="Text (40)" | app="Phone"
+    - 7.4: excel="Text (60)" | app="Phone"
+    - 7.5: excel="Percentage" | app="Email"
+    - 7.6: excel="Date" | app="Lookup"
+    - 7.7: excel="Date" | app="Text (80)"
+    - 7.8: excel="Integer" | app="Yes / No"
+    - 7.9: excel="File upload" | app="Yes / No"
+    - 7.10: excel="Text (100)" | app="Multi-select"
+  Mandatory mismatch (21):
+    - 1.1: excel="Yes" | app="System"
+    - 2.2: excel="Conditional" | app="Yes"
+    - 2.3: excel="Conditional" | app="Yes"
+    - 2.5: excel="Yes" | app="System"
+    - 2.7: excel="Yes" | app="System"
+    - 2.9: excel="No" | app="Conditional"
+    - 2.10: excel="Yes" | app=""
+    - 3.1: excel="Conditional" | app="Yes"
+    - 3.4: excel="No" | app="Yes"
+    - 3.6: excel="Yes" | app="No"
+    - 3.7: excel="No" | app="Yes"
+    - 3.8: excel="Yes" | app=""
+    - 3.9: excel="Yes" | app="Conditional"
+    - 4.1: excel="Yes" | app="No"
+    - 4.4: excel="Yes" | app="No"
+    - 5.1: excel="Yes" | app="No"
+    - 6.1: excel="Yes" | app="Project only"
+    - 6.2: excel="Yes" | app="Project only"
+    - 6.3: excel="Yes" | app="Project only"
+    - 7.4: excel="Yes" | app="No"
+    - 7.10: excel="Internal" | app="Yes"
+  Validation mismatch (45):
+    - 1.1 (validation differs)
+    - 1.2 (validation differs)
+    - 1.3 (validation differs)
+    - 1.4 (validation differs)
+    - 2.1 (validation differs)
+    - 2.2 (validation differs)
+    - 2.3 (validation differs)
+    - 2.4 (validation differs)
+    - 2.5 (validation differs)
+    - 2.6 (validation differs)
+    - 2.7 (validation differs)
+    - 2.8 (validation differs)
+    - 2.9 (validation differs)
+    - 2.10 (validation differs)
+    - 3.1 (validation differs)
+    - 3.2 (validation differs)
+    - 3.3 (validation differs)
+    - 3.4 (validation differs)
+    - 3.5 (validation differs)
+    - 3.6 (validation differs)
+    - 3.7 (validation differs)
+    - 3.8 (validation differs)
+    - 3.9 (validation differs)
+    - 3.10 (validation differs)
+    - 4.1 (validation differs)
+    - 4.2 (validation differs)
+    - 4.3 (validation differs)
+    - 4.4 (validation differs)
+    - 5.1 (validation differs)
+    - 5.2 (validation differs)
+    ... and 15 more
+========================================================================
+Module 05 (sheet "05")
+  App name: TRANSPORTER REGISTRATION
+  Counts: excel=13 app=77 | missingInApp=0 extraInApp=64 fieldDiff=13 dataTypeDiff=12 mandatoryDiff=4 validationDiff=13
+  Extra in app (64):
+    - 1.5
+    - 1.6
+    - 1.7
+    - 1.8
+    - 1.9
+    - 1.10
+    - 1.11
+    - 1.12
+    - 1.13
+    - 1.14
+    - 1.15
+    - 1.16
+    - 1.17
+    - 1.18
+    - 1.19
+    - 1.20
+    - 1.21
+    - 1.22
+    - 2.4
+    - 2.5
+    - 2.6
+    - 2.7
+    - 2.8
+    - 2.9
+    - 2.10
+    - 2.11
+    - 2.12
+    - 2.13
+    - 2.14
+    - 2.15
+    - 3.4
+    - 3.5
+    - 3.6
+    - 3.7
+    - 3.8
+    - 3.9
+    - 3.10
+    - 3.11
+    - 3.12
+    - 3.13
+    - 4.4
+    - 4.5
+    - 4.6
+    - 4.7
+    - 4.8
+    - 4.9
+    - 4.10
+    - 4.11
+    - 4.12
+    - 4.13
+    ... and 14 more
+  Field name mismatch (13):
+    - 1.1: excel="Business name (Title)" | app="Transporter code"
+    - 1.2: excel="Legal status" | app="Registering enterprise"
+    - 1.3: excel="NTN / CNIC number" | app="Is the transporter registered with SECP? (ENTITY-TYPE CHECK)"
+    - 1.4: excel="Filer status" | app="Registering authority"
+    - 2.1: excel="Full name" | app="National Tax Number (NTN)"
+    - 2.2: excel="Designation" | app="Sales Tax Registration No. (STRN)"
+    - 2.3: excel="Mobile number" | app="FBR filer status (Active Taxpayer List)"
+    - 3.1: excel="Bank name" | app="POC serial no."
+    - 3.2: excel="Title of account" | app="Contact role"
+    - 3.3: excel="Account number" | app="Full name"
+    - 4.1: excel="Exemption availed?" | app="Bank account serial no."
+    - 4.2: excel="Exemption validity (from / to)" | app="Bank name"
+    - 4.3: excel="Withholding tax rate during exemption (%)" | app="Branch name & code"
+  Data type mismatch (12):
+    - 1.1: excel="Text (150)" | app="Text (10)"
+    - 1.2: excel="Dropdown" | app="Lookup"
+    - 1.3: excel="Text (15)" | app="Yes / No"
+    - 2.1: excel="Text (100)" | app="Text (9)"
+    - 2.2: excel="Text (60)" | app="Text (13)"
+    - 2.3: excel="Phone" | app="Dropdown"
+    - 3.1: excel="Dropdown" | app="Integer"
+    - 3.2: excel="Text (100)" | app="Dropdown"
+    - 3.3: excel="Text (20)" | app="Text (100)"
+    - 4.1: excel="Dropdown" | app="Integer"
+    - 4.2: excel="Date range" | app="Dropdown"
+    - 4.3: excel="Number / %" | app="Text (80)"
+  Mandatory mismatch (4):
+    - 1.1: excel="Yes" | app="System"
+    - 2.2: excel="Yes" | app="Conditional"
+    - 4.2: excel="Yes, if 4.1 = Yes" | app="Yes"
+    - 4.3: excel="Yes, if 4.1 = Yes" | app="Yes"
+  Validation mismatch (13):
+    - 1.1 (validation differs)
+    - 1.2 (validation differs)
+    - 1.3 (validation differs)
+    - 1.4 (validation differs)
+    - 2.1 (validation differs)
+    - 2.2 (validation differs)
+    - 2.3 (validation differs)
+    - 3.1 (validation differs)
+    - 3.2 (validation differs)
+    - 3.3 (validation differs)
+    - 4.1 (validation differs)
+    - 4.2 (validation differs)
+    - 4.3 (validation differs)
+========================================================================
+Module 06 (sheet "06")
+  App name: VEHICLE REGISTRATION
+  Counts: excel=24 app=66 | missingInApp=0 extraInApp=42 fieldDiff=9 dataTypeDiff=8 mandatoryDiff=4 validationDiff=9
+  Extra in app (42):
+    - 2.9
+    - 2.10
+    - 2.11
+    - 2.12
+    - 2.13
+    - 2.14
+    - 2.15
+    - 3.1
+    - 3.2
+    - 3.3
+    - 3.4
+    - 3.5
+    - 3.6
+    - 3.7
+    - 3.8
+    - 3.9
+    - 3.10
+    - 3.11
+    - 3.12
+    - 3.13
+    - 3.14
+    - 4.1
+    - 4.2
+    - 4.3
+    - 4.4
+    - 4.5
+    - 4.6
+    - 4.7
+    - 4.8
+    - 4.9
+    - 5.1
+    - 5.2
+    - 5.3
+    - 5.4
+    - 5.5
+    - 5.6
+    - 5.7
+    - 5.8
+    - 5.9
+    - 5.10
+    - 5.11
+    - 5.12
+  Field name mismatch (9):
+    - 1.4: excel="Registered owner name & NTN" | app="Registered owner name & CNIC or NTN"
+    - 2.1: excel="Route permit number" | app="Axle configuration / number of wheels"
+    - 2.2: excel="Route permit - valid until" | app="Gross vehicle weight - GVW (MT)"
+    - 2.3: excel="Route permit - status (system-derived)" | app="Tare (empty) weight (MT)"
+    - 2.4: excel="Fitness certificate number" | app="Date tare weight last verified"
+    - 2.5: excel="Fitness certificate - valid until" | app="Payload capacity (MT)"
+    - 2.6: excel="Fitness certificate - status (system-derived)" | app="Body type"
+    - 2.7: excel="Token tax - paid up to" | app="Tank capacity (MT) & number of compartments"
+    - 2.8: excel="Token tax - status (system-derived)" | app="Blower or compressor fitted & type"
+  Data type mismatch (8):
+    - 2.1: excel="Text (30)" | app="Dropdown"
+    - 2.2: excel="Date" | app="Number"
+    - 2.3: excel="Formula - read only" | app="Number"
+    - 2.4: excel="Text (30)" | app="Date"
+    - 2.5: excel="Date" | app="Number"
+    - 2.6: excel="Formula - read only" | app="Dropdown"
+    - 2.7: excel="Date" | app="Text (40)"
+    - 2.8: excel="Formula - read only" | app="Text (60)"
+  Mandatory mismatch (4):
+    - 2.3: excel="System" | app="Yes"
+    - 2.6: excel="System" | app="Yes"
+    - 2.7: excel="Yes" | app="Bulker only"
+    - 2.8: excel="System" | app="Bulker only"
+  Validation mismatch (9):
+    - 1.4 (validation differs)
+    - 2.1 (validation differs)
+    - 2.2 (validation differs)
+    - 2.3 (validation differs)
+    - 2.4 (validation differs)
+    - 2.5 (validation differs)
+    - 2.6 (validation differs)
+    - 2.7 (validation differs)
+    - 2.8 (validation differs)
+========================================================================
+Module 07 (sheet "07")
+  App name: MANPOWER / HR - EMPLOYEE REGISTRATION
+  Counts: excel=69 app=127 | missingInApp=0 extraInApp=58 fieldDiff=39 dataTypeDiff=36 mandatoryDiff=27 validationDiff=41
+  Extra in app (58):
+    - 1.13
+    - 1.14
+    - 1.15
+    - 1.16
+    - 1.17
+    - 1.18
+    - 2.10
+    - 2.11
+    - 2.12
+    - 3.10
+    - 3.11
+    - 3.12
+    - 3.13
+    - 3.14
+    - 5.7
+    - 5.8
+    - 5.9
+    - 5.10
+    - 5.11
+    - 5.12
+    - 6.6
+    - 6.7
+    - 7.4
+    - 7.5
+    - 7.6
+    - 10.1
+    - 10.2
+    - 10.3
+    - 10.4
+    - 10.5
+    - 10.6
+    - 10.7
+    - 10.8
+    - 10.9
+    - 10.10
+    - 11.1
+    - 11.2
+    - 11.3
+    - 11.4
+    - 11.5
+    - 11.6
+    - 11.7
+    - 11.8
+    - 11.9
+    - 11.10
+    - 11.11
+    - 11.12
+    - 11.13
+    - 11.14
+    - 12.1
+    ... and 8 more
+  Field name mismatch (39):
+    - 1.5: excel="Passport number & nationality" | app="Father's / husband's name"
+    - 1.6: excel="Date of birth" | app="CNIC number"
+    - 1.7: excel="Age (system-derived)" | app="CNIC - valid until (expiry date)"
+    - 1.8: excel="Gender" | app="CNIC - status (system-derived)"
+    - 1.9: excel="Marital status" | app="Passport number & nationality"
+    - 1.10: excel="Religion" | app="Work visa / work permit number"
+    - 1.11: excel="Blood group" | app="Work visa / work permit - valid until"
+    - 1.12: excel="Photograph" | app="Date of birth"
+    - 2.3: excel="Present / residential address" | app="Personal email address"
+    - 2.4: excel="Permanent address" | app="Official company email address"
+    - 2.5: excel="City / province of residence" | app="Present / residential address"
+    - 2.6: excel="Emergency contact - name & relation" | app="Permanent address (as per CNIC)"
+    - 2.7: excel="Emergency contact - mobile number" | app="City / province of residence"
+    - 2.8: excel="Next of kin for benefits & gratuity" | app="Domicile district & province"
+    - 2.9: excel="Dependants (name, relation, date of birth)" | app="Emergency contact - name & relation"
+    - 3.4: excel="Grade / pay scale" | app="Section / cost centre"
+    - 3.5: excel="Employment status" | app="Work location / plant"
+    - 3.6: excel="Probation period (months) & confirmation due date" | app="Reporting manager"
+    - 3.7: excel="Contract start date" | app="Grade / pay scale"
+    - 3.8: excel="Contract end date" | app="Employment status"
+    - 3.9: excel="Contract - status (system-derived)" | app="Probation period (months) & confirmation due date"
+    - 5.5: excel="Police verification / character certificate number" | app="Provincial social security number (PESSI / SESSI / KPESSI)"
+    - 5.6: excel="COMPLIANCE STATUS (system-derived)" | app="Provincial social security registration date"
+    - 6.1: excel="Gross monthly salary (PKR)" | app="Salary basis"
+    - 6.2: excel="Basic salary (PKR)" | app="Gross monthly salary (PKR)"
+    - 6.3: excel="House rent allowance (PKR)" | app="Basic salary (PKR)"
+    - 6.4: excel="Income tax deduction method" | app="House rent allowance (PKR)"
+    - 6.5: excel="EOBI contribution - employee & employer share" | app="Income tax deduction method"
+    - 9.1: excel="Is the employee a driver? (GATING FIELD)" | app="CNIC copy (both sides)"
+    - 9.2: excel="Driver dispatch code" | app="Passport, visa & work permit copies"
+    - 9.3: excel="Driving licence number" | app="Passport-size photographs"
+    - 9.4: excel="Licence class / type" | app="Educational degrees & transcripts"
+    - 9.5: excel="Licence - valid until" | app="Professional licence / registration certificate"
+    - 9.6: excel="Licence - status (system-derived)" | app="Experience & relieving letters from previous employers"
+    - 9.7: excel="Driver medical fitness certificate number" | app="Signed appointment letter / employment contract"
+    - 9.8: excel="Driver medical fitness - valid until" | app="Police verification / character certificate"
+    - 9.9: excel="Police verification - valid until" | app="EOBI & social security registration forms"
+    - 9.10: excel="Police verification - status (system-derived)" | app="Bank account maintenance certificate / cancelled cheque"
+    - 9.11: excel="DRIVER COMPLIANCE STATUS (system-derived)" | app="Signed code of conduct, confidentiality & IT policy"
+  Data type mismatch (36):
+    - 1.5: excel="Text (40)" | app="Text (100)"
+    - 1.6: excel="Date" | app="Text (15)"
+    - 1.7: excel="Formula - read only" | app="Date"
+    - 1.8: excel="Dropdown" | app="Formula - read only"
+    - 1.9: excel="Dropdown" | app="Text (40)"
+    - 1.10: excel="Dropdown" | app="Text (40)"
+    - 1.11: excel="Dropdown" | app="Date"
+    - 1.12: excel="File upload" | app="Date"
+    - 2.3: excel="Text (250)" | app="Email"
+    - 2.4: excel="Text (250)" | app="Email"
+    - 2.5: excel="Text (80)" | app="Text (250)"
+    - 2.6: excel="Repeating table" | app="Text (250)"
+    - 2.7: excel="Phone" | app="Text (80)"
+    - 2.8: excel="Repeating table" | app="Text (60)"
+    - 3.4: excel="Dropdown" | app="Text (60)"
+    - 3.5: excel="Dropdown" | app="Lookup"
+    - 3.6: excel="Text (60)" | app="Lookup"
+    - 3.7: excel="Date" | app="Dropdown"
+    - 3.8: excel="Date" | app="Dropdown"
+    - 3.9: excel="Formula - read only" | app="Text (60)"
+    - 5.5: excel="Text (30)" | app="Text (20)"
+    - 5.6: excel="Formula - read only" | app="Date"
+    - 6.1: excel="Number" | app="Dropdown"
+    - 6.4: excel="Dropdown" | app="Number"
+    - 6.5: excel="Text (60)" | app="Dropdown"
+    - 9.1: excel="Formula - read only" | app="File upload"
+    - 9.2: excel="Text (10)" | app="File upload"
+    - 9.3: excel="Text (25)" | app="File upload"
+    - 9.4: excel="Dropdown" | app="File upload"
+    - 9.5: excel="Date" | app="File upload"
+    - 9.6: excel="Formula - read only" | app="File upload"
+    - 9.7: excel="Text (30)" | app="File upload"
+    - 9.8: excel="Date" | app="File upload"
+    - 9.9: excel="Date" | app="File upload"
+    - 9.10: excel="Formula - read only" | app="File upload"
+    - 9.11: excel="Formula - read only" | app="File upload"
+  Mandatory mismatch (27):
+    - 1.5: excel="Expatriate only" | app="Yes"
+    - 1.6: excel="Yes" | app="Pakistani only"
+    - 1.7: excel="System" | app="Pakistani only"
+    - 1.8: excel="Yes" | app="System"
+    - 1.9: excel="Yes" | app="Expatriate only"
+    - 1.10: excel="No" | app="Expatriate only"
+    - 1.11: excel="Yes" | app="Expatriate only"
+    - 2.3: excel="Yes" | app="No"
+    - 2.4: excel="Yes" | app="No"
+    - 2.9: excel="No" | app="Yes"
+    - 3.6: excel="Conditional" | app="Yes"
+    - 3.7: excel="Contract only" | app="Yes"
+    - 3.8: excel="Contract only" | app="Yes"
+    - 3.9: excel="System" | app="Conditional"
+    - 5.6: excel="System" | app="Conditional"
+    - 6.5: excel="No" | app="Yes"
+    - 9.1: excel="System" | app="Yes"
+    - 9.2: excel="System" | app="Expatriate only"
+    - 9.3: excel="Driver only" | app="Yes"
+    - 9.4: excel="Driver only" | app="Yes"
+    - 9.5: excel="Driver only" | app="Conditional"
+    - 9.6: excel="System" | app="Yes"
+    - 9.7: excel="Driver only" | app="Yes"
+    - 9.8: excel="Driver only" | app="Conditional"
+    - 9.9: excel="Driver only" | app="Yes"
+    - 9.10: excel="System" | app="Yes"
+    - 9.11: excel="System" | app="Yes"
+  Validation mismatch (41):
+    - 1.5 (validation differs)
+    - 1.6 (validation differs)
+    - 1.7 (validation differs)
+    - 1.8 (validation differs)
+    - 1.9 (validation differs)
+    - 1.10 (validation differs)
+    - 1.11 (validation differs)
+    - 1.12 (validation differs)
+    - 2.3 (validation differs)
+    - 2.4 (validation differs)
+    - 2.5 (validation differs)
+    - 2.6 (validation differs)
+    - 2.7 (validation differs)
+    - 2.8 (validation differs)
+    - 2.9 (validation differs)
+    - 3.2 (validation differs)
+    - 3.4 (validation differs)
+    - 3.5 (validation differs)
+    - 3.6 (validation differs)
+    - 3.7 (validation differs)
+    - 3.8 (validation differs)
+    - 3.9 (validation differs)
+    - 5.1 (validation differs)
+    - 5.5 (validation differs)
+    - 5.6 (validation differs)
+    - 6.1 (validation differs)
+    - 6.2 (validation differs)
+    - 6.3 (validation differs)
+    - 6.4 (validation differs)
+    - 6.5 (validation differs)
+    ... and 11 more
+========================================================================
+Module 08 (sheet "08")
+  App name: BILL (SUPPLIER / VENDOR BILL BOOKING)
+  Counts: excel=77 app=86 | missingInApp=0 extraInApp=9 fieldDiff=1 dataTypeDiff=0 mandatoryDiff=0 validationDiff=3
+  Extra in app (9):
+    - 2.4
+    - 2.7
+    - 2.12
+    - 5.2
+    - 9.1
+    - 9.2
+    - 9.3
+    - 9.4
+    - 9.5
+  Field name mismatch (1):
+    - 2.6: excel="Vendor withholding exemption applied" | app="Vendor exemption certificate applied"
+  Validation mismatch (3):
+    - 1.5 (validation differs)
+    - 2.6 (validation differs)
+    - 4.5 (validation differs)
+========================================================================
+Module 09 (sheet "09")
+  App name: QUOTATION (SALES QUOTE)
+  Counts: excel=39 app=52 | missingInApp=0 extraInApp=13 fieldDiff=3 dataTypeDiff=2 mandatoryDiff=0 validationDiff=3
+  Extra in app (13):
+    - 2.3
+    - 2.4
+    - 2.6
+    - 2.12
+    - 7.1
+    - 7.2
+    - 7.3
+    - 7.4
+    - 7.5
+    - 7.6
+    - 7.7
+    - 7.8
+    - 7.9
+  Field name mismatch (3):
+    - 2.9: excel="Contact mobile" | app="Contact mobile & email"
+    - 2.10: excel="Outstanding overdue balance (PKR)" | app="Existing credit limit & available balance"
+    - 2.11: excel="Customer account status" | app="Outstanding overdue balance (PKR)"
+  Data type mismatch (2):
+    - 2.10: excel="Number" | app="Lookup - read only"
+    - 2.11: excel="Formula - read only" | app="Number"
+  Validation mismatch (3):
+    - 2.9 (validation differs)
+    - 2.10 (validation differs)
+    - 2.11 (validation differs)
+========================================================================
+Module 10 (sheet "10")
+  App name: PAYMENT VOUCHER
+  Counts: excel=68 app=75 | missingInApp=3 extraInApp=10 fieldDiff=19 dataTypeDiff=16 mandatoryDiff=13 validationDiff=19
+  Missing in app (3):
+    - 6.8
+    - 6.9
+    - 6.10
+  Extra in app (10):
+    - 8.1
+    - 8.2
+    - 8.3
+    - 8.4
+    - 8.5
+    - 8.6
+    - 8.7
+    - 8.8
+    - 8.9
+    - 8.10
+  Field name mismatch (19):
+    - 2.5: excel="Payee bank name" | app="Payee bank name & branch"
+    - 2.7: excel="Payee account number" | app="Payee IBAN / account number"
+    - 6.1: excel="Bank statement date of debit" | app="Prepared by & date"
+    - 6.2: excel="Amount debited by bank (PKR)" | app="Checked by (accounts) & date"
+    - 6.3: excel="Bank charges deducted (PKR)" | app="Budget / fund availability confirmed"
+    - 6.4: excel="Reconciliation status" | app="Approval level 1 - name, role & date"
+    - 6.5: excel="Cheque clearance / bounce status" | app="Approval level 2 - name, role & date"
+    - 6.6: excel="Bounce reason & action taken" | app="Released by & date-time"
+    - 6.7: excel="Payment acknowledgement from payee" | app="Payment reference / UTR number from bank"
+    - 7.1: excel="Approved bill / invoice copy" | app="Bank statement date of debit"
+    - 7.2: excel="Goods receipt & delivery documents" | app="Amount debited by bank (PKR)"
+    - 7.3: excel="Advance request approval" | app="Bank charges deducted (PKR)"
+    - 7.4: excel="Trip sheet, job card or fuel slip" | app="Reconciliation status"
+    - 7.5: excel="Bank transfer instruction / cheque scan" | app="Cheque clearance / bounce status"
+    - 7.6: excel="Bank debit advice / UTR confirmation" | app="Bounce reason & action taken"
+    - 7.7: excel="Withholding tax certificate issued" | app="Payment acknowledgement from payee"
+    - 7.8: excel="Approval trail (system log)" | app="Effect on bill status"
+    - 7.9: excel="Cancellation / reversal reference" | app="Effect on payee balance"
+    - 7.10: excel="Final voucher status" | app="GL posting reference & date"
+  Data type mismatch (16):
+    - 6.1: excel="Date" | app="Text (120)"
+    - 6.2: excel="Number" | app="Text (120)"
+    - 6.3: excel="Number" | app="Yes / No"
+    - 6.4: excel="Dropdown" | app="Text (120)"
+    - 6.5: excel="Dropdown" | app="Text (120)"
+    - 6.6: excel="Text (200)" | app="Text (120)"
+    - 6.7: excel="File upload" | app="Text (40)"
+    - 7.1: excel="File upload" | app="Date"
+    - 7.2: excel="File upload" | app="Number"
+    - 7.3: excel="File upload" | app="Number"
+    - 7.4: excel="File upload" | app="Dropdown"
+    - 7.5: excel="File upload" | app="Dropdown"
+    - 7.6: excel="File upload" | app="Text (200)"
+    - 7.8: excel="Note - system" | app="Formula - read only"
+    - 7.9: excel="Text (60)" | app="Formula - read only"
+    - 7.10: excel="Dropdown" | app="Text (60)"
+  Mandatory mismatch (13):
+    - 6.2: excel="System" | app="Yes"
+    - 6.3: excel="No" | app="Yes"
+    - 6.4: excel="System" | app="Yes"
+    - 6.6: excel="Conditional" | app="System"
+    - 6.7: excel="No" | app="System"
+    - 7.1: excel="Yes" | app="System"
+    - 7.2: excel="Conditional" | app="System"
+    - 7.3: excel="Conditional" | app="No"
+    - 7.4: excel="Conditional" | app="System"
+    - 7.5: excel="Yes" | app="Conditional"
+    - 7.6: excel="Yes" | app="Conditional"
+    - 7.7: excel="Conditional" | app="No"
+    - 7.9: excel="Conditional" | app="System"
+  Validation mismatch (19):
+    - 2.7 (validation differs)
+    - 2.9 (validation differs)
+    - 6.1 (validation differs)
+    - 6.2 (validation differs)
+    - 6.3 (validation differs)
+    - 6.4 (validation differs)
+    - 6.5 (validation differs)
+    - 6.6 (validation differs)
+    - 6.7 (validation differs)
+    - 7.1 (validation differs)
+    - 7.2 (validation differs)
+    - 7.3 (validation differs)
+    - 7.4 (validation differs)
+    - 7.5 (validation differs)
+    - 7.6 (validation differs)
+    - 7.7 (validation differs)
+    - 7.8 (validation differs)
+    - 7.9 (validation differs)
+    - 7.10 (validation differs)
+========================================================================
+Module 11 (sheet "11")
+  App name: SALES TAX INVOICE
+  Counts: excel=42 app=46 | missingInApp=2 extraInApp=6 fieldDiff=3 dataTypeDiff=3 mandatoryDiff=1 validationDiff=4
+  Missing in app (2):
+    - 7.4
+    - 7.5
+  Extra in app (6):
+    - 2.4
+    - 8.1
+    - 8.2
+    - 8.3
+    - 8.4
+    - 8.5
+  Field name mismatch (3):
+    - 7.1: excel="Signed delivery challan" | app="Prepared by & date"
+    - 7.2: excel="Weighbridge slip" | app="Checked by (accounts) & date"
+    - 7.3: excel="Mill test / quality certificate" | app="Approved by & date"
+  Data type mismatch (3):
+    - 7.1: excel="File upload" | app="Text (120)"
+    - 7.2: excel="File upload" | app="Text (120)"
+    - 7.3: excel="File upload" | app="Text (120)"
+  Mandatory mismatch (1):
+    - 7.1: excel="Yes" | app="System"
+  Validation mismatch (4):
+    - 6.2 (validation differs)
+    - 7.1 (validation differs)
+    - 7.2 (validation differs)
+    - 7.3 (validation differs)
+========================================================================
+Module 12 (sheet "12")
+  App name: PAYROLL
+  Counts: excel=51 app=67 | missingInApp=0 extraInApp=16 fieldDiff=1 dataTypeDiff=0 mandatoryDiff=0 validationDiff=1
+  Extra in app (16):
+    - 2.2
+    - 3.3
+    - 5.10
+    - 7.1
+    - 7.2
+    - 7.3
+    - 7.4
+    - 7.5
+    - 7.6
+    - 7.7
+    - 7.8
+    - 7.9
+    - 7.10
+    - 7.11
+    - 7.12
+    - 7.13
+  Field name mismatch (1):
+    - 2.11: excel="Employee bank account number" | app="Employee bank account (IBAN)"
+  Validation mismatch (1):
+    - 5.11 (validation differs)
+========================================================================
+Module 13 (sheet "13")
+  App name: MATERIAL DEFINITION (ITEM MASTER)
+  Counts: excel=29 app=37 | missingInApp=0 extraInApp=8 fieldDiff=0 dataTypeDiff=0 mandatoryDiff=0 validationDiff=0
+  Extra in app (8):
+    - 7.1
+    - 7.2
+    - 7.3
+    - 7.4
+    - 7.5
+    - 7.6
+    - 7.7
+    - 7.8
+========================================================================
+Module 14 (sheet "14")
+  App name: DELIVERY CHALLAN
+  Counts: excel=43 app=62 | missingInApp=0 extraInApp=19 fieldDiff=3 dataTypeDiff=0 mandatoryDiff=1 validationDiff=6
+  Extra in app (19):
+    - 2.3
+    - 2.6
+    - 3.10
+    - 5.1
+    - 5.2
+    - 5.3
+    - 5.4
+    - 5.5
+    - 5.6
+    - 5.7
+    - 5.8
+    - 5.9
+    - 8.1
+    - 8.2
+    - 8.3
+    - 8.4
+    - 8.5
+    - 8.6
+    - 8.7
+  Field name mismatch (3):
+    - 3.3: excel="Vehicle type" | app="Vehicle type & payload capacity"
+    - 3.5: excel="Driver name" | app="Driver name & CNIC"
+    - 6.4: excel="Received by - name & designation" | app="Received by - name, designation & CNIC"
+  Mandatory mismatch (1):
+    - 3.9: excel="No" | app="System"
+  Validation mismatch (6):
+    - 3.3 (validation differs)
+    - 3.4 (validation differs)
+    - 3.7 (validation differs)
+    - 3.9 (validation differs)
+    - 4.5 (validation differs)
+    - 6.4 (validation differs)
+========================================================================
+Module 15 (sheet "15")
+  App name: PAYMENT RECEIPT (CUSTOMER RECEIPT)
+  Counts: excel=71 app=78 | missingInApp=0 extraInApp=7 fieldDiff=4 dataTypeDiff=2 mandatoryDiff=1 validationDiff=4
+  Extra in app (7):
+    - 2.10
+    - 7.1
+    - 7.2
+    - 7.3
+    - 7.4
+    - 7.5
+    - 7.6
+  Field name mismatch (4):
+    - 2.8: excel="Contact & mobile for receipt acknowledgement" | app="Credit limit utilised before receipt (PKR)"
+    - 2.9: excel="Project / site reference" | app="Contact & mobile for receipt acknowledgement"
+    - 3.7: excel="CASH - collected by (name & designation)" | app="CASH - collected by (name, designation & CNIC)"
+    - 3.23: excel="IBFT - payer bank & account number" | app="IBFT - payer bank & account / IBAN"
+  Data type mismatch (2):
+    - 2.8: excel="Lookup - read only" | app="Formula - read only"
+    - 2.9: excel="Lookup" | app="Lookup - read only"
+  Mandatory mismatch (1):
+    - 2.9: excel="No" | app="System"
+  Validation mismatch (4):
+    - 2.8 (validation differs)
+    - 2.9 (validation differs)
+    - 3.7 (validation differs)
+    - 6.1 (validation differs)
+
+========================================================================
+TOTALS
+  modulesCompared: 15
+  excelFields (module sheets): 652
+  appFields (matched modules): 1257
+  missingInApp: 13
+  extraInApp: 618
+  fieldNameDiff: 213
+  dataTypeDiff: 184
+  mandatoryDiff: 90
+  validationDiff: 221
+
+TOP MISMATCHES PER MODULE (short)
+  01 ENTERPRISE REGISTRATION
+    - missingInApp: 4 e.g. 2.8, 2.9, 2.10
+    - extraInApp: 88 e.g. 1.5, 1.6, 1.7
+    - fieldName: 17 e.g. 1.1
+    - dataType: 14 e.g. 1.1
+    - mandatory: 4 e.g. 2.4
+    - validation: 17 e.g. 1.1 (validation differs)
+  02 MANUFACTURER (SUPPLIER) REGISTRATION
+    - extraInApp: 99 e.g. 1.5, 1.6, 1.7
+    - fieldName: 44 e.g. 1.1
+    - dataType: 40 e.g. 1.1
+    - mandatory: 12 e.g. 1.1
+    - validation: 44 e.g. 1.1 (validation differs)
+  03 DISTRIBUTOR REGISTRATION
+    - extraInApp: 73 e.g. 1.5, 1.6, 1.7
+    - fieldName: 12 e.g. 1.1
+    - dataType: 11 e.g. 1.1
+    - mandatory: 2 e.g. 1.1
+    - validation: 12 e.g. 1.1 (validation differs)
+  04 CUSTOMER REGISTRATION - END USER
+    - missingInApp: 4 e.g. 3.11, 3.12, 3.13
+    - extraInApp: 106 e.g. 1.5, 1.6, 1.7
+    - fieldName: 45 e.g. 1.1
+    - dataType: 40 e.g. 1.1
+    - mandatory: 21 e.g. 1.1
+    - validation: 45 e.g. 1.1 (validation differs)
+  05 TRANSPORTER REGISTRATION
+    - extraInApp: 64 e.g. 1.5, 1.6, 1.7
+    - fieldName: 13 e.g. 1.1
+    - dataType: 12 e.g. 1.1
+    - mandatory: 4 e.g. 1.1
+    - validation: 13 e.g. 1.1 (validation differs)
+  06 VEHICLE REGISTRATION
+    - extraInApp: 42 e.g. 2.9, 2.10, 2.11
+    - fieldName: 9 e.g. 1.4
+    - dataType: 8 e.g. 2.1
+    - mandatory: 4 e.g. 2.3
+    - validation: 9 e.g. 1.4 (validation differs)
+  07 MANPOWER / HR - EMPLOYEE REGISTRATION
+    - extraInApp: 58 e.g. 1.13, 1.14, 1.15
+    - fieldName: 39 e.g. 1.5
+    - dataType: 36 e.g. 1.5
+    - mandatory: 27 e.g. 1.5
+    - validation: 41 e.g. 1.5 (validation differs)
+  08 BILL (SUPPLIER / VENDOR BILL BOOKING)
+    - extraInApp: 9 e.g. 2.4, 2.7, 2.12
+    - fieldName: 1 e.g. 2.6
+    - validation: 3 e.g. 1.5 (validation differs)
+  09 QUOTATION (SALES QUOTE)
+    - extraInApp: 13 e.g. 2.3, 2.4, 2.6
+    - fieldName: 3 e.g. 2.9
+    - dataType: 2 e.g. 2.10
+    - validation: 3 e.g. 2.9 (validation differs)
+  10 PAYMENT VOUCHER
+    - missingInApp: 3 e.g. 6.8, 6.9, 6.10
+    - extraInApp: 10 e.g. 8.1, 8.2, 8.3
+    - fieldName: 19 e.g. 2.5
+    - dataType: 16 e.g. 6.1
+    - mandatory: 13 e.g. 6.2
+    - validation: 19 e.g. 2.7 (validation differs)
+  11 SALES TAX INVOICE
+    - missingInApp: 2 e.g. 7.4, 7.5
+    - extraInApp: 6 e.g. 2.4, 8.1, 8.2
+    - fieldName: 3 e.g. 7.1
+    - dataType: 3 e.g. 7.1
+    - mandatory: 1 e.g. 7.1
+    - validation: 4 e.g. 6.2 (validation differs)
+  12 PAYROLL
+    - extraInApp: 16 e.g. 2.2, 3.3, 5.10
+    - fieldName: 1 e.g. 2.11
+    - validation: 1 e.g. 5.11 (validation differs)
+  13 MATERIAL DEFINITION (ITEM MASTER)
+    - extraInApp: 8 e.g. 7.1, 7.2, 7.3
+  14 DELIVERY CHALLAN
+    - extraInApp: 19 e.g. 2.3, 2.6, 3.10
+    - fieldName: 3 e.g. 3.3
+    - mandatory: 1 e.g. 3.9
+    - validation: 6 e.g. 3.3 (validation differs)
+  15 PAYMENT RECEIPT (CUSTOMER RECEIPT)
+    - extraInApp: 7 e.g. 2.10, 7.1, 7.2
+    - fieldName: 4 e.g. 2.8
+    - dataType: 2 e.g. 2.8
+    - mandatory: 1 e.g. 2.9
+    - validation: 4 e.g. 2.8 (validation differs)

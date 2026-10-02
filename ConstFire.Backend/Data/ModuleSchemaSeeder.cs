@@ -15,7 +15,8 @@ internal static class ModuleSchemaSeeder
     {
         if (await context.ErpModules.AnyAsync())
         {
-            await RefreshModuleAsync(context, env, EnterpriseModuleHelper.ModuleCode);
+            for (var i = 1; i <= 15; i++)
+                await RefreshModuleAsync(context, env, i.ToString("00"));
             return;
         }
 

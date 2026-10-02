@@ -8,11 +8,13 @@ const props = withDefaults(
     maxSizeMb?: number
     disabled?: boolean
     id?: string
+    buttonLabel?: string
   }>(),
   {
     accept: '.pdf,.jpg,.jpeg,.png,.doc,.docx',
     maxSizeMb: 10,
     disabled: false,
+    buttonLabel: 'Choose file',
   },
 )
 
@@ -82,7 +84,7 @@ async function onFileChange(event: Event) {
       <button type="button" class="btn-clear" :disabled="disabled" @click="clearFile">Remove</button>
     </div>
     <button type="button" class="btn-choose" :disabled="disabled" @click="openPicker">
-      {{ modelValue ? 'Replace file' : 'Choose file' }}
+      {{ modelValue ? 'Replace file' : buttonLabel }}
     </button>
     <p v-if="error" class="error">{{ error }}</p>
   </div>

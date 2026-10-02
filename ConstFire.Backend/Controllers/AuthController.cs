@@ -1,5 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using ConstFire.Backend.DTOs;
+using ConstFire.Backend.Models;
 using ConstFire.Backend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,6 +25,19 @@ public class AuthController(IAuthService authService) : ControllerBase
     public async Task<ActionResult<AuthResponse>> Login([FromBody] LoginRequest request)
     {
         var response = await authService.LoginAsync(request);
+        var expiryMinutes = int.TryParse(HttpContext.RequestServices
+            .GetRequiredService<IConfiguration>()["Jwt:ExpiryMinutes"], out var m) ? m : 60;
+        Response.Cookies.Append(
+            "steelstone_auth",
+            response.Token,
+            new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = Request.IsHttps,
+                SameSite = SameSiteMode.Lax,
+                Path = "/",
+                Expires = DateTimeOffset.UtcNow.AddMinutes(expiryMinutes),
+            });
         return Ok(response);
     }
 

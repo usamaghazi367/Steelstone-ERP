@@ -11,6 +11,10 @@ import {
   type SectionData,
 } from '../utils/moduleWizardRules'
 import { saveSection } from '../services/modules'
+import {
+  applyModuleConditionalCascade,
+  applyModuleRepeatingRowCascade,
+} from '../utils/moduleFieldRules'
 
 const props = defineProps<{
   module: ModuleDetail
@@ -37,6 +41,20 @@ const completedSections = computed(() => formState.value.completedSections)
 const sectionFields = computed(() => {
   if (!currentSection.value) return []
   return fieldsForSection(props.module.fields, currentSection.value.num)
+})
+
+const flatValues = computed(() => {
+  const flat: Record<string, string> = {}
+  for (const [, value] of Object.entries(formState.value.sections)) {
+    if (Array.isArray(value)) {
+      value.forEach((row, index) => {
+        for (const [ref, val] of Object.entries(row)) flat[`${ref}#${index}`] = val
+      })
+    } else {
+      Object.assign(flat, value)
+    }
+  }
+  return flat
 })
 
 const repeatingRows = computed<RepeatingSectionData>({
@@ -82,12 +100,26 @@ function removeRepeatingRow(index: number) {
 }
 
 function onSectionFormUpdate(data: Record<string, string>) {
-  sectionFlatData.value = data
+  const sectionNum = currentSection.value?.num ?? 1
+  sectionFlatData.value = applyModuleConditionalCascade(
+    props.module.code,
+    data,
+    flatValues.value,
+    sectionNum,
+    props.module.fields,
+  )
 }
 
 function onRepeatingRowUpdate(index: number, data: Record<string, string>) {
+  const sectionNum = currentSection.value?.num ?? 0
   const rows = [...repeatingRows.value]
-  rows[index] = data
+  rows[index] = applyModuleRepeatingRowCascade(
+    props.module.code,
+    data,
+    flatValues.value,
+    sectionNum,
+    props.module.fields,
+  )
   repeatingRows.value = rows
 }
 
@@ -140,14 +172,13 @@ async function saveCurrentSection() {
         }"
         @click="goSection(section.num)"
       >
-        <span class="num">{{ section.num }}</span>
         <span class="title">{{ section.title }}</span>
       </button>
     </nav>
 
     <div v-if="currentSection" class="section-panel">
       <header class="section-header">
-        <h2>Section {{ currentSection.num }} — {{ currentSection.title }}</h2>
+        <h2>{{ currentSection.title }}</h2>
         <p v-if="currentSection.repeating">Add one or more entries in this section.</p>
       </header>
 
@@ -166,8 +197,10 @@ async function saveCurrentSection() {
           </div>
           <DynamicForm
             :fields="sectionFields"
+            :all-fields="module.fields"
             :model-value="row"
             :module-code="module.code"
+            :flat-context="flatValues"
             hide-section-headers
             @update:model-value="(val) => onRepeatingRowUpdate(index, val)"
           />
@@ -178,8 +211,10 @@ async function saveCurrentSection() {
       <template v-else>
         <DynamicForm
           :fields="sectionFields"
+          :all-fields="module.fields"
           :model-value="sectionFlatData"
           :module-code="module.code"
+          :flat-context="flatValues"
           hide-section-headers
           @update:model-value="onSectionFormUpdate"
         />

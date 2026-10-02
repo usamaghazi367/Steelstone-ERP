@@ -50,9 +50,9 @@ watch(
 
     <aside class="sidebar" :class="{ open: sidebarOpen }">
       <div class="sidebar-brand">
-        <div class="logo">CF</div>
+        <div class="logo">ST</div>
         <div class="brand-text">
-          <strong>Steelstone IT</strong>
+          <strong>Steelstone</strong>
           <span>Cloud ERP</span>
         </div>
         <button
@@ -74,8 +74,16 @@ watch(
           :class="{ active: isActive(mod.code) }"
           @click="goModule(mod.code)"
         >
-          <span class="code">{{ mod.code }}</span>
           <span class="label">{{ mod.name }}</span>
+        </button>
+
+        <p class="menu-label tools-label">Tools</p>
+        <button
+          class="menu-item"
+          :class="{ active: route.name === 'data-backup' }"
+          @click="router.push({ name: 'data-backup' })"
+        >
+          <span class="label">Import / Export</span>
         </button>
       </nav>
     </aside>

@@ -48,12 +48,26 @@ Pop-Location
 
 New-Item -ItemType Directory -Force -Path (Join-Path $pub "logs") | Out-Null
 Copy-Item (Join-Path $root "DEPLOY-SMARTERASP.md") $pub -Force
+Copy-Item (Join-Path $root "SETUP-SITE2-ONLY.md") $pub -Force
+Copy-Item (Join-Path $root "SITE2-SMARTERASP-503-FIX.md") $pub -Force
 Copy-Item (Join-Path $root "UPLOAD-README.txt") $pub -Force
+
+# App-only deploy: no database files or local dev settings in the zip
+$excludeFromPub = @(
+    "appsettings.Development.json",
+    "appsettings.Production.local.json"
+)
+foreach ($name in $excludeFromPub) {
+    $p = Join-Path $pub $name
+    if (Test-Path $p) { Remove-Item $p -Force }
+}
+Get-ChildItem $pub -Recurse -Include *.mdf, *.ldf, *.bak, *.db, *.sqlite -ErrorAction SilentlyContinue |
+    Remove-Item -Force -ErrorAction SilentlyContinue
 
 Write-Host "Verifying publish layout..." -ForegroundColor Cyan
 Test-PublishLayout -Dir $pub
 
-Write-Host "Creating zip..." -ForegroundColor Cyan
+Write-Host "Creating zip (application only - no SQL database)..." -ForegroundColor Cyan
 if (Test-Path $zip) { Remove-Item $zip -Force }
 tar -a -cf $zip -C $pub .
 if (-not (Test-Path $zip)) { throw "Failed to create zip" }
@@ -67,6 +81,6 @@ $mb = [math]::Round((Get-Item $zip).Length / 1MB, 2)
 Write-Host ""
 Write-Host "SUCCESS" -ForegroundColor Green
 Write-Host "  Folder: $pub"
-Write-Host "  Zip:    $zip ($mb MB)"
+Write-Host ("  Zip:    {0} ({1} MB)" -f $zip, $mb)
 Write-Host ""
-Write-Host "Upload ConstFire-deploy.zip to SmarterASP site1 root, unzip, set .NET 10, edit appsettings.Production.json"
+Write-Host "Upload ConstFire-deploy.zip to SmarterASP SITE2 root only (usamaghazi-002). See SETUP-SITE2-ONLY.md"

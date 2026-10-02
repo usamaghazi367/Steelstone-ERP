@@ -12,1536 +12,436 @@
   "sections": [
     {
       "num": 1,
-      "title": "MANUFACTURER PROFILE & LEGAL REGISTRATION",
+      "title": "BUSINESS REGISTRATION",
       "repeating": false
     },
     {
       "num": 2,
-      "title": "TAX & STATUTORY REGISTRATIONS  (validity dates updated periodically)",
-      "repeating": false
-    },
-    {
-      "num": 3,
-      "title": "BUSINESS LOCATIONS  (repeating block - multiple locations supported)",
-      "repeating": true
-    },
-    {
-      "num": 4,
       "title": "PLANTS / PRODUCTION FACILITIES  (repeating block - multiple plants supported)",
       "repeating": true
     },
     {
-      "num": 5,
+      "num": 3,
       "title": "POINTS OF CONTACT  (repeating block - minimum 2, unlimited additional contacts)",
       "repeating": true
     },
     {
-      "num": 6,
+      "num": 4,
       "title": "BANK ACCOUNT DETAILS  (repeating block - multiple accounts supported)",
       "repeating": true
     },
     {
-      "num": 7,
+      "num": 5,
       "title": "WORKING CALENDAR, SHIFTS & DISPATCH WINDOWS",
       "repeating": false
     },
     {
-      "num": 8,
-      "title": "COMMERCIAL, PRICING & SUPPLY TERMS",
-      "repeating": false
+      "num": 6,
+      "title": "PRODUCT PRICING  (repeating block - one line per product)",
+      "repeating": true
     },
     {
-      "num": 9,
-      "title": "QUALITY, ENVIRONMENTAL & REGULATORY COMPLIANCE",
-      "repeating": false
-    },
-    {
-      "num": 10,
-      "title": "SUPPORTING DOCUMENTS CHECKLIST",
-      "repeating": false
-    },
-    {
-      "num": 11,
-      "title": "DECLARATION, AUTHORISATION & INTERNAL APPROVAL",
+      "num": 7,
+      "title": "WITHHOLDING TAX EXEMPTION",
       "repeating": false
     }
   ],
   "fields": [
     {
       "ref": "1.1",
-      "field": "Supplier / manufacturer code",
-      "dataType": "Text (10)",
-      "mandatory": "System",
-      "validation": "Auto-generated, unique and immutable (e.g. MFR-00001).",
-      "sampleEntry": "MFR-00021",
-      "section": 1
-    },
-    {
-      "ref": "1.2",
-      "field": "Registering enterprise (buyer tenant)",
-      "dataType": "Lookup",
-      "mandatory": "Yes",
-      "validation": "Links this manufacturer to the enterprise registered on sheet 01.",
-      "sampleEntry": "ENT-000145 - Steelstone IT (Pvt) Ltd",
-      "section": 1
-    },
-    {
-      "ref": "1.3",
-      "field": "Is the manufacturer registered with SECP? (ENTITY-TYPE CHECK)",
-      "dataType": "Yes / No",
-      "mandatory": "Yes",
-      "validation": "GATING FIELD - answered first. Yes = Company track; No = AOP / Firm / Sole Proprietor track.",
-      "sampleEntry": "Yes",
-      "section": 1
-    },
-    {
-      "ref": "1.4",
-      "field": "Registering authority",
-      "dataType": "Dropdown",
-      "mandatory": "Yes",
-      "validation": "SECP / Registrar of Firms (Provincial) / FBR only (Sole Proprietor). Must be SECP if 1.3 = Yes.",
-      "sampleEntry": "SECP",
-      "section": 1
-    },
-    {
-      "ref": "1.5",
-      "field": "Entity class (system-derived)",
-      "dataType": "Formula - read only",
-      "mandatory": "System",
-      "validation": "Derived from 1.3 and 1.4; enforces every conditional rule below.",
-      "sampleEntry": "Company",
-      "section": 1
-    },
-    {
-      "ref": "1.6",
-      "field": "Legal status / entity type",
-      "dataType": "Dependent dropdown",
-      "mandatory": "Yes",
-      "validation": "Company: SMC-Private / Private Limited / Public Limited (Unlisted) / Public Limited (Listed). AOP: Registered Partnership Firm / Unregistered AOP.",
-      "sampleEntry": "Public Limited (Listed)",
-      "section": 1
-    },
-    {
-      "ref": "1.7",
-      "field": "Registered legal name",
+      "field": "Business name (Title)",
       "dataType": "Text (150)",
       "mandatory": "Yes",
-      "validation": "Must match the Certificate of Incorporation or Form II exactly.",
+      "validation": "Registered name as per SECP / Registrar of Firms / FBR NTN record; for a sole proprietor or individual, the name as per CNIC.",
       "sampleEntry": "Pak Cement Industries Limited",
       "section": 1
     },
     {
-      "ref": "1.8",
-      "field": "Trading / brand name(s)",
-      "dataType": "Text (150)",
-      "mandatory": "Yes",
-      "validation": "Cement brand names sold in the market; printed on purchase orders and GRNs.",
-      "sampleEntry": "PakCem Ultra, PakCem SRC",
-      "section": 1
-    },
-    {
-      "ref": "1.9",
-      "field": "SECP Company Registration Office (CRO)",
-      "dataType": "Dropdown",
-      "mandatory": "Company only",
-      "validation": "Karachi / Lahore / Islamabad / Faisalabad / Multan / Peshawar / Quetta / Sukkur / Gilgit",
-      "sampleEntry": "Karachi",
-      "section": 1
-    },
-    {
-      "ref": "1.10",
-      "field": "Registrar of Firms registration no. & province",
-      "dataType": "Text (40)",
-      "mandatory": "AOP only",
-      "validation": "Mandatory if 1.5 = AOP; disabled for companies.",
-      "sampleEntry": "N/A",
-      "section": 1
-    },
-    {
-      "ref": "1.11",
-      "field": "Manufacturer category",
+      "ref": "1.2",
+      "field": "Legal status",
       "dataType": "Dropdown",
       "mandatory": "Yes",
-      "validation": "Cement / Steel / Chemicals / Packaging / Machinery / Other.",
-      "sampleEntry": "Cement",
+      "validation": "Company / AOP / Sole Proprietor / Individual. Determines whether NTN or CNIC is required in field 1.3.",
+      "sampleEntry": "Company",
       "section": 1
     },
     {
-      "ref": "1.12",
-      "field": "Principal manufacturing activity",
-      "dataType": "Text (250)",
+      "ref": "1.3",
+      "field": "NTN / CNIC number",
+      "dataType": "Text (15)",
       "mandatory": "Yes",
-      "validation": "Should match the SECP object clause and the FBR business activity.",
-      "sampleEntry": "Manufacture and sale of grey Portland cement and clinker",
+      "validation": "Company and AOP: NTN - 7 digits + '-' + check digit. Sole Proprietor and Individual: 13-digit CNIC (XXXXX-XXXXXXX-X) in lieu of NTN. Unique per record.",
+      "sampleEntry": "0098765-4",
       "section": 1
     },
     {
-      "ref": "1.13",
-      "field": "Head office address (principal place of business)",
-      "dataType": "Text (300)",
+      "ref": "1.4",
+      "field": "Filer status",
+      "dataType": "Dropdown",
       "mandatory": "Yes",
-      "validation": "Full address including city, province and postal code.",
-      "sampleEntry": "5th Floor, Corporate Tower, I.I. Chundrigar Road, Karachi 74000",
-      "section": 1
-    },
-    {
-      "ref": "1.14",
-      "field": "Head office city / province",
-      "dataType": "Text (80)",
-      "mandatory": "Yes",
-      "validation": "Determines the applicable provincial revenue authority.",
-      "sampleEntry": "Karachi / Sindh",
-      "section": 1
-    },
-    {
-      "ref": "1.15",
-      "field": "Main business email address",
-      "dataType": "Email",
-      "mandatory": "Yes",
-      "validation": "Official mailbox; receives purchase orders and remittance advice.",
-      "sampleEntry": "info@pakcement.com.pk",
-      "section": 1
-    },
-    {
-      "ref": "1.16",
-      "field": "Main business phone number",
-      "dataType": "Phone",
-      "mandatory": "Yes",
-      "validation": "Format +92-XX-XXXXXXXX",
-      "sampleEntry": "+92-21-32412345",
-      "section": 1
-    },
-    {
-      "ref": "1.17",
-      "field": "Company website / URL",
-      "dataType": "URL",
-      "mandatory": "No",
-      "validation": "Valid URL format.",
-      "sampleEntry": "https://www.pakcement.com.pk",
+      "validation": "Filer / Non-filer as per the FBR Active Taxpayer List - drives the withholding tax rates applied in the ERP.",
+      "sampleEntry": "Filer",
       "section": 1
     },
     {
       "ref": "2.1",
-      "field": "National Tax Number (NTN)",
-      "dataType": "Text (9)",
-      "mandatory": "Yes",
-      "validation": "7 digits + '-' + check digit; unique per supplier record.",
-      "sampleEntry": "0098765-4",
-      "section": 2
-    },
-    {
-      "ref": "2.2",
-      "field": "Sales Tax Registration No. (STRN - FBR)",
-      "dataType": "Text (13)",
-      "mandatory": "Yes",
-      "validation": "13 digits. Mandatory for cement manufacturers (taxable goods).",
-      "sampleEntry": "3277800098765",
-      "section": 2
-    },
-    {
-      "ref": "2.3",
-      "field": "Sales tax registration category",
-      "dataType": "Dropdown",
-      "mandatory": "Yes",
-      "validation": "Manufacturer / Importer / Wholesaler / Retailer / Exporter. Must include Manufacturer.",
-      "sampleEntry": "Manufacturer",
-      "section": 2
-    },
-    {
-      "ref": "2.4",
-      "field": "FBR filer status (Active Taxpayer List)",
-      "dataType": "Dropdown",
-      "mandatory": "Yes",
-      "validation": "Filer / Non-filer - drives the withholding tax rate applied on payments.",
-      "sampleEntry": "Filer",
-      "section": 2
-    },
-    {
-      "ref": "2.5",
-      "field": "Filer status - date last verified against ATL",
-      "dataType": "Date",
-      "mandatory": "Yes",
-      "validation": "Date the status in 2.4 was checked on the FBR Active Taxpayer List.",
-      "sampleEntry": "46235",
-      "section": 2
-    },
-    {
-      "ref": "2.6",
-      "field": "Filer status - valid until (next verification due)",
-      "dataType": "Date",
-      "mandatory": "Yes",
-      "validation": "EDITABLE / UPDATED PERIODICALLY. On expiry the ERP flags the supplier and reverts to non-filer WHT rates until re-verified.",
-      "sampleEntry": "46326",
-      "section": 2
-    },
-    {
-      "ref": "2.7",
-      "field": "ATL re-verification frequency",
-      "dataType": "Dropdown",
-      "mandatory": "Yes",
-      "validation": "Monthly / Quarterly / Half-yearly. System raises an alert to the procurement team on the due date.",
-      "sampleEntry": "Quarterly",
-      "section": 2
-    },
-    {
-      "ref": "2.8",
-      "field": "Provincial revenue authority & registration no.",
-      "dataType": "Text (60)",
-      "mandatory": "Conditional",
-      "validation": "PRA / SRB / KPRA / BRA registration where services are also rendered (e.g. transport).",
-      "sampleEntry": "SRB - SRB-98-76-5432",
-      "section": 2
-    },
-    {
-      "ref": "2.9",
-      "field": "Federal Excise Duty (FED) registration",
-      "dataType": "Text (20)",
-      "mandatory": "Yes",
-      "validation": "Cement is excisable under the Federal Excise Act 2005 - required for correct invoice tax lines.",
-      "sampleEntry": "FED-0098765-4",
-      "section": 2
-    },
-    {
-      "ref": "2.10",
-      "field": "Sales tax withholding regime applicable",
-      "dataType": "Dropdown",
-      "mandatory": "Yes",
-      "validation": "Withheld at source / Exempt from withholding / Not applicable.",
-      "sampleEntry": "Withheld at source",
-      "section": 2
-    },
-    {
-      "ref": "2.11",
-      "field": "Tax exemption / reduced-rate certificate no. & issuing authority",
-      "dataType": "Text (80)",
-      "mandatory": "Conditional",
-      "validation": "Section 148 / 153 / 236 exemption or reduced-rate certificate, if claimed.",
-      "sampleEntry": "EXC-153/2026/0912 - CIR Zone-II Karachi",
-      "section": 2
-    },
-    {
-      "ref": "2.12",
-      "field": "FBR filer status - status flag (system-derived)",
-      "dataType": "Formula - read only",
-      "mandatory": "System",
-      "validation": "Active while the date in field 2.6 is in the future. INACTIVE BY DEFAULT once it passes - the ERP applies non-filer withholding rates until the status is re-verified.",
-      "sampleEntry": "Active",
-      "section": 2
-    },
-    {
-      "ref": "2.13",
-      "field": "Exemption certificate - valid from",
-      "dataType": "Date",
-      "mandatory": "Conditional",
-      "validation": "Start date of the exemption period.",
-      "sampleEntry": "46204",
-      "section": 2
-    },
-    {
-      "ref": "2.14",
-      "field": "Exemption certificate - valid until",
-      "dataType": "Date",
-      "mandatory": "Conditional",
-      "validation": "EDITABLE / UPDATED PERIODICALLY. After this date the ERP stops applying the exemption and resumes normal withholding automatically.",
-      "sampleEntry": "46568",
-      "section": 2
-    },
-    {
-      "ref": "2.15",
-      "field": "Reduced withholding rate ater exemption",
-      "dataType": "Percentage",
-      "mandatory": "Yes",
-      "validation": "Percentage from 0.00% and above",
-      "sampleEntry": "0.0125",
-      "section": 2
-    },
-    {
-      "ref": "2.16",
-      "field": "Exemption certificate - status (system-derived)",
-      "dataType": "Formula - read only",
-      "mandatory": "System",
-      "validation": "Active while the date in field 2.9 is in the future. INACTIVE BY DEFAULT after expiry - the ERP resumes the normal withholding rate automatically.",
-      "sampleEntry": "Active",
-      "section": 2
-    },
-    {
-      "ref": "3.1",
-      "field": "Location serial no.",
-      "dataType": "Integer",
-      "mandatory": "Yes",
-      "validation": "REPEATING BLOCK - the system supports unlimited business locations per manufacturer. Add one row set per location.",
-      "sampleEntry": "1",
-      "section": 3
-    },
-    {
-      "ref": "3.2",
-      "field": "Location type",
-      "dataType": "Dropdown",
-      "mandatory": "Yes",
-      "validation": "Head Office / Cement Plant / Grinding Unit / Limestone Quarry / Warehouse / Dispatch Terminal / Regional Sales Office",
-      "sampleEntry": "Cement Plant",
-      "section": 3
-    },
-    {
-      "ref": "3.3",
-      "field": "Location name / code",
-      "dataType": "Text (60)",
-      "mandatory": "Yes",
-      "validation": "Unique per manufacturer; used on purchase orders, delivery notes and GRNs.",
-      "sampleEntry": "LOC-01 Nooriabad Plant",
-      "section": 3
-    },
-    {
-      "ref": "3.4",
-      "field": "Address line 1",
-      "dataType": "Text (150)",
-      "mandatory": "Yes",
-      "validation": "Street / plot / survey number.",
-      "sampleEntry": "Deh Kohistan, Main Super Highway",
-      "section": 3
-    },
-    {
-      "ref": "3.5",
-      "field": "Address line 2",
-      "dataType": "Text (150)",
-      "mandatory": "No",
-      "validation": "Landmark / industrial estate.",
-      "sampleEntry": "Near Nooriabad Industrial Estate",
-      "section": 3
-    },
-    {
-      "ref": "3.6",
-      "field": "City / District",
-      "dataType": "Text (60)",
-      "mandatory": "Yes",
-      "validation": "Master list of Pakistani cities and districts.",
-      "sampleEntry": "Nooriabad / Jamshoro",
-      "section": 3
-    },
-    {
-      "ref": "3.7",
-      "field": "Province",
-      "dataType": "Dropdown",
-      "mandatory": "Yes",
-      "validation": "Punjab / Sindh / KPK / Balochistan / Gilgit-Baltistan / AJK / ICT",
-      "sampleEntry": "Sindh",
-      "section": 3
-    },
-    {
-      "ref": "3.8",
-      "field": "Country",
-      "dataType": "Dropdown",
-      "mandatory": "Yes",
-      "validation": "Default: Pakistan",
-      "sampleEntry": "Pakistan",
-      "section": 3
-    },
-    {
-      "ref": "3.9",
-      "field": "Provincial tax jurisdiction of this location",
-      "dataType": "Dropdown",
-      "mandatory": "Yes",
-      "validation": "Determines the provincial levies applied to transactions raised against this site.",
-      "sampleEntry": "SRB (Sindh)",
-      "section": 3
-    },
-    {
-      "ref": "3.10",
-      "field": "Location contact - name, mobile & email",
-      "dataType": "Text (180)",
-      "mandatory": "Yes",
-      "validation": "Person responsible for gate entry, dispatch and documentation at this site.",
-      "sampleEntry": "Kamran Baig / +92-333-1122334 / kamran@pakcement.com.pk",
-      "section": 3
-    },
-    {
-      "ref": "3.11",
-      "field": "Operating hours at this location",
-      "dataType": "Text (80)",
-      "mandatory": "Yes",
-      "validation": "Gate-in to gate-out window; may differ from the plant working calendar.",
-      "sampleEntry": "06:00-22:00 PKT",
-      "section": 3
-    },
-    {
-      "ref": "3.12",
-      "field": "Is this the default dispatch point?",
-      "dataType": "Yes / No",
-      "mandatory": "Yes",
-      "validation": "Exactly one location must be flagged as the default dispatch point.",
-      "sampleEntry": "Yes",
-      "section": 3
-    },
-    {
-      "ref": "3.13",
-      "field": "Location status",
-      "dataType": "Dropdown",
-      "mandatory": "Yes",
-      "validation": "Active / Inactive - with effective date. Inactive locations cannot be selected on new orders.",
-      "sampleEntry": "Active",
-      "section": 3
-    },
-    {
-      "ref": "4.1",
       "field": "Plant serial no.",
       "dataType": "Integer",
       "mandatory": "Yes",
       "validation": "REPEATING BLOCK - unlimited plants supported. Add one row set per production facility.",
       "sampleEntry": "1",
-      "section": 4
+      "section": 2
     },
     {
-      "ref": "4.2",
+      "ref": "2.2",
       "field": "Plant name",
       "dataType": "Text (80)",
       "mandatory": "Yes",
       "validation": "Common name by which the facility is known.",
       "sampleEntry": "Nooriabad Cement Plant",
-      "section": 4
+      "section": 2
     },
     {
-      "ref": "4.3",
+      "ref": "2.3",
       "field": "Plant code",
       "dataType": "Text (15)",
       "mandatory": "Yes",
       "validation": "Unique short code used on production and dispatch documents.",
       "sampleEntry": "PLANT-01",
-      "section": 4
+      "section": 2
     },
     {
-      "ref": "4.4",
-      "field": "Linked business location (Section 3)",
-      "dataType": "Lookup",
-      "mandatory": "Yes",
-      "validation": "Select the location record this plant belongs to; avoids duplicate address entry.",
-      "sampleEntry": "LOC-01 Nooriabad Plant",
-      "section": 4
-    },
-    {
-      "ref": "4.5",
+      "ref": "2.4",
       "field": "Plant address (full)",
       "dataType": "Text (300)",
       "mandatory": "Yes",
       "validation": "Complete site address including city, province and postal code.",
       "sampleEntry": "Deh Kohistan, Main Super Highway, Nooriabad, Jamshoro, Sindh 76100",
-      "section": 4
+      "section": 2
     },
     {
-      "ref": "4.6",
+      "ref": "2.5",
       "field": "Plant city / province",
       "dataType": "Text (80)",
       "mandatory": "Yes",
       "validation": "Master list of Pakistani cities and provinces.",
       "sampleEntry": "Nooriabad / Sindh",
-      "section": 4
+      "section": 2
     },
     {
-      "ref": "4.7",
+      "ref": "2.6",
       "field": "Plant geo-coordinates (lat, long)",
       "dataType": "Text (30)",
       "mandatory": "No",
       "validation": "Decimal degrees; used for delivery routing.",
       "sampleEntry": "25.1408, 67.8985",
-      "section": 4
+      "section": 2
     },
     {
-      "ref": "4.8",
+      "ref": "2.7",
       "field": "Plant Manager - full name & designation",
       "dataType": "Text (150)",
       "mandatory": "Yes",
       "validation": "Person overall in charge of the site.",
       "sampleEntry": "Engr. Tariq Mahmood / Plant Manager",
-      "section": 4
+      "section": 2
     },
     {
-      "ref": "4.9",
-      "field": "Plant Manager - mobile & email",
-      "dataType": "Text (150)",
+      "ref": "2.8",
+      "field": "Plant Manager - mobile",
+      "dataType": "Phone",
       "mandatory": "Yes",
-      "validation": "+92-3XX-XXXXXXX and a valid email address.",
-      "sampleEntry": "+92-300-8877665 / tariq.mahmood@pakcement.com.pk",
-      "section": 4
+      "validation": "+92-3XX-XXXXXXX",
+      "sampleEntry": "+92-300-8877665",
+      "section": 2
     },
     {
-      "ref": "4.10",
+      "ref": "2.9",
       "field": "Production Manager - full name & designation",
       "dataType": "Text (150)",
       "mandatory": "Yes",
       "validation": "Person responsible for production planning and output.",
       "sampleEntry": "Engr. Saad Rehman / Production Manager",
-      "section": 4
+      "section": 2
     },
     {
-      "ref": "4.11",
-      "field": "Production Manager - mobile & email",
-      "dataType": "Text (150)",
+      "ref": "2.10",
+      "field": "Production Manager - mobile",
+      "dataType": "Phone",
       "mandatory": "Yes",
-      "validation": "+92-3XX-XXXXXXX and a valid email address.",
-      "sampleEntry": "+92-321-4433221 / saad.rehman@pakcement.com.pk",
-      "section": 4
+      "validation": "+92-3XX-XXXXXXX",
+      "sampleEntry": "+92-321-4433221",
+      "section": 2
     },
     {
-      "ref": "4.12",
+      "ref": "2.11",
       "field": "Plant landline / control room number",
       "dataType": "Phone",
       "mandatory": "No",
       "validation": "Format +92-XX-XXXXXXXX ext. NNN",
       "sampleEntry": "+92-25-4670011 ext. 105",
-      "section": 4
+      "section": 2
     },
     {
-      "ref": "4.13",
+      "ref": "2.12",
       "field": "Products manufactured at this plant",
       "dataType": "Multi-select",
       "mandatory": "Yes",
       "validation": "Linked to the material master, e.g. OPC 43 / OPC 53 / SRC / Slag Cement / Clinker.",
       "sampleEntry": "OPC 53, SRC, Clinker",
-      "section": 4
+      "section": 2
     },
     {
-      "ref": "4.14",
+      "ref": "2.13",
       "field": "Plant operational status",
       "dataType": "Dropdown",
       "mandatory": "Yes",
       "validation": "Operational / Under maintenance / Under construction / Closed - with effective date.",
       "sampleEntry": "Operational",
-      "section": 4
+      "section": 2
     },
     {
-      "ref": "5.1",
-      "field": "POC serial no.",
-      "dataType": "Integer",
-      "mandatory": "Yes",
-      "validation": "REPEATING BLOCK - minimum 2 contacts required, no upper limit. Add one row set per contact.",
-      "sampleEntry": "1",
-      "section": 5
-    },
-    {
-      "ref": "5.2",
-      "field": "Contact role",
-      "dataType": "Dropdown",
-      "mandatory": "Yes",
-      "validation": "Primary (mandatory) / Secondary (mandatory) / Sales & Order Management / Dispatch & Logistics / Finance & Receivables / Quality Assurance / Escalation - Senior Management",
-      "sampleEntry": "Primary - Sales & Order Management",
-      "section": 5
-    },
-    {
-      "ref": "5.3",
+      "ref": "3.1",
       "field": "Full name",
       "dataType": "Text (100)",
       "mandatory": "Yes",
       "validation": "As per CNIC.",
       "sampleEntry": "Kamran Baig",
-      "section": 5
+      "section": 3
     },
     {
-      "ref": "5.4",
+      "ref": "3.2",
       "field": "Designation",
       "dataType": "Text (60)",
       "mandatory": "Yes",
       "validation": "Free text.",
       "sampleEntry": "General Manager Sales",
-      "section": 5
+      "section": 3
     },
     {
-      "ref": "5.5",
+      "ref": "3.3",
       "field": "Mobile number",
       "dataType": "Phone",
       "mandatory": "Yes",
       "validation": "+92-3XX-XXXXXXX; must be unique per contact.",
       "sampleEntry": "+92-333-1122334",
-      "section": 5
+      "section": 3
     },
     {
-      "ref": "5.6",
-      "field": "Landline / extension",
-      "dataType": "Phone",
-      "mandatory": "No",
-      "validation": "Format +92-XX-XXXXXXXX ext. NNN",
-      "sampleEntry": "+92-21-32412345 ext. 210",
-      "section": 5
-    },
-    {
-      "ref": "5.7",
-      "field": "Email address",
-      "dataType": "Email",
-      "mandatory": "Yes",
-      "validation": "Unique per contact; receives notifications by role.",
-      "sampleEntry": "kamran.baig@pakcement.com.pk",
-      "section": 5
-    },
-    {
-      "ref": "5.8",
-      "field": "Location / plant assigned",
-      "dataType": "Lookup",
-      "mandatory": "Yes",
-      "validation": "Select from Section 3 or Section 4; use 'All locations' for head-office roles.",
-      "sampleEntry": "LOC-01 Nooriabad Plant",
-      "section": 5
-    },
-    {
-      "ref": "5.9",
-      "field": "Available hours / days",
-      "dataType": "Text (80)",
-      "mandatory": "Yes",
-      "validation": "Contact window; should sit inside the working calendar in Section 7.",
-      "sampleEntry": "Mon-Sat, 08:00-18:00 PKT",
-      "section": 5
-    },
-    {
-      "ref": "5.10",
-      "field": "Escalation level",
-      "dataType": "Dropdown",
-      "mandatory": "Yes",
-      "validation": "Level 1 (operational) / Level 2 (managerial) / Level 3 (executive)",
-      "sampleEntry": "Level 2 (managerial)",
-      "section": 5
-    },
-    {
-      "ref": "5.11",
-      "field": "Authorised to confirm orders and prices?",
-      "dataType": "Yes / No",
-      "mandatory": "Yes",
-      "validation": "At least one contact must be flagged Yes.",
-      "sampleEntry": "Yes",
-      "section": 5
-    },
-    {
-      "ref": "5.12",
-      "field": "Receives system notifications?",
-      "dataType": "Multi-select",
-      "mandatory": "Yes",
-      "validation": "Purchase Order / Delivery Schedule / Invoice / Payment Advice / Quality Complaint / None",
-      "sampleEntry": "Purchase Order, Delivery Schedule",
-      "section": 5
-    },
-    {
-      "ref": "5.13",
-      "field": "Contact status",
-      "dataType": "Dropdown",
-      "mandatory": "Yes",
-      "validation": "Active / Inactive with effective date. At least 2 contacts must remain Active at all times.",
-      "sampleEntry": "Active",
-      "section": 5
-    },
-    {
-      "ref": "6.1",
-      "field": "Bank account serial no.",
-      "dataType": "Integer",
-      "mandatory": "Yes",
-      "validation": "REPEATING BLOCK - multiple accounts supported; exactly one must be flagged primary.",
-      "sampleEntry": "1",
-      "section": 6
-    },
-    {
-      "ref": "6.2",
+      "ref": "4.1",
       "field": "Bank name",
       "dataType": "Dropdown",
       "mandatory": "Yes",
       "validation": "SBP-licensed scheduled bank.",
       "sampleEntry": "Habib Bank Limited",
-      "section": 6
+      "section": 4
     },
     {
-      "ref": "6.3",
-      "field": "Branch name & code",
-      "dataType": "Text (80)",
-      "mandatory": "Yes",
-      "validation": "Branch code numeric.",
-      "sampleEntry": "I.I. Chundrigar Road, Karachi - 0786",
-      "section": 6
-    },
-    {
-      "ref": "6.4",
+      "ref": "4.2",
       "field": "Title of account",
       "dataType": "Text (100)",
       "mandatory": "Yes",
-      "validation": "Must match the registered legal name in field 1.7; mismatches block payment release.",
+      "validation": "Must match the registered legal name in field 1.1; mismatches block payment release.",
       "sampleEntry": "Pak Cement Industries Limited",
-      "section": 6
+      "section": 4
     },
     {
-      "ref": "6.5",
+      "ref": "4.3",
       "field": "Account number",
       "dataType": "Text (20)",
       "mandatory": "Yes",
       "validation": "Numeric, as issued by the bank, allow 0 in the start.",
       "sampleEntry": "7867900123456",
-      "section": 6
+      "section": 4
     },
     {
-      "ref": "6.6",
-      "field": "IBAN",
-      "dataType": "Text (24)",
-      "mandatory": "Optional",
-      "validation": "PK + 2 check digits + 4-letter bank code + 16 alphanumeric characters.",
-      "sampleEntry": "PK24HABB0007867900123456",
-      "section": 6
-    },
-    {
-      "ref": "6.7",
-      "field": "Account currency",
-      "dataType": "Dropdown",
-      "mandatory": "Yes",
-      "validation": "PKR (default) / USD / EUR",
-      "sampleEntry": "PKR",
-      "section": 6
-    },
-    {
-      "ref": "6.8",
-      "field": "SWIFT / BIC code",
-      "dataType": "Text (11)",
-      "mandatory": "Conditional",
-      "validation": "Required for foreign-currency payments.",
-      "sampleEntry": "HABBPKKA",
-      "section": 6
-    },
-    {
-      "ref": "6.9",
-      "field": "Is this the primary account for payments?",
-      "dataType": "Yes / No",
-      "mandatory": "Yes",
-      "validation": "Exactly one account must be flagged as primary.",
-      "sampleEntry": "Yes",
-      "section": 6
-    },
-    {
-      "ref": "6.10",
-      "field": "Preferred payment mode",
-      "dataType": "Dropdown",
-      "mandatory": "Yes",
-      "validation": "Online transfer (RTGS / IBFT) / Cheque / Pay order / Letter of Credit",
-      "sampleEntry": "Online transfer (RTGS)",
-      "section": 6
-    },
-    {
-      "ref": "6.11",
-      "field": "Bank details verified by finance team",
-      "dataType": "Yes / No + Date",
-      "mandatory": "Internal",
-      "validation": "Dual verification required before the account is activated for payment.",
-      "sampleEntry": "Yes - 12-Aug-2026",
-      "section": 6
-    },
-    {
-      "ref": "7.1",
+      "ref": "5.1",
       "field": "Working days per week",
       "dataType": "Multi-select",
       "mandatory": "Yes",
       "validation": "Mon / Tue / Wed / Thu / Fri / Sat / Sun - drives delivery-date calculation in the ERP.",
       "sampleEntry": "Mon, Tue, Wed, Thu, Fri, Sat",
-      "section": 7
+      "section": 5
     },
     {
-      "ref": "7.2",
+      "ref": "5.2",
       "field": "Weekly off day(s)",
       "dataType": "Dropdown",
       "mandatory": "Yes",
       "validation": "Sunday (default) / Friday / Other. Orders are not scheduled on off days.",
       "sampleEntry": "Sunday",
-      "section": 7
+      "section": 5
     },
     {
-      "ref": "7.3",
+      "ref": "5.3",
       "field": "Plant operating pattern",
       "dataType": "Dropdown",
       "mandatory": "Yes",
       "validation": "24x7 continuous / Two shifts / Single shift.",
       "sampleEntry": "24x7 continuous",
-      "section": 7
+      "section": 5
     },
     {
-      "ref": "7.4",
+      "ref": "5.4",
       "field": "Shift timings",
       "dataType": "Text (120)",
       "mandatory": "Yes",
       "validation": "Allow multiple shifts, all shifts with start and end times.",
       "sampleEntry": "A 06:00-14:00, B 14:00-22:00, C 22:00-06:00",
-      "section": 7
+      "section": 5
     },
     {
-      "ref": "7.5",
+      "ref": "5.5",
       "field": "Dispatch / loading hours",
       "dataType": "Text (80)",
       "mandatory": "Yes",
       "validation": "Gate-in to gate-out window for collection vehicles.",
       "sampleEntry": "06:00-22:00 PKT",
-      "section": 7
+      "section": 5
     },
     {
-      "ref": "7.6",
+      "ref": "5.6",
       "field": "Order cut-off time for same-day dispatch",
       "dataType": "Time",
       "mandatory": "Yes",
       "validation": "Orders received after this time are scheduled for the next working day.",
       "sampleEntry": "14:00 PKT",
-      "section": 7
+      "section": 5
     },
     {
-      "ref": "7.7",
+      "ref": "5.7",
       "field": "Office / commercial working hours",
       "dataType": "Text (80)",
       "mandatory": "Yes",
       "validation": "Applies to sales, finance and documentation teams.",
       "sampleEntry": "Mon-Sat 09:00-17:30 PKT",
-      "section": 7
+      "section": 5
     },
     {
-      "ref": "7.8",
+      "ref": "5.8",
       "field": "Annual maintenance shutdown period",
       "dataType": "Date range",
       "mandatory": "Yes",
       "validation": "Planned shutdown; the ERP blocks delivery promises in this window.",
       "sampleEntry": "15-Jan-2027 to 05-Feb-2027",
-      "section": 7
+      "section": 5
     },
     {
-      "ref": "7.9",
+      "ref": "5.9",
       "field": "Public / religious holidays observed",
       "dataType": "Multi-select",
       "mandatory": "Yes",
       "validation": "Gazetted Pakistan holidays plus Eid-ul-Fitr, Eid-ul-Azha and Muharram closures.",
       "sampleEntry": "Gazetted holidays + 3 days Eid-ul-Fitr",
-      "section": 7
+      "section": 5
     },
     {
-      "ref": "7.10",
+      "ref": "5.10",
       "field": "Ramadan / seasonal timing changes",
       "dataType": "Text (120)",
       "mandatory": "No",
       "validation": "Reduced hours during Ramadan or the monsoon season.",
       "sampleEntry": "Ramadan: dispatch 06:00-16:00",
-      "section": 7
+      "section": 5
     },
     {
-      "ref": "7.11",
+      "ref": "5.11",
       "field": "Emergency / after-hours dispatch available?",
       "dataType": "Yes / No",
       "mandatory": "Yes",
       "validation": "If Yes, provide the after-hours contact and any surcharge.",
       "sampleEntry": "Yes - Level 2 contact, 5% surcharge",
-      "section": 7
+      "section": 5
     },
     {
-      "ref": "7.12",
-      "field": "Calendar applies to (location / plant)",
+      "ref": "5.12",
+      "field": "Calendar applies to (plant)",
       "dataType": "Lookup",
       "mandatory": "Yes",
-      "validation": "Calendars can be maintained per plant; select 'All locations' for a single common calendar.",
+      "validation": "Calendars can be maintained per plant; select 'All plants' for a single common calendar.",
       "sampleEntry": "PLANT-01",
-      "section": 7
+      "section": 5
     },
     {
-      "ref": "7.13",
+      "ref": "5.13",
       "field": "Calendar effective from / to",
       "dataType": "Date range",
       "mandatory": "Yes",
       "validation": "The working calendar is versioned; the ERP applies the version valid on the order date.",
       "sampleEntry": "01-Jul-2026 to 30-Jun-2027",
+      "section": 5
+    },
+    {
+      "ref": "6.1",
+      "field": "Name of product",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Linked to the material master, e.g. OPC 43 / OPC 53 / SRC / Slag Cement / Clinker. One line per product.",
+      "sampleEntry": "OPC 53 Grade",
+      "section": 6
+    },
+    {
+      "ref": "6.2",
+      "field": "Unit of measure (UoM)",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "From the UoM master: 50 kg bag / MT / 1.2 MT jumbo bag / Bulk.",
+      "sampleEntry": "50 kg bag",
+      "section": 6
+    },
+    {
+      "ref": "6.3",
+      "field": "Price per UoM (PKR)",
+      "dataType": "Number",
+      "mandatory": "Yes",
+      "validation": "Excluding sales tax; must be greater than zero. Tax lines are computed by the ERP.",
+      "sampleEntry": "1420",
+      "section": 6
+    },
+    {
+      "ref": "6.4",
+      "field": "Discount",
+      "dataType": "Number / %",
+      "mandatory": "No",
+      "validation": "PKR per UoM or % of price; cannot exceed the price in 6.3.",
+      "sampleEntry": "2%",
+      "section": 6
+    },
+    {
+      "ref": "6.5",
+      "field": "Discount validity (from / to)",
+      "dataType": "Date range",
+      "mandatory": "Yes, if 6.4 is entered",
+      "validation": "DATE FIELD - 'to' date must be on or after the 'from' date; the discount stops applying after the 'to' date.",
+      "sampleEntry": "01-Oct-2026 to 31-Dec-2026",
+      "section": 6
+    },
+    {
+      "ref": "7.1",
+      "field": "Exemption availed?",
+      "dataType": "Dropdown",
+      "mandatory": "Yes",
+      "validation": "Yes / No. If No, normal withholding rates apply based on the filer status in field 1.4.",
+      "sampleEntry": "Yes",
       "section": 7
     },
     {
-      "ref": "8.1",
-      "field": "Products offered to this enterprise",
-      "dataType": "Multi-select",
-      "mandatory": "Yes",
-      "validation": "Linked to the material master; one price line per product and packing type.",
-      "sampleEntry": "OPC 53 (50 kg PP bag), Clinker (bulk)",
-      "section": 8
-    },
-    {
-      "ref": "8.2",
-      "field": "Packing options offered",
-      "dataType": "Multi-select",
-      "mandatory": "Yes",
-      "validation": "50 kg paper bag / 50 kg PP bag / 1.5 MT jumbo bag / Bulk tanker / Bulk rail.",
-      "sampleEntry": "50 kg PP bag, Bulk tanker",
-      "section": 8
-    },
-    {
-      "ref": "8.3",
-      "field": "Price basis / Incoterm",
-      "dataType": "Dropdown",
-      "mandatory": "Yes",
-      "validation": "Ex-Works (ex-factory) / FOR destination / CIF / Delivered at site.",
-      "sampleEntry": "FOR destination",
-      "section": 8
-    },
-    {
-      "ref": "8.4",
-      "field": "Quoted price per MT or per bag (PKR)",
-      "dataType": "Number",
-      "mandatory": "Yes",
-      "validation": "Excluding sales tax and FED; tax lines are computed by the ERP.",
-      "sampleEntry": "1420 per 50 kg bag",
-      "section": 8
-    },
-    {
-      "ref": "8.5",
-      "field": "Price valid from",
-      "dataType": "Date",
-      "mandatory": "Yes",
-      "validation": "Start of the agreed price window.",
-      "sampleEntry": "46266",
-      "section": 8
-    },
-    {
-      "ref": "8.6",
-      "field": "Price valid until",
-      "dataType": "Date",
-      "mandatory": "Yes",
-      "validation": "DATE FIELD - amber 30 days before expiry, red once expired. Rates must be renegotiated before new orders are accepted.",
-      "sampleEntry": "46356",
-      "section": 8
-    },
-    {
-      "ref": "8.7",
-      "field": "Price escalation clause",
-      "dataType": "Text (200)",
-      "mandatory": "No",
-      "validation": "Basis for revision, e.g. coal index or FED changes, with notice period.",
-      "sampleEntry": "Coal index linked, 15 days notice",
-      "section": 8
-    },
-    {
-      "ref": "8.8",
-      "field": "Payment terms",
-      "dataType": "Dropdown",
-      "mandatory": "Yes",
-      "validation": "Advance / Cash on delivery / Net 15 / Net 30 / Net 45 / LC at sight.",
-      "sampleEntry": "Net 30",
-      "section": 8
-    },
-    {
-      "ref": "8.9",
-      "field": "Credit limit requested / approved (PKR)",
-      "dataType": "Number",
-      "mandatory": "Conditional",
-      "validation": "Approved by the enterprise finance team; enforced on order release.",
-      "sampleEntry": "50000000",
-      "section": 8
-    },
-    {
-      "ref": "8.10",
-      "field": "Early payment / prompt settlement discount",
-      "dataType": "Percentage",
-      "mandatory": "No",
-      "validation": "Discount and qualifying days.",
-      "sampleEntry": "1.0% within 10 days",
-      "section": 8
-    },
-    {
-      "ref": "8.11",
-      "field": "Minimum order quantity (MT)",
-      "dataType": "Number",
-      "mandatory": "Yes",
-      "validation": "Below this quantity orders are rejected by the ERP.",
-      "sampleEntry": "30",
-      "section": 8
-    },
-    {
-      "ref": "8.12",
-      "field": "Standard order-to-dispatch lead time (days)",
-      "dataType": "Integer",
-      "mandatory": "Yes",
-      "validation": "From purchase order confirmation to gate-out.",
-      "sampleEntry": "3",
-      "section": 8
-    },
-    {
-      "ref": "8.13",
-      "field": "Freight responsibility & rate",
-      "dataType": "Text (150)",
-      "mandatory": "Yes",
-      "validation": "Who arranges and pays freight; rate per MT per km if applicable.",
-      "sampleEntry": "Supplier arranged, PKR 4.5 per MT-km",
-      "section": 8
-    },
-    {
-      "ref": "8.14",
-      "field": "Transport arrangement",
-      "dataType": "Dropdown",
-      "mandatory": "Yes",
-      "validation": "Own fleet / Contracted transporters / Buyer arranged. Links to the transporter register.",
-      "sampleEntry": "Contracted transporters",
-      "section": 8
-    },
-    {
-      "ref": "8.15",
-      "field": "Delivery performance commitment (OTIF %)",
-      "dataType": "Percentage",
-      "mandatory": "Yes",
-      "validation": "On-time in-full target used in supplier scorecards.",
-      "sampleEntry": "0.95",
-      "section": 8
-    },
-    {
-      "ref": "8.16",
-      "field": "Return / rejection & claim policy",
-      "dataType": "Text (200)",
-      "mandatory": "Yes",
-      "validation": "Handling of damaged bags, weight shortage and off-spec material.",
-      "sampleEntry": "Claims within 7 days of delivery with mill test certificate",
-      "section": 8
-    },
-    {
-      "ref": "8.17",
-      "field": "Warranty / quality guarantee period",
-      "dataType": "Text (80)",
-      "mandatory": "Yes",
-      "validation": "Shelf life and strength guarantee for bagged cement.",
-      "sampleEntry": "90 days from date of manufacture",
-      "section": 8
-    },
-    {
-      "ref": "8.18",
-      "field": "Supply agreement reference",
-      "dataType": "Text (60)",
-      "mandatory": "No",
-      "validation": "Master supply agreement number.",
-      "sampleEntry": "MSA-2026-014",
-      "section": 8
-    },
-    {
-      "ref": "8.19",
-      "field": "Supply agreement valid until",
-      "dataType": "Date",
-      "mandatory": "No",
-      "validation": "DATE FIELD - amber 30 days before expiry, red once expired.",
-      "sampleEntry": "46568",
-      "section": 8
-    },
-    {
-      "ref": "9.1",
-      "field": "PSQCA product certification mark licence number",
-      "dataType": "Text (40)",
-      "mandatory": "Yes",
-      "validation": "Mandatory for cement sold in Pakistan (PS 232 / PS 612).",
-      "sampleEntry": "PSQCA/CM/2024/0345",
-      "section": 9
-    },
-    {
-      "ref": "9.2",
-      "field": "PSQCA licence - valid until",
-      "dataType": "Date",
-      "mandatory": "Yes",
-      "validation": "DATE FIELD - amber 30 days before expiry, red once expired. INACTIVE BY DEFAULT after expiry - new orders are blocked until renewed.",
-      "sampleEntry": "46568",
-      "section": 9
-    },
-    {
-      "ref": "9.3",
-      "field": "ISO 9001 (Quality Management) certificate number",
-      "dataType": "Text (40)",
-      "mandatory": "Yes",
-      "validation": "Certificate number and issuing body.",
-      "sampleEntry": "ISO9001-PK-3345 (SGS)",
-      "section": 9
-    },
-    {
-      "ref": "9.4",
-      "field": "ISO 9001 certificate - valid until",
-      "dataType": "Date",
-      "mandatory": "Yes",
-      "validation": "DATE FIELD - amber 30 days before expiry, red once expired.",
-      "sampleEntry": "46885",
-      "section": 9
-    },
-    {
-      "ref": "9.5",
-      "field": "ISO 14001 (Environmental Management) certificate number",
-      "dataType": "Text (40)",
-      "mandatory": "No",
-      "validation": "Certificate number and issuing body.",
-      "sampleEntry": "ISO14001-PK-3346 (SGS)",
-      "section": 9
-    },
-    {
-      "ref": "9.6",
-      "field": "ISO 14001 certificate - valid until",
-      "dataType": "Date",
-      "mandatory": "No",
-      "validation": "DATE FIELD - amber 30 days before expiry, red once expired.",
-      "sampleEntry": "46885",
-      "section": 9
-    },
-    {
-      "ref": "9.7",
-      "field": "ISO 45001 (Occupational Health & Safety) certificate number",
-      "dataType": "Text (40)",
-      "mandatory": "No",
-      "validation": "Certificate number and issuing body.",
-      "sampleEntry": "N/A",
-      "section": 9
-    },
-    {
-      "ref": "9.8",
-      "field": "ISO 45001 certificate - valid until",
-      "dataType": "Date",
-      "mandatory": "No",
-      "validation": "DATE FIELD - amber 30 days before expiry, red once expired.",
-      "sampleEntry": "N/A",
-      "section": 9
-    },
-    {
-      "ref": "9.9",
-      "field": "Provincial EPA environmental approval / NOC number",
-      "dataType": "Text (40)",
-      "mandatory": "Yes",
-      "validation": "SEPA / EPD Punjab / KP-EPA approval for plant operations.",
-      "sampleEntry": "SEPA/NOC/2023/118",
-      "section": 9
-    },
-    {
-      "ref": "9.10",
-      "field": "EPA environmental approval - valid until",
-      "dataType": "Date",
-      "mandatory": "Yes",
-      "validation": "DATE FIELD - amber 30 days before expiry, red once expired. INACTIVE BY DEFAULT after expiry.",
-      "sampleEntry": "46752",
-      "section": 9
-    },
-    {
-      "ref": "9.11",
-      "field": "Mining lease / limestone quarry licence number",
-      "dataType": "Text (40)",
-      "mandatory": "Conditional",
-      "validation": "Required where the manufacturer operates its own quarry.",
-      "sampleEntry": "ML-SIN-2015-77",
-      "section": 9
-    },
-    {
-      "ref": "9.12",
-      "field": "Mining lease - valid until",
-      "dataType": "Date",
-      "mandatory": "Conditional",
-      "validation": "DATE FIELD - amber 30 days before expiry, red once expired.",
-      "sampleEntry": "49535",
-      "section": 9
-    },
-    {
-      "ref": "9.13",
-      "field": "Weighbridge calibration certificate number",
-      "dataType": "Text (40)",
-      "mandatory": "Yes",
-      "validation": "Certificate for each weighbridge used for dispatch weighment.",
-      "sampleEntry": "WBC-2026-0431",
-      "section": 9
-    },
-    {
-      "ref": "9.14",
-      "field": "Weighbridge calibration - valid until",
-      "dataType": "Date",
-      "mandatory": "Yes",
-      "validation": "DATE FIELD - amber 30 days before expiry, red once expired. GRN posting against that weighbridge is blocked on expiry.",
-      "sampleEntry": "46387",
-      "section": 9
-    },
-    {
-      "ref": "9.15",
-      "field": "Mill test certificate issued with each dispatch",
-      "dataType": "Yes / No",
-      "mandatory": "Yes",
-      "validation": "Required for incoming quality inspection in the ERP.",
-      "sampleEntry": "Yes",
-      "section": 9
-    },
-    {
-      "ref": "9.16",
-      "field": "Labour / social compliance declaration",
-      "dataType": "Checkbox",
-      "mandatory": "Yes",
-      "validation": "No child or forced labour; compliance with the Factories Act 1934.",
-      "sampleEntry": "Accepted",
-      "section": 9
-    },
-    {
-      "ref": "9.17",
-      "field": "Anti-bribery & supplier code of conduct acceptance",
-      "dataType": "Checkbox",
-      "mandatory": "Yes",
-      "validation": "Supplier code of conduct of the buying enterprise.",
-      "sampleEntry": "Accepted",
-      "section": 9
-    },
-    {
-      "ref": "9.18",
-      "field": "Insurance cover (fire, marine, public liability)",
-      "dataType": "Text (150)",
-      "mandatory": "Yes",
-      "validation": "Policy numbers, insurer and sum insured.",
-      "sampleEntry": "EFU Fire P-2026-0912, PKR 2.5 bn",
-      "section": 9
-    },
-    {
-      "ref": "9.19",
-      "field": "OVERALL COMPLIANCE STATUS (system-derived)",
-      "dataType": "Formula - read only",
-      "mandatory": "System",
-      "validation": "Compliant only when the PSQCA licence, EPA approval, weighbridge calibration and (where applicable) mining lease are all within validity. If ANY expires the manufacturer is set to INACTIVE automatically until renewed.",
-      "sampleEntry": "Compliant",
-      "section": 9
-    },
-    {
-      "ref": "10.1",
-      "field": "Certificate of Incorporation (SECP)",
-      "dataType": "File upload",
-      "mandatory": "Company only",
-      "validation": "PDF, max 5 MB. Required when field 1.3 = Yes.",
-      "sampleEntry": "Attached",
-      "section": 10
-    },
-    {
-      "ref": "10.2",
-      "field": "Memorandum & Articles of Association",
-      "dataType": "File upload",
-      "mandatory": "Company only",
-      "validation": "PDF, max 10 MB.",
-      "sampleEntry": "Attached",
-      "section": 10
-    },
-    {
-      "ref": "10.3",
-      "field": "Form A / Form B and Form 29 (latest filed)",
-      "dataType": "File upload",
-      "mandatory": "Company only",
-      "validation": "Confirms the SECP record of shareholding and officers.",
-      "sampleEntry": "Attached",
-      "section": 10
-    },
-    {
-      "ref": "10.4",
-      "field": "Registered partnership deed & Form II",
-      "dataType": "File upload",
-      "mandatory": "AOP only",
-      "validation": "Required when field 1.3 = No.",
-      "sampleEntry": "N/A",
-      "section": 10
-    },
-    {
-      "ref": "10.5",
-      "field": "NTN certificate (FBR)",
-      "dataType": "File upload",
-      "mandatory": "Yes",
-      "validation": "PDF from the IRIS portal.",
-      "sampleEntry": "Attached",
-      "section": 10
-    },
-    {
-      "ref": "10.6",
-      "field": "Sales Tax Registration certificate & FED registration",
-      "dataType": "File upload",
-      "mandatory": "Yes",
-      "validation": "Supports the tax registrations in Section 2.",
-      "sampleEntry": "Attached",
-      "section": 10
-    },
-    {
-      "ref": "10.7",
-      "field": "ATL status print / screenshot",
-      "dataType": "File upload",
-      "mandatory": "Yes",
-      "validation": "Dated within the last 30 days; refreshed at each re-verification.",
-      "sampleEntry": "Attached",
-      "section": 10
-    },
-    {
-      "ref": "10.8",
-      "field": "Tax exemption / reduced-rate certificate",
-      "dataType": "File upload",
-      "mandatory": "Conditional",
-      "validation": "Required where an exemption is claimed in Section 2.",
-      "sampleEntry": "N/A",
-      "section": 10
-    },
-    {
-      "ref": "10.9",
-      "field": "PSQCA product licence",
-      "dataType": "File upload",
-      "mandatory": "Yes",
-      "validation": "Current licence covering every cement grade supplied.",
-      "sampleEntry": "Attached",
-      "section": 10
-    },
-    {
-      "ref": "10.10",
-      "field": "Provincial EPA NOC / environmental approval",
-      "dataType": "File upload",
-      "mandatory": "Yes",
-      "validation": "Supports Section 9.",
-      "sampleEntry": "Attached",
-      "section": 10
-    },
-    {
-      "ref": "10.11",
-      "field": "Mining lease / quarry licence",
-      "dataType": "File upload",
-      "mandatory": "Conditional",
-      "validation": "Supports Section 9.",
-      "sampleEntry": "Attached",
-      "section": 10
-    },
-    {
-      "ref": "10.12",
-      "field": "ISO certificates (9001 / 14001 / 45001)",
-      "dataType": "File upload",
-      "mandatory": "Conditional",
-      "validation": "Required where declared in Section 9.",
-      "sampleEntry": "Attached",
-      "section": 10
-    },
-    {
-      "ref": "10.13",
-      "field": "Bank account maintenance certificate / cancelled cheque",
-      "dataType": "File upload",
-      "mandatory": "Yes",
-      "validation": "One per bank account listed in Section 6.",
-      "sampleEntry": "Attached",
-      "section": 10
-    },
-    {
-      "ref": "10.14",
-      "field": "Weighbridge calibration certificate",
-      "dataType": "File upload",
-      "mandatory": "Yes",
-      "validation": "Current certificate for each weighbridge in use.",
-      "sampleEntry": "Attached",
-      "section": 10
-    },
-    {
-      "ref": "10.15",
-      "field": "Insurance policy schedules",
-      "dataType": "File upload",
-      "mandatory": "Yes",
-      "validation": "Fire, marine and public liability cover.",
-      "sampleEntry": "Attached",
-      "section": 10
-    },
-    {
-      "ref": "10.16",
-      "field": "Board resolution / authority letter for the signatory",
-      "dataType": "File upload",
-      "mandatory": "Yes",
-      "validation": "On letterhead, signed and stamped.",
-      "sampleEntry": "Attached",
-      "section": 10
-    },
-    {
-      "ref": "10.17",
-      "field": "Company profile / product brochure",
-      "dataType": "File upload",
-      "mandatory": "No",
-      "validation": "PDF, max 10 MB.",
-      "sampleEntry": "Attached",
-      "section": 10
-    },
-    {
-      "ref": "11.1",
-      "field": "Declaration of accuracy of information",
-      "dataType": "Checkbox",
-      "mandatory": "Yes",
-      "validation": "\"We certify that the information provided is true and correct.\"",
-      "sampleEntry": "Accepted",
-      "section": 11
-    },
-    {
-      "ref": "11.2",
-      "field": "Acceptance of purchase terms & supplier code of conduct",
-      "dataType": "Checkbox",
-      "mandatory": "Yes",
-      "validation": "Version and timestamp recorded by the system.",
-      "sampleEntry": "Accepted",
-      "section": 11
-    },
-    {
-      "ref": "11.3",
-      "field": "Consent to periodic audit and plant inspection",
-      "dataType": "Checkbox",
-      "mandatory": "Yes",
-      "validation": "Allows the buying enterprise to conduct supplier audits.",
-      "sampleEntry": "Accepted",
-      "section": 11
-    },
-    {
-      "ref": "11.4",
-      "field": "Undertaking to notify changes in tax / filer status",
-      "dataType": "Checkbox",
-      "mandatory": "Yes",
-      "validation": "Any change in Section 2 must be notified within 7 days.",
-      "sampleEntry": "Accepted",
-      "section": 11
-    },
-    {
-      "ref": "11.5",
-      "field": "Undertaking to keep licences and certificates valid",
-      "dataType": "Checkbox",
-      "mandatory": "Yes",
-      "validation": "PSQCA, EPA, calibration and insurance must be renewed before expiry.",
-      "sampleEntry": "Accepted",
-      "section": 11
-    },
-    {
-      "ref": "11.6",
-      "field": "Name & designation of authorised signatory",
-      "dataType": "Text (150)",
-      "mandatory": "Yes",
-      "validation": "Supported by a board resolution or power of attorney.",
-      "sampleEntry": "Imran Sheikh / Chief Executive Officer",
-      "section": 11
-    },
-    {
-      "ref": "11.7",
-      "field": "CNIC of signatory",
-      "dataType": "Text (15)",
-      "mandatory": "Yes",
-      "validation": "XXXXX-XXXXXXX-X",
-      "sampleEntry": "42101-1234567-9",
-      "section": 11
-    },
-    {
-      "ref": "11.8",
-      "field": "Date of submission",
-      "dataType": "Date",
-      "mandatory": "Yes",
-      "validation": "System date at submission.",
-      "sampleEntry": "46246",
-      "section": 11
-    },
-    {
-      "ref": "11.9",
-      "field": "Signature & company stamp",
-      "dataType": "File upload / e-sign",
-      "mandatory": "Yes",
-      "validation": "Scanned signature with company stamp, or a verified e-signature.",
-      "sampleEntry": "Attached",
-      "section": 11
-    },
-    {
-      "ref": "11.10",
-      "field": "Internal use - vendor verification completed by",
-      "dataType": "Text (100)",
-      "mandatory": "Internal",
-      "validation": "Procurement officer who verified the documents.",
-      "sampleEntry": "Procurement - S. Ahmed",
-      "section": 11
-    },
-    {
-      "ref": "11.11",
-      "field": "Internal use - supplier category & risk rating",
-      "dataType": "Dropdown",
-      "mandatory": "Internal",
-      "validation": "Strategic / Approved / Conditional / Blacklisted; risk Low / Medium / High.",
-      "sampleEntry": "Strategic - Low risk",
-      "section": 11
-    },
-    {
-      "ref": "11.12",
-      "field": "Internal use - approval status & date",
-      "dataType": "Dropdown",
-      "mandatory": "Internal",
-      "validation": "Pending / Approved / Rejected, with approver name and date.",
-      "sampleEntry": "Approved - 20-Aug-2026",
-      "section": 11
+      "ref": "7.2",
+      "field": "Exemption validity (from / to)",
+      "dataType": "Date range",
+      "mandatory": "Yes, if 7.1 = Yes",
+      "validation": "DATE FIELD - 'to' date must be on or after the 'from' date; amber 30 days before expiry, red once expired. After expiry the ERP applies normal withholding rates automatically.",
+      "sampleEntry": "01-Jul-2026 to 30-Jun-2027",
+      "section": 7
+    },
+    {
+      "ref": "7.3",
+      "field": "Withholding tax rate during exemption (%)",
+      "dataType": "Number / %",
+      "mandatory": "Yes, if 7.1 = Yes",
+      "validation": "0% for full exemption, or the reduced rate allowed; applied only to bills dated within the validity in 7.2.",
+      "sampleEntry": "0%",
+      "section": 7
     }
   ]
 }

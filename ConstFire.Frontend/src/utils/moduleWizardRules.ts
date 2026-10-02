@@ -79,17 +79,22 @@ export function parseModuleState(
         }
       }
       const sorted = [...rowIndexes].sort((a, b) => a - b)
-      state.sections[key] =
-        sorted.length === 0
-          ? [{}]
-          : sorted.map((index) => {
-              const row: SectionData = {}
-              for (const ref of refs) {
-                const value = data[`${ref}#${index}`]
-                if (value !== undefined) row[ref] = value
-              }
-              return row
-            })
+      if (sorted.length === 0) {
+        const flatRow: SectionData = {}
+        for (const ref of refs) {
+          if (data[ref] !== undefined && data[ref] !== '') flatRow[ref] = data[ref]
+        }
+        state.sections[key] = Object.keys(flatRow).length > 0 ? [flatRow] : [{}]
+      } else {
+        state.sections[key] = sorted.map((index) => {
+          const row: SectionData = {}
+          for (const ref of refs) {
+            const value = data[`${ref}#${index}`]
+            if (value !== undefined) row[ref] = value
+          }
+          return row
+        })
+      }
     } else {
       const row: SectionData = {}
       for (const ref of refs) {

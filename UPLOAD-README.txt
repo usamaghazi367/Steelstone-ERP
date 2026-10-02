@@ -1,12 +1,15 @@
 ConstFire — SmarterASP upload (read this first)
 ================================================
 
-1. DELETE old files in site1 root (or upload to empty folder).
+SITE2 ONLY (usamaghazi-002): See SETUP-SITE2-ONLY.md
+Do NOT deploy to ghaziusama-001-site1 (working production).
 
-2. Upload ConstFire-deploy.zip to site1 root in File Manager.
+1. DELETE old files in SITE2 root only (or upload to empty folder).
+
+2. Upload ConstFire-deploy.zip to SITE2 root in File Manager.
 
 3. Select the zip → click UNZIP / Extract here.
-   After extract, site1 MUST contain directly (not inside a subfolder):
+   After extract, site2 MUST contain directly (not inside a subfolder):
      web.config
      ConstFire.Backend.dll
      appsettings.Production.json
@@ -15,7 +18,8 @@ ConstFire — SmarterASP upload (read this first)
      Data\modules-schema.json
      logs\             (empty folder is OK)
 
-4. SmarterASP panel → Websites → site1 → set .NET version to 10.x
+4. SmarterASP panel → Websites → YOUR SITE (e.g. site1 or site2) → set .NET version to 10.x
+   If you see HTTP 502/503, read SITE2-SMARTERASP-503-FIX.md in the project folder.
 
 5. Create MS SQL database (SmarterASP → Databases → MS SQL → Create).
    Copy the connection string. Edit appsettings.Production.json on the server:

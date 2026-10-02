@@ -105,9 +105,6 @@ internal static class ModuleConfigHelper
         if (config?.ListColumns is { Count: > 0 })
             return config.ListColumns;
 
-        if (code == EnterpriseRecordHelper.ModuleCode)
-            return ["_recordCode", "1.4", "1.13", "1.21"];
-
         if (config is not null)
         {
             var cols = new List<string>();
@@ -147,9 +144,6 @@ internal static class ModuleConfigHelper
             });
             return ResolveListColumns(code, dtoFields, config);
         }
-
-        if (code == EnterpriseRecordHelper.ModuleCode)
-            return ["_recordCode", "1.4", "1.13", "1.21"];
 
         return PickFallbackListColumns(fields.Select(f => new ModuleFieldDto
         {

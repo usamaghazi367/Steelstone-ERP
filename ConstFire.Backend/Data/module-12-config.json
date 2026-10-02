@@ -27,7 +27,7 @@
     },
     {
       "num": 4,
-      "title": "DEDUCTIONS & STATUTORY CONTRIBUTIONS",
+      "title": "DEDUCTIONS & NET PAY",
       "repeating": false
     },
     {
@@ -38,16 +38,6 @@
     {
       "num": 6,
       "title": "STATUTORY FILING & DEPOSITS",
-      "repeating": false
-    },
-    {
-      "num": 7,
-      "title": "APPROVAL, DISBURSEMENT & PAYSLIPS",
-      "repeating": false
-    },
-    {
-      "num": 8,
-      "title": "OFF-CYCLE, SETTLEMENT & RECORDS",
       "repeating": false
     }
   ],
@@ -99,24 +89,6 @@
     },
     {
       "ref": "1.6",
-      "field": "Location / plant covered",
-      "dataType": "Multi-select",
-      "mandatory": "Yes",
-      "validation": "One or more locations included in this run.",
-      "sampleEntry": "PLANT-01 Nooriabad, Head Office",
-      "section": 1
-    },
-    {
-      "ref": "1.7",
-      "field": "Employee category covered",
-      "dataType": "Multi-select",
-      "mandatory": "Yes",
-      "validation": "Permanent / Probationary / Contract / Daily wage / Apprentice.",
-      "sampleEntry": "Permanent, Probationary",
-      "section": 1
-    },
-    {
-      "ref": "1.8",
       "field": "Attendance cut-off date",
       "dataType": "Date",
       "mandatory": "Yes",
@@ -125,7 +97,7 @@
       "section": 1
     },
     {
-      "ref": "1.9",
+      "ref": "1.7",
       "field": "Number of employees in the run",
       "dataType": "Formula",
       "mandatory": "System",
@@ -134,7 +106,7 @@
       "section": 1
     },
     {
-      "ref": "1.10",
+      "ref": "1.8",
       "field": "Payment date",
       "dataType": "Date",
       "mandatory": "Yes",
@@ -143,7 +115,7 @@
       "section": 1
     },
     {
-      "ref": "1.11",
+      "ref": "1.9",
       "field": "Currency",
       "dataType": "Dropdown",
       "mandatory": "Yes",
@@ -152,11 +124,11 @@
       "section": 1
     },
     {
-      "ref": "1.12",
+      "ref": "1.10",
       "field": "Payroll status",
       "dataType": "Dropdown",
       "mandatory": "System",
-      "validation": "Draft / Calculated / Under review / Locked / Approved / Disbursed / Reversed.",
+      "validation": "Draft / Calculated / Under review / Approved / Disbursed / Reversed.",
       "sampleEntry": "Calculated",
       "section": 1
     },
@@ -170,15 +142,6 @@
       "section": 2
     },
     {
-      "ref": "2.2",
-      "field": "Department, designation & cost centre",
-      "dataType": "Text (150)",
-      "mandatory": "System",
-      "validation": "Pulled from the employee master for GL posting.",
-      "sampleEntry": "Production / Supervisor / CC-2100",
-      "section": 2
-    },
-    {
       "ref": "2.3",
       "field": "Employment category & status",
       "dataType": "Text (80)",
@@ -189,15 +152,6 @@
     },
     {
       "ref": "2.4",
-      "field": "Date of joining / date of leaving",
-      "dataType": "Text (60)",
-      "mandatory": "System",
-      "validation": "Drives pro-rata calculation for joiners and leavers.",
-      "sampleEntry": "01-Sep-2026 (joiner)",
-      "section": 2
-    },
-    {
-      "ref": "2.5",
       "field": "Payable days in the period",
       "dataType": "Formula",
       "mandatory": "System",
@@ -206,7 +160,7 @@
       "section": 2
     },
     {
-      "ref": "2.6",
+      "ref": "2.5",
       "field": "Days present",
       "dataType": "Formula",
       "mandatory": "System",
@@ -215,7 +169,7 @@
       "section": 2
     },
     {
-      "ref": "2.7",
+      "ref": "2.6",
       "field": "Paid leave days availed",
       "dataType": "Formula",
       "mandatory": "System",
@@ -224,7 +178,7 @@
       "section": 2
     },
     {
-      "ref": "2.8",
+      "ref": "2.7",
       "field": "Unpaid leave / absent days",
       "dataType": "Formula",
       "mandatory": "System",
@@ -233,7 +187,7 @@
       "section": 2
     },
     {
-      "ref": "2.9",
+      "ref": "2.8",
       "field": "Late arrivals / short hours deduction",
       "dataType": "Formula",
       "mandatory": "System",
@@ -242,7 +196,7 @@
       "section": 2
     },
     {
-      "ref": "2.10",
+      "ref": "2.9",
       "field": "Overtime hours approved",
       "dataType": "Number",
       "mandatory": "Conditional",
@@ -251,7 +205,7 @@
       "section": 2
     },
     {
-      "ref": "2.11",
+      "ref": "2.10",
       "field": "Weekly holiday / gazetted holiday worked",
       "dataType": "Number",
       "mandatory": "No",
@@ -260,12 +214,12 @@
       "section": 2
     },
     {
-      "ref": "2.12",
-      "field": "Employee bank account (IBAN)",
+      "ref": "2.11",
+      "field": "Employee bank account number",
       "dataType": "Lookup",
       "mandatory": "System",
       "validation": "Verified salary account from the employee master.",
-      "sampleEntry": "PK41ALFH0005120010044556",
+      "sampleEntry": "5120010044556",
       "section": 2
     },
     {
@@ -284,15 +238,6 @@
       "mandatory": "System",
       "validation": "Normally 45% of basic salary.",
       "sampleEntry": "36450",
-      "section": 3
-    },
-    {
-      "ref": "3.3",
-      "field": "Utilities & conveyance allowance (PKR)",
-      "dataType": "Formula",
-      "mandatory": "System",
-      "validation": "Fixed allowances from the employee master.",
-      "sampleEntry": "17550",
       "section": 3
     },
     {
@@ -324,15 +269,6 @@
     },
     {
       "ref": "3.7",
-      "field": "Attendance / production incentive (PKR)",
-      "dataType": "Number",
-      "mandatory": "No",
-      "validation": "Performance-linked incentive approved for the period.",
-      "sampleEntry": "5000",
-      "section": 3
-    },
-    {
-      "ref": "3.8",
       "field": "Arrears of previous period (PKR)",
       "dataType": "Number",
       "mandatory": "No",
@@ -341,7 +277,7 @@
       "section": 3
     },
     {
-      "ref": "3.9",
+      "ref": "3.8",
       "field": "Bonus / ex-gratia (PKR)",
       "dataType": "Number",
       "mandatory": "No",
@@ -350,16 +286,7 @@
       "section": 3
     },
     {
-      "ref": "3.10",
-      "field": "Leave encashment (PKR)",
-      "dataType": "Number",
-      "mandatory": "No",
-      "validation": "Encashment of unused leave, where eligible.",
-      "sampleEntry": "0",
-      "section": 3
-    },
-    {
-      "ref": "3.11",
+      "ref": "3.9",
       "field": "Reimbursements (fuel, mobile, medical)",
       "dataType": "Number",
       "mandatory": "No",
@@ -368,7 +295,7 @@
       "section": 3
     },
     {
-      "ref": "3.12",
+      "ref": "3.10",
       "field": "GROSS EARNINGS (PKR)",
       "dataType": "Formula",
       "mandatory": "System",
@@ -396,51 +323,6 @@
     },
     {
       "ref": "4.3",
-      "field": "EOBI - employee contribution (PKR)",
-      "dataType": "Formula",
-      "mandatory": "System",
-      "validation": "Employee share as notified; deducted from salary.",
-      "sampleEntry": "370",
-      "section": 4
-    },
-    {
-      "ref": "4.4",
-      "field": "EOBI - employer contribution (PKR)",
-      "dataType": "Formula",
-      "mandatory": "System",
-      "validation": "Employer share; a cost to the company, not a salary deduction.",
-      "sampleEntry": "1850",
-      "section": 4
-    },
-    {
-      "ref": "4.5",
-      "field": "Provincial social security - employer contribution",
-      "dataType": "Formula",
-      "mandatory": "System",
-      "validation": "PESSI / SESSI contribution where the wage is within the ceiling.",
-      "sampleEntry": "2000",
-      "section": 4
-    },
-    {
-      "ref": "4.6",
-      "field": "Provident fund - employee contribution (PKR)",
-      "dataType": "Formula",
-      "mandatory": "System",
-      "validation": "Deducted at the rate held in the employee master.",
-      "sampleEntry": "6747",
-      "section": 4
-    },
-    {
-      "ref": "4.7",
-      "field": "Provident fund - employer contribution (PKR)",
-      "dataType": "Formula",
-      "mandatory": "System",
-      "validation": "Matching employer share credited to the fund.",
-      "sampleEntry": "6747",
-      "section": 4
-    },
-    {
-      "ref": "4.8",
       "field": "Loan / advance instalment recovery (PKR)",
       "dataType": "Formula",
       "mandatory": "System",
@@ -449,7 +331,7 @@
       "section": 4
     },
     {
-      "ref": "4.9",
+      "ref": "4.4",
       "field": "Unpaid leave / absence deduction (PKR)",
       "dataType": "Formula",
       "mandatory": "System",
@@ -458,16 +340,7 @@
       "section": 4
     },
     {
-      "ref": "4.10",
-      "field": "Union dues, canteen & other recoveries (PKR)",
-      "dataType": "Number",
-      "mandatory": "No",
-      "validation": "Recurring deductions authorised by the employee.",
-      "sampleEntry": "800",
-      "section": 4
-    },
-    {
-      "ref": "4.11",
+      "ref": "4.5",
       "field": "Penalty / disciplinary deduction (PKR)",
       "dataType": "Number",
       "mandatory": "No",
@@ -476,7 +349,7 @@
       "section": 4
     },
     {
-      "ref": "4.12",
+      "ref": "4.6",
       "field": "TOTAL DEDUCTIONS (PKR)",
       "dataType": "Formula",
       "mandatory": "System",
@@ -485,7 +358,7 @@
       "section": 4
     },
     {
-      "ref": "4.13",
+      "ref": "4.7",
       "field": "NET PAYABLE TO EMPLOYEE (PKR)",
       "dataType": "Formula",
       "mandatory": "System",
@@ -494,11 +367,11 @@
       "section": 4
     },
     {
-      "ref": "4.14",
+      "ref": "4.8",
       "field": "Employer cost for the period (PKR)",
       "dataType": "Formula",
       "mandatory": "System",
-      "validation": "Gross earnings plus employer EOBI, social security and provident fund contributions.",
+      "validation": "Gross earnings plus any employer-side contributions payable for the employee.",
       "sampleEntry": "176962",
       "section": 4
     },
@@ -531,33 +404,6 @@
     },
     {
       "ref": "5.4",
-      "field": "Total EOBI - employee & employer (PKR)",
-      "dataType": "Formula",
-      "mandatory": "System",
-      "validation": "Deposited with EOBI by the 15th of the following month.",
-      "sampleEntry": "91760 / 458800",
-      "section": 5
-    },
-    {
-      "ref": "5.5",
-      "field": "Total provincial social security (PKR)",
-      "dataType": "Formula",
-      "mandatory": "System",
-      "validation": "Deposited with PESSI / SESSI as applicable.",
-      "sampleEntry": "496000",
-      "section": 5
-    },
-    {
-      "ref": "5.6",
-      "field": "Total provident fund - employee & employer (PKR)",
-      "dataType": "Formula",
-      "mandatory": "System",
-      "validation": "Remitted to the recognised provident fund trust.",
-      "sampleEntry": "1672000 / 1672000",
-      "section": 5
-    },
-    {
-      "ref": "5.7",
       "field": "Total loan & advance recoveries (PKR)",
       "dataType": "Formula",
       "mandatory": "System",
@@ -566,7 +412,7 @@
       "section": 5
     },
     {
-      "ref": "5.8",
+      "ref": "5.5",
       "field": "Total other deductions (PKR)",
       "dataType": "Formula",
       "mandatory": "System",
@@ -575,7 +421,7 @@
       "section": 5
     },
     {
-      "ref": "5.9",
+      "ref": "5.6",
       "field": "TOTAL NET DISBURSEMENT (PKR)",
       "dataType": "Formula",
       "mandatory": "System",
@@ -584,7 +430,7 @@
       "section": 5
     },
     {
-      "ref": "5.10",
+      "ref": "5.7",
       "field": "Total employer cost for the period (PKR)",
       "dataType": "Formula",
       "mandatory": "System",
@@ -593,7 +439,7 @@
       "section": 5
     },
     {
-      "ref": "5.11",
+      "ref": "5.8",
       "field": "Variance against previous period (%)",
       "dataType": "Formula - read only",
       "mandatory": "System",
@@ -602,7 +448,7 @@
       "section": 5
     },
     {
-      "ref": "5.12",
+      "ref": "5.9",
       "field": "Variance explanation",
       "dataType": "Text (250)",
       "mandatory": "Conditional",
@@ -611,20 +457,11 @@
       "section": 5
     },
     {
-      "ref": "5.13",
-      "field": "Cost centre-wise distribution",
-      "dataType": "Formula - read only",
-      "mandatory": "System",
-      "validation": "Payroll cost split by cost centre and department for GL posting.",
-      "sampleEntry": "Generated",
-      "section": 5
-    },
-    {
-      "ref": "5.14",
+      "ref": "5.11",
       "field": "Exception report",
       "dataType": "Formula - read only",
       "mandatory": "System",
-      "validation": "Lists negative net pay, zero attendance, missing bank details, duplicate CNIC and employees above the tax slab change point. Must be cleared before locking.",
+      "validation": "Lists negative net pay, zero attendance, missing bank details and duplicate employee records. Must be cleared before the run is approved.",
       "sampleEntry": "0 exceptions",
       "section": 5
     },
@@ -657,291 +494,12 @@
     },
     {
       "ref": "6.4",
-      "field": "EOBI contribution deposit due date",
-      "dataType": "Formula",
-      "mandatory": "System",
-      "validation": "Contribution is payable by the 15th of the following month.",
-      "sampleEntry": "46310",
-      "section": 6
-    },
-    {
-      "ref": "6.5",
-      "field": "EOBI challan number & date",
-      "dataType": "Text (60)",
-      "mandatory": "Conditional",
-      "validation": "Recorded on payment.",
-      "sampleEntry": "Pending",
-      "section": 6
-    },
-    {
-      "ref": "6.6",
-      "field": "Provincial social security deposit due date",
-      "dataType": "Formula",
-      "mandatory": "System",
-      "validation": "As notified by the provincial institution.",
-      "sampleEntry": "46310",
-      "section": 6
-    },
-    {
-      "ref": "6.7",
-      "field": "Social security challan number & date",
-      "dataType": "Text (60)",
-      "mandatory": "Conditional",
-      "validation": "Recorded on payment.",
-      "sampleEntry": "Pending",
-      "section": 6
-    },
-    {
-      "ref": "6.8",
-      "field": "Provident fund remittance date & reference",
-      "dataType": "Text (60)",
-      "mandatory": "Conditional",
-      "validation": "Transfer to the provident fund trust account.",
-      "sampleEntry": "Pending",
-      "section": 6
-    },
-    {
-      "ref": "6.9",
       "field": "Minimum wage compliance check",
       "dataType": "Formula - read only",
       "mandatory": "System",
       "validation": "Pass / Fail - no employee may be paid below the notified provincial minimum wage.",
       "sampleEntry": "Pass",
       "section": 6
-    },
-    {
-      "ref": "6.10",
-      "field": "Overtime rate compliance check",
-      "dataType": "Formula - read only",
-      "mandatory": "System",
-      "validation": "Pass / Fail - overtime must be at twice the ordinary rate.",
-      "sampleEntry": "Pass",
-      "section": 6
-    },
-    {
-      "ref": "6.11",
-      "field": "Statutory register updated",
-      "dataType": "Yes / No",
-      "mandatory": "Yes",
-      "validation": "Wage register and muster roll maintained under the Factories Act 1934.",
-      "sampleEntry": "Yes",
-      "section": 6
-    },
-    {
-      "ref": "7.1",
-      "field": "Calculated by & date",
-      "dataType": "Text (120)",
-      "mandatory": "System",
-      "validation": "Payroll officer who ran the calculation.",
-      "sampleEntry": "Payroll - N. Fatima, 26-Sep-2026",
-      "section": 7
-    },
-    {
-      "ref": "7.2",
-      "field": "Attendance certified by (department heads)",
-      "dataType": "Text (150)",
-      "mandatory": "Yes",
-      "validation": "Heads certify attendance and overtime before the run is locked.",
-      "sampleEntry": "Certified - all departments, 26-Sep-2026",
-      "section": 7
-    },
-    {
-      "ref": "7.3",
-      "field": "Reviewed by HR head & date",
-      "dataType": "Text (120)",
-      "mandatory": "Yes",
-      "validation": "Verifies headcount, joiners, leavers and any exception.",
-      "sampleEntry": "HR Head - 27-Sep-2026",
-      "section": 7
-    },
-    {
-      "ref": "7.4",
-      "field": "Reviewed by finance & date",
-      "dataType": "Text (120)",
-      "mandatory": "Yes",
-      "validation": "Verifies totals, tax computation and cost centre allocation.",
-      "sampleEntry": "Manager Finance - 28-Sep-2026",
-      "section": 7
-    },
-    {
-      "ref": "7.5",
-      "field": "Payroll locked on & by",
-      "dataType": "Text (120)",
-      "mandatory": "System",
-      "validation": "Once locked, no line can be edited; an off-cycle run is required for corrections.",
-      "sampleEntry": "28-Sep-2026 - Payroll Manager",
-      "section": 7
-    },
-    {
-      "ref": "7.6",
-      "field": "Approved by (CEO / authorised officer) & date",
-      "dataType": "Text (120)",
-      "mandatory": "Yes",
-      "validation": "Final approval as per the delegation of authority.",
-      "sampleEntry": "CEO - 30-Sep-2026",
-      "section": 7
-    },
-    {
-      "ref": "7.7",
-      "field": "Bank account used for disbursement",
-      "dataType": "Lookup",
-      "mandatory": "Yes",
-      "validation": "Enterprise account from which salaries are transferred.",
-      "sampleEntry": "PK36MEZN0001230010012345",
-      "section": 7
-    },
-    {
-      "ref": "7.8",
-      "field": "Salary transfer letter / bulk upload file reference",
-      "dataType": "Text (60)",
-      "mandatory": "Yes",
-      "validation": "Bank instruction or the bulk transfer file submitted.",
-      "sampleEntry": "BULK-2026-09-248",
-      "section": 7
-    },
-    {
-      "ref": "7.9",
-      "field": "Payment voucher reference",
-      "dataType": "Lookup",
-      "mandatory": "System",
-      "validation": "Payment voucher raised for the total disbursement; links to sheet 10.",
-      "sampleEntry": "SSIT-PV-2026-00901",
-      "section": 7
-    },
-    {
-      "ref": "7.10",
-      "field": "Disbursement confirmation from bank",
-      "dataType": "Text (80)",
-      "mandatory": "Yes",
-      "validation": "Confirmation that all credits were successful; failed credits are re-issued.",
-      "sampleEntry": "248 of 248 credited, 03-Oct-2026",
-      "section": 7
-    },
-    {
-      "ref": "7.11",
-      "field": "Failed credits & action taken",
-      "dataType": "Text (200)",
-      "mandatory": "Conditional",
-      "validation": "Employees whose transfer failed, with the corrective action.",
-      "sampleEntry": "None",
-      "section": 7
-    },
-    {
-      "ref": "7.12",
-      "field": "Payslips generated & released",
-      "dataType": "Yes / No + Date",
-      "mandatory": "Yes",
-      "validation": "Payslips issued to employees through email or the self-service portal.",
-      "sampleEntry": "Yes - 03-Oct-2026",
-      "section": 7
-    },
-    {
-      "ref": "7.13",
-      "field": "Payslip content check",
-      "dataType": "Formula - read only",
-      "mandatory": "System",
-      "validation": "Each payslip shows earnings, deductions, employer contributions, leave balance and year-to-date tax.",
-      "sampleEntry": "Pass",
-      "section": 7
-    },
-    {
-      "ref": "7.14",
-      "field": "GL posting reference & date",
-      "dataType": "Text (60)",
-      "mandatory": "System",
-      "validation": "Journal voucher posting salary expense, statutory liabilities and net payable.",
-      "sampleEntry": "JV-2026-009011, 30-Sep-2026",
-      "section": 7
-    },
-    {
-      "ref": "8.1",
-      "field": "Off-cycle / supplementary run reference",
-      "dataType": "Text (40)",
-      "mandatory": "Conditional",
-      "validation": "Raised for corrections, missed payments or mid-month settlements.",
-      "sampleEntry": "N/A",
-      "section": 8
-    },
-    {
-      "ref": "8.2",
-      "field": "Final settlement - employee & date of leaving",
-      "dataType": "Text (120)",
-      "mandatory": "Conditional",
-      "validation": "Triggered by a separation recorded in the employee master.",
-      "sampleEntry": "N/A",
-      "section": 8
-    },
-    {
-      "ref": "8.3",
-      "field": "Final settlement components",
-      "dataType": "Text (250)",
-      "mandatory": "Conditional",
-      "validation": "Salary to date, leave encashment, gratuity, provident fund, notice pay less recoveries.",
-      "sampleEntry": "N/A",
-      "section": 8
-    },
-    {
-      "ref": "8.4",
-      "field": "Gratuity calculation basis",
-      "dataType": "Text (150)",
-      "mandatory": "Conditional",
-      "validation": "One month's basic salary for each completed year of service, or as per contract.",
-      "sampleEntry": "30 days basic per completed year",
-      "section": 8
-    },
-    {
-      "ref": "8.5",
-      "field": "Provident fund settlement reference",
-      "dataType": "Text (60)",
-      "mandatory": "Conditional",
-      "validation": "Employee and employer balances released from the fund.",
-      "sampleEntry": "N/A",
-      "section": 8
-    },
-    {
-      "ref": "8.6",
-      "field": "Clearance certificate obtained",
-      "dataType": "Yes / No",
-      "mandatory": "Conditional",
-      "validation": "No-dues clearance from stores, IT, finance and administration.",
-      "sampleEntry": "N/A",
-      "section": 8
-    },
-    {
-      "ref": "8.7",
-      "field": "Experience letter issued",
-      "dataType": "Yes / No + Date",
-      "mandatory": "Conditional",
-      "validation": "Issued on completion of the final settlement.",
-      "sampleEntry": "N/A",
-      "section": 8
-    },
-    {
-      "ref": "8.8",
-      "field": "Payroll register archived",
-      "dataType": "Yes / No",
-      "mandatory": "Yes",
-      "validation": "Locked register retained for 6 years with the supporting attendance data.",
-      "sampleEntry": "Yes",
-      "section": 8
-    },
-    {
-      "ref": "8.9",
-      "field": "Attachments",
-      "dataType": "File upload",
-      "mandatory": "Yes",
-      "validation": "Attendance summary, overtime approvals, tax challans, EOBI and social security challans, bank transfer confirmation and the signed payroll register.",
-      "sampleEntry": "Attached",
-      "section": 8
-    },
-    {
-      "ref": "8.10",
-      "field": "Audit trail",
-      "dataType": "Note - system",
-      "mandatory": "System",
-      "validation": "Every calculation, edit, lock, approval and disbursement is logged with the user and timestamp; locked runs can only be reversed by an approved reversal entry.",
-      "sampleEntry": "Enabled",
-      "section": 8
     }
   ]
 }

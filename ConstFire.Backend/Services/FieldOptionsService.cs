@@ -37,9 +37,32 @@ public partial class FieldOptionsService(AppDbContext context) : IFieldOptionsSe
         var dataType = field.DataType.Trim();
         var dtLower = dataType.ToLowerInvariant();
 
-        if (dtLower is "dropdown" or "multi-select" or "dependent dropdown")
+        if (FieldOptionsParser.IsBankNameField(field.FieldName, field.Ref))
         {
-            var options = FieldOptionsParser.ParseStaticOptions(field.Validation, parentValue, dataType, fieldRef);
+            var banks = await context.ErpFieldOptions
+                .Where(o => o.ListKey == Data.BankOptionsSeeder.PakistanBanksListKey)
+                .OrderBy(o => o.SortOrder)
+                .Select(o => o.Value)
+                .ToListAsync();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                var term = search.Trim();
+                banks = banks.Where(b => b.Contains(term, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            return new FieldOptionsResponse
+            {
+                FieldRef = fieldRef,
+                DataType = dataType,
+                Options = banks.Take(limit).Select(b => new FieldOptionDto { Value = b, Label = b }).ToList()
+            };
+        }
+
+        if ((dtLower.Contains("dropdown") || dtLower is "multi-select") && !dtLower.Contains("lookup"))
+        {
+            var options = FieldOptionsParser.ParseStaticOptions(
+                field.Validation, parentValue, dataType, fieldRef, field.FieldName);
             if (!string.IsNullOrWhiteSpace(search))
             {
                 var term = search.Trim();
@@ -59,7 +82,7 @@ public partial class FieldOptionsService(AppDbContext context) : IFieldOptionsSe
             };
         }
 
-        if (dtLower == "lookup")
+        if (dtLower.Contains("lookup"))
         {
             var sourceModules = FieldOptionsParser.ResolveLookupModules(field.Validation, moduleCode);
             var options = await SearchLookupRecordsAsync(sourceModules, search, limit, field.Validation);
@@ -190,11 +213,20 @@ public partial class FieldOptionsService(AppDbContext context) : IFieldOptionsSe
 
 public static partial class FieldOptionsParser
 {
-    public static List<string> ParseStaticOptions(string validation, string? parentValue, string dataType, string? fieldRef = null)
+    public static List<string> ParseStaticOptions(
+        string validation,
+        string? parentValue,
+        string dataType,
+        string? fieldRef = null,
+        string? fieldName = null)
     {
         if (string.IsNullOrWhiteSpace(validation)) return [];
 
-        if (fieldRef == "1.2" && parentValue is not null)
+        if (IsPakistaniCityField(validation, dataType, fieldName ?? ""))
+            return FilterCities(null);
+
+        if (parentValue is not null &&
+            validation.Contains("Must be SECP if", StringComparison.OrdinalIgnoreCase))
         {
             var track = parentValue.Trim().ToLowerInvariant();
             if (track.Contains("company") || parentValue.Equals("Yes", StringComparison.OrdinalIgnoreCase))
@@ -203,12 +235,46 @@ public static partial class FieldOptionsParser
                 return ["Registrar of Firms (Provincial)", "FBR only (Sole Proprietor)"];
         }
 
+        if (parentValue is not null &&
+            validation.Contains("SECP / Registrar of Firms", StringComparison.OrdinalIgnoreCase))
+        {
+            var track = parentValue.Trim().ToLowerInvariant();
+            if (track.Contains("company") || parentValue.Equals("Yes", StringComparison.OrdinalIgnoreCase))
+                return ["SECP"];
+            return ["Registrar of Firms (Provincial)", "FBR only (Sole Proprietor)"];
+        }
+
         if (dataType.Equals("Dependent dropdown", StringComparison.OrdinalIgnoreCase))
         {
             return ParseDependentOptions(validation, parentValue);
         }
 
         return ParseSlashSeparatedOptions(validation);
+    }
+
+    public static bool IsBankNameField(string fieldName, string fieldRef) =>
+        fieldRef is "4.1" ||
+        fieldName.Contains("Bank name", StringComparison.OrdinalIgnoreCase) ||
+        fieldName.Contains("Payee bank name", StringComparison.OrdinalIgnoreCase);
+
+    public static bool IsPhoneField(string dataType, string fieldName) =>
+        dataType.Contains("phone", StringComparison.OrdinalIgnoreCase) ||
+        fieldName.Contains("mobile", StringComparison.OrdinalIgnoreCase) ||
+        fieldName.Contains("phone", StringComparison.OrdinalIgnoreCase);
+
+    private static bool IsPakistaniCityField(string validation, string dataType, string fieldName)
+    {
+        if (IsPhoneField(dataType, fieldName))
+            return false;
+        return validation.Contains("master list of pakistani cit", StringComparison.OrdinalIgnoreCase);
+    }
+
+    public static List<string> FilterCities(string? search)
+    {
+        var cities = PakistaniCities.All;
+        if (string.IsNullOrWhiteSpace(search)) return cities;
+        var term = search.Trim();
+        return cities.Where(c => c.Contains(term, StringComparison.OrdinalIgnoreCase)).ToList();
     }
 
     public static List<string> ParseDependentOptions(string validation, string? parentValue)
@@ -369,4 +435,21 @@ public static partial class FieldOptionsParser
 
     [GeneratedRegex(@"(Company|AOP|Individual|Other|Sole Proprietorship?)\s*:", RegexOptions.IgnoreCase)]
     private static partial Regex GroupClauseRegex();
+}
+
+internal static class PakistaniCities
+{
+    public static List<string> All { get; } =
+    [
+        "Abbottabad", "Attock", "Badin", "Bahawalnagar", "Bahawalpur", "Bannu", "Bhalwal", "Burewala",
+        "Chakwal", "Charsadda", "Chiniot", "Chishtian", "Dadu", "Dera Ghazi Khan", "Dera Ismail Khan", "Daska",
+        "Faisalabad", "Gilgit", "Gojra", "Gujranwala", "Gujrat", "Gwadar", "Hafizabad", "Haripur", "Hasilpur",
+        "Hub", "Hyderabad", "Islamabad", "Jacobabad", "Jaranwala", "Jhang", "Jhelum", "Kamalia", "Kamoke",
+        "Karachi", "Kasur", "Khanewal", "Khanpur", "Kharian", "Khipro", "Khuzdar", "Kohat", "Kot Addu", "Kotli",
+        "Lahore", "Larkana", "Layyah", "Lodhran", "Loralai", "Mandi Bahauddin", "Mansehra", "Mardan", "Mianwali",
+        "Mingora", "Mirpur", "Mirpur Khas", "Multan", "Muzaffarabad", "Muzaffargarh", "Nawabshah", "Nowshera",
+        "Okara", "Pakpattan", "Peshawar", "Quetta", "Rahim Yar Khan", "Rawalpindi", "Sahiwal", "Sargodha",
+        "Sheikhupura", "Shikarpur", "Sialkot", "Skardu", "Sukkur", "Swabi", "Talagang", "Taxila", "Toba Tek Singh",
+        "Turbat", "Umerkot", "Vehari", "Wah Cantonment", "Wazirabad"
+    ];
 }

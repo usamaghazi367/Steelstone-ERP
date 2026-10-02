@@ -9,6 +9,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<ErpModule> ErpModules => Set<ErpModule>();
     public DbSet<ErpModuleField> ErpModuleFields => Set<ErpModuleField>();
     public DbSet<ErpRecord> ErpRecords => Set<ErpRecord>();
+    public DbSet<ErpFieldOption> ErpFieldOptions => Set<ErpFieldOption>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -36,6 +37,13 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             entity.Property(f => f.DataType).HasMaxLength(128);
             entity.Property(f => f.Mandatory).HasMaxLength(32);
             entity.HasOne(f => f.Module).WithMany(m => m.Fields).HasForeignKey(f => f.ModuleId);
+        });
+
+        modelBuilder.Entity<ErpFieldOption>(entity =>
+        {
+            entity.HasIndex(o => new { o.ListKey, o.Value }).IsUnique();
+            entity.Property(o => o.ListKey).HasMaxLength(64);
+            entity.Property(o => o.Value).HasMaxLength(256);
         });
 
         modelBuilder.Entity<ErpRecord>(entity =>

@@ -1,4 +1,5 @@
 using System.Text.Json;
+using ClosedXML.Excel;
 using ConstFire.Backend.Data;
 using ConstFire.Backend.DTOs;
 using ConstFire.Backend.Models;
@@ -47,15 +48,22 @@ public class ModuleService(AppDbContext context, IWebHostEnvironment env) : IMod
                 Validation = f.Validation,
                 SortOrder = f.SortOrder
             }).ToList(),
-            ListColumns = ModuleConfigHelper.ResolveListColumns(code, module.Fields, env)
+            ListColumns = PickListColumns(module.Fields)
         };
 
         ModuleConfigHelper.EnrichModuleDto(dto, env);
+
         return dto;
     }
 
     public async Task<RecordListResponse> GetRecordsAsync(
-        string code, string? search, string? sortBy, string sortDir, int page, int pageSize)
+        string code,
+        string? search,
+        string? sortBy,
+        string sortDir,
+        int page,
+        int pageSize,
+        bool includeAllFields = false)
     {
         var module = await context.ErpModules
             .Include(m => m.Fields)
@@ -63,19 +71,18 @@ public class ModuleService(AppDbContext context, IWebHostEnvironment env) : IMod
             ?? throw new KeyNotFoundException($"Module '{code}' not found.");
 
         page = Math.Max(1, page);
-        pageSize = Math.Clamp(pageSize, 1, 200);
+        pageSize = Math.Clamp(pageSize, 1, includeAllFields ? 500 : 200);
 
         var query = context.ErpRecords.Where(r => r.ModuleId == module.Id);
 
         if (!string.IsNullOrWhiteSpace(search))
         {
             var term = search.Trim();
-            query = query.Where(r => r.DataJson.Contains(term) || (r.RecordCode != null && r.RecordCode.Contains(term)));
+            query = query.Where(r => r.DataJson.Contains(term));
         }
 
         var records = await query.ToListAsync();
         var listColumns = ModuleConfigHelper.ResolveListColumns(code, module.Fields, env);
-        var config = ModuleConfigHelper.LoadConfig(env, code);
         var sortField = string.IsNullOrWhiteSpace(sortBy) ? "id" : sortBy.Trim().ToLowerInvariant();
         var descending = sortDir.Equals("desc", StringComparison.OrdinalIgnoreCase);
 
@@ -84,9 +91,6 @@ public class ModuleService(AppDbContext context, IWebHostEnvironment env) : IMod
             "id" => descending ? records.OrderByDescending(r => r.Id) : records.OrderBy(r => r.Id),
             "createdat" => descending ? records.OrderByDescending(r => r.CreatedAt) : records.OrderBy(r => r.CreatedAt),
             "updatedat" => descending ? records.OrderByDescending(r => r.UpdatedAt) : records.OrderBy(r => r.UpdatedAt),
-            "_recordcode" => descending
-                ? records.OrderByDescending(r => ResolveRecordCode(r, code, config))
-                : records.OrderBy(r => ResolveRecordCode(r, code, config)),
             _ => descending
                 ? records.OrderByDescending(r => GetFieldValue(r, sortField))
                 : records.OrderBy(r => GetFieldValue(r, sortField))
@@ -97,22 +101,103 @@ public class ModuleService(AppDbContext context, IWebHostEnvironment env) : IMod
 
         return new RecordListResponse
         {
-            Items = pageItems.Select(r => MapRecord(r, listColumns, code, config)).ToList(),
+            Items = pageItems.Select(r => MapRecord(r, listColumns, module.Fields, includeAllFields)).ToList(),
             TotalCount = total,
             Page = page,
             PageSize = pageSize
         };
     }
 
+    public async Task<byte[]> ExportRecordsExcelAsync(string code, string? search, CancellationToken cancellationToken = default)
+    {
+        var module = await context.ErpModules
+            .Include(m => m.Fields)
+            .FirstOrDefaultAsync(m => m.Code == code, cancellationToken)
+            ?? throw new KeyNotFoundException($"Module '{code}' not found.");
+
+        var query = context.ErpRecords.Where(r => r.ModuleId == module.Id);
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            var term = search.Trim();
+            query = query.Where(r => r.DataJson.Contains(term));
+        }
+
+        var records = await query.OrderBy(r => r.Id).ToListAsync(cancellationToken);
+        var exportFields = ModuleExportHelper.GetOrderedExportFields(module, env);
+
+        using var workbook = new XLWorkbook();
+        var sheetName = $"T{code}".Length > 31 ? code : $"T{code}";
+        var sheet = workbook.Worksheets.Add(sheetName);
+
+        var config = ModuleConfigHelper.LoadConfig(env, code);
+        var headerRow = 1;
+        if (config?.Sections is { Count: > 0 })
+        {
+            var colIndex = 3;
+            foreach (var section in config.Sections.OrderBy(s => s.Num))
+            {
+                var sectionFields = exportFields.Where(f => f.Section == section.Num).ToList();
+                if (sectionFields.Count == 0)
+                    continue;
+
+                sheet.Cell(headerRow, colIndex).Value = $"SECTION {section.Num} - {section.Title}";
+                sheet.Cell(headerRow, colIndex).Style.Font.Bold = true;
+                colIndex += sectionFields.Count;
+            }
+
+            headerRow = 2;
+        }
+
+        sheet.Cell(headerRow, 1).Value = "ID";
+        sheet.Cell(headerRow, 2).Value = "Record Code";
+        sheet.Cell(headerRow, 1).Style.Font.Bold = true;
+        sheet.Cell(headerRow, 2).Style.Font.Bold = true;
+
+        var col = 3;
+        foreach (var field in exportFields)
+        {
+            sheet.Cell(headerRow, col).Value = field.FieldName;
+            sheet.Cell(headerRow, col).Style.Font.Bold = true;
+            col++;
+        }
+
+        var dataRow = headerRow + 1;
+        foreach (var record in records)
+        {
+            var data = JsonSerializer.Deserialize<Dictionary<string, string>>(record.DataJson) ?? [];
+            if (!string.IsNullOrWhiteSpace(record.RecordCode))
+                data["_recordCode"] = record.RecordCode;
+
+            sheet.Cell(dataRow, 1).Value = record.Id;
+            sheet.Cell(dataRow, 2).Value = record.RecordCode ?? data.GetValueOrDefault("_recordCode") ?? "";
+
+            col = 3;
+            foreach (var field in exportFields)
+            {
+                data.TryGetValue(field.Ref, out var val);
+                sheet.Cell(dataRow, col).Value = val ?? "";
+                col++;
+            }
+
+            dataRow++;
+        }
+
+        sheet.SheetView.FreezeRows(headerRow);
+        sheet.Row(headerRow).Style.Fill.BackgroundColor = XLColor.FromHtml("#D9E1F2");
+        sheet.Columns().AdjustToContents(1, Math.Min(col - 1, 40));
+
+        using var stream = new MemoryStream();
+        workbook.SaveAs(stream);
+        return stream.ToArray();
+    }
+
     public async Task<RecordDto?> GetRecordAsync(string code, int id)
     {
         var module = await GetModuleEntityAsync(code);
         var record = await context.ErpRecords.FirstOrDefaultAsync(r => r.ModuleId == module.Id && r.Id == id);
-        if (record is null) return null;
-
-        var listColumns = ModuleConfigHelper.ResolveListColumns(code, module.Fields, env);
-        var config = ModuleConfigHelper.LoadConfig(env, code);
-        return MapRecord(record, listColumns, code, config, includeAllFields: true);
+        return record is null
+            ? null
+            : MapRecord(record, PickListColumns(module.Fields), module.Fields, includeAllFields: true);
     }
 
     public async Task<RecordDto> CreateRecordAsync(string code, SaveRecordRequest request)
@@ -134,12 +219,14 @@ public class ModuleService(AppDbContext context, IWebHostEnvironment env) : IMod
 
             record.RecordCode = ModuleConfigHelper.GenerateRecordCode(code, record.Id, config);
             var data = new Dictionary<string, string>();
-            EnterpriseRecordHelper.StampRecordCode(data, record.RecordCode);
+            ModuleRecordHelper.StampRecordCode(data, record.RecordCode);
             record.DataJson = JsonSerializer.Serialize(data, JsonOptions);
             await context.SaveChangesAsync();
-
-            var listColumns = ModuleConfigHelper.ResolveListColumns(code, module.Fields, env);
-            return MapRecord(record, listColumns, code, config, includeAllFields: true);
+            return MapRecord(
+                record,
+                ModuleConfigHelper.ResolveListColumns(code, module.Fields, env),
+                module.Fields,
+                includeAllFields: true);
         }
 
         ValidateRequiredFields(module.Fields, request.Data);
@@ -155,9 +242,7 @@ public class ModuleService(AppDbContext context, IWebHostEnvironment env) : IMod
         context.ErpRecords.Add(normalRecord);
         await context.SaveChangesAsync();
 
-        var cols = ModuleConfigHelper.ResolveListColumns(code, module.Fields, env);
-        var normalConfig = ModuleConfigHelper.LoadConfig(env, code);
-        return MapRecord(normalRecord, cols, code, normalConfig, includeAllFields: true);
+        return MapRecord(normalRecord, PickListColumns(module.Fields), module.Fields, includeAllFields: true);
     }
 
     public async Task<RecordDto?> UpdateRecordAsync(string code, int id, SaveRecordRequest request)
@@ -172,9 +257,7 @@ public class ModuleService(AppDbContext context, IWebHostEnvironment env) : IMod
         record.UpdatedAt = DateTime.UtcNow;
         await context.SaveChangesAsync();
 
-        var listColumns = ModuleConfigHelper.ResolveListColumns(code, module.Fields, env);
-        var updateConfig = ModuleConfigHelper.LoadConfig(env, code);
-        return MapRecord(record, listColumns, code, updateConfig, includeAllFields: true);
+        return MapRecord(record, PickListColumns(module.Fields), module.Fields, includeAllFields: true);
     }
 
     public async Task<bool> DeleteRecordAsync(string code, int id)
@@ -188,54 +271,28 @@ public class ModuleService(AppDbContext context, IWebHostEnvironment env) : IMod
         return true;
     }
 
-    public async Task<RecordDto?> SaveSectionAsync(string code, int id, SaveSectionRequest request)
-    {
-        if (!ModuleConfigHelper.HasSectionWizard(env, code))
-            throw new InvalidOperationException($"Section save is not configured for module {code}.");
-
-        var module = await GetModuleEntityAsync(code);
-        var record = await context.ErpRecords.FirstOrDefaultAsync(r => r.ModuleId == module.Id && r.Id == id);
-        if (record is null) return null;
-
-        var config = ModuleConfigHelper.LoadConfig(env, code)
-            ?? throw new InvalidOperationException($"Module {code} configuration not found.");
-
-        var section = config.Sections.FirstOrDefault(s => s.Num == request.SectionNum)
-            ?? throw new InvalidOperationException($"Section {request.SectionNum} not found.");
-
-        var fieldRefs = ModuleConfigHelper.GetSectionFieldRefs(env, code, request.SectionNum);
-
-        var data = JsonSerializer.Deserialize<Dictionary<string, string>>(record.DataJson) ?? [];
-        EnterpriseRecordHelper.ApplySection(data, code, request.SectionNum, request, section.Repeating, fieldRefs);
-
-        var recordCode = ResolveRecordCode(record, code, config);
-        EnterpriseRecordHelper.StampRecordCode(data, recordCode);
-        if (string.IsNullOrWhiteSpace(record.RecordCode))
-        {
-            record.RecordCode = recordCode;
-        }
-
-        if (request.MarkComplete)
-        {
-            var completed = EnterpriseRecordHelper.GetCompletedSections(data);
-            if (!completed.Contains(request.SectionNum))
-                completed.Add(request.SectionNum);
-            EnterpriseRecordHelper.SetCompletedSections(data, completed);
-        }
-
-        record.DataJson = JsonSerializer.Serialize(data, JsonOptions);
-        record.UpdatedAt = DateTime.UtcNow;
-        await context.SaveChangesAsync();
-
-        var listColumns = ModuleConfigHelper.ResolveListColumns(code, module.Fields, env);
-        return MapRecord(record, listColumns, code, config, includeAllFields: true);
-    }
-
     private async Task<ErpModule> GetModuleEntityAsync(string code) =>
         await context.ErpModules
             .Include(m => m.Fields)
             .FirstOrDefaultAsync(m => m.Code == code)
         ?? throw new KeyNotFoundException($"Module '{code}' not found.");
+
+    private static List<string> PickListColumns(IEnumerable<ErpModuleField> fields)
+    {
+        var editable = fields
+            .Where(f => !IsReadOnly(f.DataType))
+            .OrderBy(f => f.SortOrder)
+            .Take(4)
+            .Select(f => f.Ref)
+            .ToList();
+
+        if (editable.Count == 0)
+        {
+            editable = fields.OrderBy(f => f.SortOrder).Take(3).Select(f => f.Ref).ToList();
+        }
+
+        return editable;
+    }
 
     private static bool IsReadOnly(string dataType) =>
         dataType.Contains("read only", StringComparison.OrdinalIgnoreCase) ||
@@ -265,9 +322,6 @@ public class ModuleService(AppDbContext context, IWebHostEnvironment env) : IMod
 
     private static string GetFieldValue(ErpRecord record, string fieldRef)
     {
-        if (fieldRef.Equals("_recordcode", StringComparison.OrdinalIgnoreCase))
-            return ResolveRecordCode(record, null, null);
-
         try
         {
             var data = JsonSerializer.Deserialize<Dictionary<string, string>>(record.DataJson) ?? [];
@@ -279,61 +333,113 @@ public class ModuleService(AppDbContext context, IWebHostEnvironment env) : IMod
         }
     }
 
-    private static string ResolveRecordCode(ErpRecord record, string? moduleCode = null, ModuleConfig? config = null)
-    {
-        if (!string.IsNullOrWhiteSpace(record.RecordCode))
-            return record.RecordCode;
-
-        try
-        {
-            var data = JsonSerializer.Deserialize<Dictionary<string, string>>(record.DataJson) ?? [];
-            if (data.TryGetValue("_recordCode", out var stored) && !string.IsNullOrWhiteSpace(stored))
-                return stored;
-        }
-        catch
-        {
-            /* ignore */
-        }
-
-        if (!string.IsNullOrWhiteSpace(moduleCode))
-            return ModuleConfigHelper.GenerateRecordCode(moduleCode, record.Id, config);
-
-        return $"ENT-{record.Id:D6}";
-    }
-
     private static RecordDto MapRecord(
         ErpRecord record,
         List<string> listColumns,
-        string? moduleCode = null,
-        ModuleConfig? config = null,
+        IEnumerable<ErpModuleField>? moduleFields = null,
         bool includeAllFields = false)
     {
         var data = JsonSerializer.Deserialize<Dictionary<string, string>>(record.DataJson) ?? [];
-        var recordCode = ResolveRecordCode(record, moduleCode, config);
-        data["_recordCode"] = recordCode;
-        var completedSections = EnterpriseRecordHelper.GetCompletedSections(data);
 
-        if (!includeAllFields)
+        if (!string.IsNullOrWhiteSpace(record.RecordCode))
+            data["_recordCode"] = record.RecordCode;
+
+        if (includeAllFields && moduleFields is not null)
         {
-            var filtered = new Dictionary<string, string>();
-            foreach (var col in listColumns)
-            {
-                if (col == "_recordCode")
-                    filtered[col] = recordCode;
-                else if (data.TryGetValue(col, out var value))
-                    filtered[col] = value;
-            }
-            data = filtered;
+            var full = new Dictionary<string, string> { ["_recordCode"] = data.GetValueOrDefault("_recordCode") ?? record.RecordCode ?? "" };
+            foreach (var field in moduleFields.OrderBy(f => f.Ref, FieldRefComparer.Instance))
+                full[field.Ref] = data.GetValueOrDefault(field.Ref) ?? "";
+
+            data = full;
+        }
+        else if (!includeAllFields)
+        {
+            data = data
+                .Where(kv => listColumns.Contains(kv.Key))
+                .ToDictionary(kv => kv.Key, kv => kv.Value);
         }
 
         return new RecordDto
         {
             Id = record.Id,
-            RecordCode = recordCode,
+            RecordCode = record.RecordCode ?? (data.TryGetValue("_recordCode", out var rc) ? rc : null),
             Data = data,
-            CompletedSections = completedSections,
+            CompletedSections = EnterpriseRecordHelper.GetCompletedSections(data),
             CreatedAt = record.CreatedAt,
             UpdatedAt = record.UpdatedAt
         };
+    }
+
+    public async Task<RecordDto?> SaveSectionAsync(string code, int id, SaveSectionRequest request)
+    {
+        if (!ModuleConfigHelper.HasSectionWizard(env, code))
+            throw new InvalidOperationException($"Section save is not configured for module '{code}'.");
+
+        var module = await GetModuleEntityAsync(code);
+        var record = await context.ErpRecords.FirstOrDefaultAsync(r => r.ModuleId == module.Id && r.Id == id);
+        if (record is null) return null;
+
+        var config = ModuleConfigHelper.LoadConfig(env, code)
+            ?? throw new InvalidOperationException($"Module '{code}' configuration not found.");
+        var section = config.Sections.FirstOrDefault(s => s.Num == request.SectionNum)
+            ?? throw new InvalidOperationException($"Section {request.SectionNum} not found.");
+        var fieldRefs = ModuleConfigHelper.GetSectionFieldRefs(env, code, request.SectionNum);
+
+        var data = JsonSerializer.Deserialize<Dictionary<string, string>>(record.DataJson) ?? [];
+        ModuleRecordHelper.ApplySection(code, data, request.SectionNum, request, section.Repeating, fieldRefs);
+
+        if (!string.IsNullOrWhiteSpace(record.RecordCode))
+            ModuleRecordHelper.StampRecordCode(data, record.RecordCode);
+
+        if (request.MarkComplete)
+        {
+            var completed = ModuleRecordHelper.GetCompletedSections(data);
+            if (!completed.Contains(request.SectionNum))
+                completed.Add(request.SectionNum);
+            ModuleRecordHelper.SetCompletedSections(data, completed);
+        }
+
+        record.DataJson = JsonSerializer.Serialize(data, JsonOptions);
+        record.UpdatedAt = DateTime.UtcNow;
+        await context.SaveChangesAsync();
+
+        return MapRecord(
+            record,
+            ModuleConfigHelper.ResolveListColumns(code, module.Fields, env),
+            module.Fields,
+            includeAllFields: true);
+    }
+
+    private sealed class FieldRefComparer : IComparer<string>
+    {
+        public static readonly FieldRefComparer Instance = new();
+
+        public int Compare(string? x, string? y)
+        {
+            if (ReferenceEquals(x, y)) return 0;
+            if (x is null) return -1;
+            if (y is null) return 1;
+
+            var xParts = x.Split('.');
+            var yParts = y.Split('.');
+            var len = Math.Max(xParts.Length, yParts.Length);
+            for (var i = 0; i < len; i++)
+            {
+                var xs = i < xParts.Length ? xParts[i] : "0";
+                var ys = i < yParts.Length ? yParts[i] : "0";
+                if (int.TryParse(xs, out var xi) && int.TryParse(ys, out var yi))
+                {
+                    var c = xi.CompareTo(yi);
+                    if (c != 0) return c;
+                }
+                else
+                {
+                    var c = string.Compare(xs, ys, StringComparison.Ordinal);
+                    if (c != 0) return c;
+                }
+            }
+
+            return string.Compare(x, y, StringComparison.Ordinal);
+        }
     }
 }

@@ -13,10 +13,40 @@ export async function getModule(code: string): Promise<ModuleDetail> {
 
 export async function getRecords(
   code: string,
-  params: { search?: string; sortBy?: string; sortDir?: string; page?: number; pageSize?: number },
+  params: {
+    search?: string
+    sortBy?: string
+    sortDir?: string
+    page?: number
+    pageSize?: number
+    full?: boolean
+  },
 ): Promise<RecordListResponse> {
   const { data } = await api.get<RecordListResponse>(`/api/modules/${code}/records`, { params })
   return data
+}
+
+export async function exportModuleRecords(code: string, search?: string): Promise<Blob> {
+  const { data } = await api.get<Blob>(`/api/modules/${code}/records/export`, {
+    params: search ? { search } : undefined,
+    responseType: 'blob',
+    timeout: 300000,
+  })
+  return data
+}
+
+export async function downloadRecordPdf(code: string, recordId: number): Promise<{ blob: Blob; fileName: string }> {
+  const response = await api.get<Blob>(`/api/modules/${code}/records/${recordId}/pdf`, {
+    responseType: 'blob',
+    timeout: 120000,
+  })
+  const disposition = response.headers['content-disposition'] as string | undefined
+  let fileName = `steelstone-record-${recordId}.pdf`
+  if (disposition) {
+    const match = /filename\*?=(?:UTF-8''|")?([^";]+)/i.exec(disposition)
+    if (match?.[1]) fileName = decodeURIComponent(match[1].replace(/"/g, ''))
+  }
+  return { blob: response.data, fileName }
 }
 
 export async function getRecord(code: string, id: number): Promise<RecordItem> {

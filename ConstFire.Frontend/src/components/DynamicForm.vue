@@ -1,21 +1,22 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, reactive, watch } from 'vue'
 import type { ModuleField } from '../types/modules'
-import CheckboxMultiSelect from './CheckboxMultiSelect.vue'
-import FileUploadField from './FileUploadField.vue'
+import SearchableMultiSelect from './SearchableMultiSelect.vue'
 import SearchableSelect from './SearchableSelect.vue'
+import FileUploadField from './FileUploadField.vue'
 import { getFieldOptions } from '../services/modules'
 import {
   getStaticFieldOptions,
-  hasDropdownOptions,
+  isBankNameField,
   isDropdownField,
   isFileUploadField,
   isLookupField,
   isMultiSelectField,
+  isSearchableSelectField,
   isYesNoField,
   resolveParentValue,
 } from '../utils/fieldOptions'
-import { isFieldVisible } from '../utils/enterpriseRules'
+import { findEntityGatingRef, isFieldVisibleForModule } from '../utils/moduleFieldRules'
 
 const props = withDefaults(
   defineProps<{
@@ -24,10 +25,12 @@ const props = withDefaults(
     moduleCode: string
     flatContext?: Record<string, string>
     hideSectionHeaders?: boolean
+    allFields?: ModuleField[]
   }>(),
   {
     flatContext: () => ({}),
     hideSectionHeaders: false,
+    allFields: undefined,
   },
 )
 
@@ -39,13 +42,15 @@ const lookupTimers = reactive<Record<string, number>>({})
 
 const contextValues = computed(() => ({ ...props.flatContext, ...props.modelValue }))
 
+const ruleFields = computed(() => props.allFields ?? props.fields)
+
 const editableFields = computed(() =>
   props.fields.filter(
     (f) =>
       !f.dataType.toLowerCase().includes('read only') &&
       !f.dataType.toLowerCase().includes('formula') &&
       !f.dataType.toLowerCase().includes('calculated') &&
-      isFieldVisible(f.ref, contextValues.value),
+      isFieldVisibleForModule(props.moduleCode, f.ref, contextValues.value, ruleFields.value),
   ),
 )
 
@@ -68,6 +73,7 @@ function inputType(dataType: string) {
   if (dt.includes('date')) return 'date'
   if (dt.includes('number') || dt.includes('numeric') || dt.includes('amount')) return 'number'
   if (dt.includes('email')) return 'email'
+  if (dt.includes('phone')) return 'tel'
   return 'text'
 }
 
@@ -76,11 +82,11 @@ function isTextArea(dataType: string) {
 }
 
 function staticOptions(field: ModuleField): string[] {
-  return getStaticFieldOptions(field.dataType, field.validation, contextValues.value, field.ref)
+  return getStaticFieldOptions(field.dataType, field.validation, contextValues.value, field.ref, ruleFields.value)
 }
 
-function useDropdownControl(field: ModuleField): boolean {
-  return isDropdownField(field.dataType) && hasDropdownOptions(field.dataType, field.validation, contextValues.value, field.ref)
+function fieldInputId(field: ModuleField): string {
+  return `field-${field.ref.replace('.', '-')}`
 }
 
 function fileMaxSizeMb(validation: string): number {
@@ -89,20 +95,22 @@ function fileMaxSizeMb(validation: string): number {
 }
 
 function fileAccept(validation: string): string {
-  if (/pdf/i.test(validation)) return '.pdf'
+  if (/pdf only|\.pdf|pdf,/i.test(validation)) return '.pdf,application/pdf'
+  if (/pdf/i.test(validation)) return '.pdf,application/pdf'
   return '.pdf,.jpg,.jpeg,.png,.doc,.docx'
 }
 
-const formRenderKey = computed(() => {
-  if (props.moduleCode !== '01') return 'default'
-  const v = contextValues.value
-  return `${v['1.1'] ?? ''}|${v['1.2'] ?? ''}|${v['4.3'] ?? ''}|${v['3.8'] ?? ''}|${props.fields.length}`
-})
+function uploadButtonLabel(field: ModuleField): string {
+  if (/pdf/i.test(field.validation)) return 'Upload PDF'
+  return 'Choose file'
+}
+
+const formRenderKey = computed(() => 'stable')
 
 async function loadLookupOptions(field: ModuleField, search = '') {
   lookupLoading[field.ref] = true
   try {
-    const parentValue = resolveParentValue(field.validation, contextValues.value)
+    const parentValue = resolveParentValue(field.validation, contextValues.value, findEntityGatingRef(ruleFields.value))
     const response = await getFieldOptions(props.moduleCode, field.ref, {
       search: search || undefined,
       parentValue: parentValue || undefined,
@@ -153,11 +161,9 @@ onBeforeUnmount(() => {
 <template>
   <div class="dynamic-form" :key="formRenderKey">
     <section v-for="[sectionNum, sectionFields] in sections" :key="sectionNum" class="form-section">
-      <h3 v-if="!hideSectionHeaders">Section {{ sectionNum }}</h3>
       <div class="fields-grid">
         <div v-for="field in sectionFields" :key="field.ref" class="field">
-          <label :for="field.ref">
-            <span class="ref">{{ field.ref }}</span>
+          <label :for="fieldInputId(field)">
             {{ field.fieldName }}
             <span v-if="field.mandatory === 'Yes'" class="req">*</span>
           </label>
@@ -181,16 +187,8 @@ onBeforeUnmount(() => {
             <option value="No">No</option>
           </select>
 
-          <CheckboxMultiSelect
+          <SearchableMultiSelect
             v-else-if="isMultiSelectField(field.dataType)"
-            :id="field.ref"
-            :model-value="modelValue[field.ref] ?? ''"
-            :options="staticOptions(field)"
-            @update:model-value="updateField(field.ref, $event)"
-          />
-
-          <SearchableSelect
-            v-else-if="useDropdownControl(field)"
             :id="field.ref"
             :model-value="modelValue[field.ref] ?? ''"
             :options="staticOptions(field)"
@@ -198,24 +196,46 @@ onBeforeUnmount(() => {
             @update:model-value="updateField(field.ref, $event)"
           />
 
-          <FileUploadField
-            v-else-if="isFileUploadField(field.dataType)"
-            :id="field.ref"
+          <SearchableSelect
+            v-else-if="isBankNameField(field)"
+            :id="fieldInputId(field)"
             :model-value="modelValue[field.ref] ?? ''"
-            :accept="fileAccept(field.validation)"
-            :max-size-mb="fileMaxSizeMb(field.validation)"
+            :options="lookupOptions[field.ref] ?? []"
+            :loading="lookupLoading[field.ref]"
+            :placeholder="'Search bank…'"
+            @focus="loadLookupOptions(field)"
+            @search="onLookupSearch(field, $event)"
+            @update:model-value="updateField(field.ref, $event)"
+          />
+
+          <SearchableSelect
+            v-else-if="isSearchableSelectField(field) && !isLookupField(field.dataType)"
+            :id="fieldInputId(field)"
+            :model-value="modelValue[field.ref] ?? ''"
+            :options="staticOptions(field)"
+            :placeholder="'Search ' + field.fieldName.toLowerCase() + '…'"
             @update:model-value="updateField(field.ref, $event)"
           />
 
           <SearchableSelect
             v-else-if="isLookupField(field.dataType)"
-            :id="field.ref"
+            :id="fieldInputId(field)"
             :model-value="modelValue[field.ref] ?? ''"
             :options="lookupOptions[field.ref] ?? []"
             :loading="lookupLoading[field.ref]"
             :placeholder="'Search ' + field.fieldName.toLowerCase() + '…'"
             @focus="onLookupFocus(field)"
             @search="onLookupSearch(field, $event)"
+            @update:model-value="updateField(field.ref, $event)"
+          />
+
+          <FileUploadField
+            v-else-if="isFileUploadField(field.dataType, field.ref, field.validation)"
+            :id="fieldInputId(field)"
+            :model-value="modelValue[field.ref] ?? ''"
+            :accept="fileAccept(field.validation)"
+            :max-size-mb="fileMaxSizeMb(field.validation)"
+            :button-label="uploadButtonLabel(field)"
             @update:model-value="updateField(field.ref, $event)"
           />
 
@@ -227,7 +247,6 @@ onBeforeUnmount(() => {
             @input="updateField(field.ref, ($event.target as HTMLInputElement).value)"
           />
 
-          <small v-if="field.validation" class="hint">{{ field.validation }}</small>
         </div>
       </div>
     </section>

@@ -3,7 +3,6 @@ import { ref, watch, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import AppLayout from '../layouts/AppLayout.vue'
 import DynamicForm from '../components/DynamicForm.vue'
-import EnterpriseRegistrationForm from '../components/EnterpriseRegistrationForm.vue'
 import ModuleWizardForm from '../components/ModuleWizardForm.vue'
 import {
   getModules,
@@ -13,6 +12,8 @@ import {
   createRecord,
   updateRecord,
   deleteRecord,
+  exportModuleRecords,
+  downloadRecordPdf,
 } from '../services/modules'
 import type { ModuleDetail, ModuleSummary, RecordItem } from '../types/modules'
 
@@ -29,7 +30,9 @@ const search = ref('')
 const sortBy = ref('id')
 const sortDir = ref<'asc' | 'desc'>('asc')
 const page = ref(1)
-const pageSize = 25
+const pageSize = 100
+const exporting = ref(false)
+const printingRowId = ref<number | null>(null)
 
 const formData = ref<Record<string, string>>({})
 const saving = ref(false)
@@ -40,9 +43,11 @@ const wizardRecordCode = ref<string | undefined>()
 const creatingWizardDraft = ref(false)
 
 const hasSectionWizard = computed(() => (moduleDetail.value?.sections?.length ?? 0) > 0)
-const isEnterpriseModule = computed(() => code.value === '01')
-const showWizard = computed(
-  () => hasSectionWizard.value && (action.value === 'add' || action.value === 'edit') && wizardRecordId.value,
+const showModuleWizard = computed(
+  () =>
+    hasSectionWizard.value &&
+    (action.value === 'add' || action.value === 'edit') &&
+    wizardRecordId.value,
 )
 
 const code = computed(() => route.params.code as string)
@@ -61,8 +66,28 @@ const listColumns = computed(() => {
   const cols = moduleDetail.value?.listColumns ?? []
   return cols.map((ref) => ({
     ref,
-    label: ref === '_recordCode' ? (code.value === '01' ? 'Enterprise ID' : 'Record ID') : (fieldLabelMap.value[ref] ?? ref),
+    label: ref === '_recordCode' ? 'Record ID' : (fieldLabelMap.value[ref] ?? ref),
   }))
+})
+
+function compareFieldRef(a: string, b: string) {
+  const pa = a.split('.').map((p) => parseInt(p, 10) || 0)
+  const pb = b.split('.').map((p) => parseInt(p, 10) || 0)
+  const len = Math.max(pa.length, pb.length)
+  for (let i = 0; i < len; i++) {
+    const d = (pa[i] ?? 0) - (pb[i] ?? 0)
+    if (d !== 0) return d
+  }
+  return a.localeCompare(b)
+}
+
+const viewColumns = computed(() => {
+  const fields = [...(moduleDetail.value?.fields ?? [])].sort((a, b) => compareFieldRef(a.ref, b.ref))
+  const cols: { ref: string; label: string }[] = [{ ref: '_recordCode', label: 'Record ID' }]
+  for (const f of fields) {
+    cols.push({ ref: f.ref, label: f.fieldName })
+  }
+  return cols
 })
 
 const totalPages = computed(() => Math.max(1, Math.ceil(totalCount.value / pageSize)))
@@ -131,9 +156,48 @@ async function loadRecords() {
     sortDir: sortDir.value,
     page: page.value,
     pageSize,
+    full: true,
   })
   records.value = result.items
   totalCount.value = result.totalCount
+}
+
+async function onPrintExcel() {
+  if (!code.value) return
+  exporting.value = true
+  error.value = ''
+  try {
+    const blob = await exportModuleRecords(code.value, search.value || undefined)
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `steelstone-module-${code.value}-${new Date().toISOString().slice(0, 10)}.xlsx`
+    a.click()
+    URL.revokeObjectURL(url)
+  } catch {
+    error.value = 'Excel download failed.'
+  } finally {
+    exporting.value = false
+  }
+}
+
+async function onPrintRowPdf(row: RecordItem) {
+  if (!code.value) return
+  printingRowId.value = row.id
+  error.value = ''
+  try {
+    const { blob, fileName } = await downloadRecordPdf(code.value, row.id)
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = fileName
+    a.click()
+    URL.revokeObjectURL(url)
+  } catch {
+    error.value = 'PDF download failed.'
+  } finally {
+    printingRowId.value = null
+  }
 }
 
 function setAction(newAction: string, id?: number) {
@@ -213,7 +277,6 @@ function sortIcon(column: string) {
   <AppLayout :modules="modules">
     <template #title>
       <div v-if="moduleDetail" class="page-title">
-        <span class="page-code">{{ moduleDetail.code }}</span>
         <div>
           <h1>{{ moduleDetail.name }}</h1>
           <p>{{ moduleDetail.category }}</p>
@@ -240,6 +303,9 @@ function sortIcon(column: string) {
         >
           Delete Data
         </button>
+        <button type="button" class="print-btn" :disabled="exporting" @click="onPrintExcel">
+          {{ exporting ? 'Preparing…' : 'Print / Excel' }}
+        </button>
       </nav>
 
       <p v-if="error" class="error">{{ error }}</p>
@@ -255,7 +321,7 @@ function sortIcon(column: string) {
             @keyup.enter="onSearch"
           />
           <button class="btn-secondary" @click="onSearch">Search</button>
-          <span class="count">{{ totalCount }} record(s)</span>
+          <span class="count">{{ totalCount }} record(s) · scroll table for all fields</span>
         </div>
 
         <div v-if="records.length === 0" class="empty-state">No records found.</div>
@@ -267,25 +333,28 @@ function sortIcon(column: string) {
               <span class="record-date">{{ formatDate(row.createdAt) }}</span>
             </div>
             <dl class="record-fields">
-              <div v-for="col in listColumns" :key="col.ref" class="record-field">
+              <div v-for="col in viewColumns" :key="col.ref" class="record-field">
                 <dt>{{ col.label }}</dt>
                 <dd>{{ row.data[col.ref] || '—' }}</dd>
               </div>
             </dl>
             <div class="record-card-actions">
+              <button type="button" class="print-row" :disabled="printingRowId === row.id" @click="onPrintRowPdf(row)">
+                {{ printingRowId === row.id ? 'PDF…' : 'Print PDF' }}
+              </button>
               <button type="button" @click="setAction('edit', row.id)">Edit</button>
               <button type="button" class="danger" @click="confirmDelete(row)">Delete</button>
             </div>
           </article>
         </div>
 
-        <div class="table-wrap desktop-table">
-          <table>
+        <div class="table-wrap desktop-table table-scroll">
+          <table class="wide-table">
             <thead>
               <tr>
-                <th class="sortable" @click="toggleSort('id')">ID {{ sortIcon('id') }}</th>
+                <th class="sortable sticky-col" @click="toggleSort('id')">ID {{ sortIcon('id') }}</th>
                 <th
-                  v-for="col in listColumns"
+                  v-for="col in viewColumns"
                   :key="col.ref"
                   class="sortable"
                   @click="toggleSort(col.ref)"
@@ -295,15 +364,18 @@ function sortIcon(column: string) {
                 <th class="sortable" @click="toggleSort('createdAt')">
                   Created {{ sortIcon('createdAt') }}
                 </th>
-                <th>Actions</th>
+                <th class="sticky-actions">Actions</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="row in records" :key="row.id">
-                <td>{{ row.id }}</td>
-                <td v-for="col in listColumns" :key="col.ref">{{ row.data[col.ref] || '—' }}</td>
+                <td class="sticky-col">{{ row.id }}</td>
+                <td v-for="col in viewColumns" :key="col.ref">{{ row.data[col.ref] || '—' }}</td>
                 <td>{{ formatDate(row.createdAt) }}</td>
-                <td class="actions">
+                <td class="actions sticky-actions">
+                  <button type="button" class="print-row" :disabled="printingRowId === row.id" @click="onPrintRowPdf(row)">
+                    {{ printingRowId === row.id ? 'PDF…' : 'Print' }}
+                  </button>
                   <button type="button" @click="setAction('edit', row.id)">Edit</button>
                   <button type="button" class="danger" @click="confirmDelete(row)">Delete</button>
                 </td>
@@ -319,18 +391,8 @@ function sortIcon(column: string) {
         </div>
       </div>
 
-      <!-- SECTION WIZARD (all modules with sections) -->
-      <div v-else-if="showWizard && moduleDetail" class="panel enterprise-panel">
-        <div v-if="creatingWizardDraft" class="loading">Creating registration draft…</div>
-        <EnterpriseRegistrationForm
-          v-else-if="isEnterpriseModule"
-          :module="moduleDetail"
-          :record-id="wizardRecordId!"
-          :record-code="wizardRecordCode"
-          :initial-data="formData"
-          :initial-section="Number(route.query.section) || 1"
-          @complete="setAction('view')"
-        />
+      <div v-else-if="showModuleWizard && moduleDetail" class="panel enterprise-panel">
+        <div v-if="creatingWizardDraft" class="loading">Creating draft record…</div>
         <ModuleWizardForm
           v-else
           :module="moduleDetail"
@@ -342,7 +404,7 @@ function sortIcon(column: string) {
         />
       </div>
 
-      <!-- ADD / EDIT (other modules) -->
+      <!-- ADD / EDIT (modules without section wizard) -->
       <div v-else-if="action === 'add' || action === 'edit'" class="panel">
         <div class="form-header">
           <h2>{{ action === 'add' ? 'Add New Record' : `Edit Record #${editId}` }}</h2>
@@ -448,6 +510,20 @@ function sortIcon(column: string) {
   cursor: not-allowed;
 }
 
+.action-bar button.print-btn {
+  background: #1e3a5f;
+  border-color: #1e3a5f;
+  color: #fff;
+}
+
+.action-bar button.print-btn:hover:not(:disabled) {
+  background: #163049;
+}
+
+.action-bar button.print-btn:disabled {
+  opacity: 0.65;
+}
+
 .panel {
   background: #fff;
   border: 1px solid #e2e8f0;
@@ -501,8 +577,60 @@ function sortIcon(column: string) {
 }
 
 .table-wrap {
-  overflow-x: auto;
+  overflow: auto;
   -webkit-overflow-scrolling: touch;
+}
+
+.table-scroll {
+  max-height: min(72vh, 820px);
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+}
+
+.wide-table {
+  width: max-content;
+  min-width: 100%;
+}
+
+.wide-table th,
+.wide-table td {
+  min-width: 128px;
+  max-width: 280px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: top;
+}
+
+.wide-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  box-shadow: 0 1px 0 #e2e8f0;
+}
+
+.wide-table .sticky-col {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: #fff;
+  min-width: 4rem;
+}
+
+.wide-table thead .sticky-col {
+  z-index: 3;
+  background: #f8fafc;
+}
+
+.wide-table .sticky-actions {
+  position: sticky;
+  right: 0;
+  background: #fff;
+  min-width: 8.5rem;
+  box-shadow: -4px 0 8px rgba(15, 23, 42, 0.06);
+}
+
+.wide-table thead .sticky-actions {
+  background: #f8fafc;
 }
 
 .record-card {
@@ -680,6 +808,19 @@ th {
 .actions button.danger {
   color: #dc2626;
   border-color: #fecaca;
+}
+
+.actions button.print-row,
+.record-card-actions button.print-row {
+  background: #2f5597;
+  border-color: #2f5597;
+  color: #fff;
+}
+
+.actions button.print-row:disabled,
+.record-card-actions button.print-row:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
 }
 
 .empty {

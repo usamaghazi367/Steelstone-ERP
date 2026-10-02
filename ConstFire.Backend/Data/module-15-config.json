@@ -37,12 +37,7 @@
     },
     {
       "num": 6,
-      "title": "REALISATION, CREDIT & ACCOUNTING EFFECT",
-      "repeating": false
-    },
-    {
-      "num": 7,
-      "title": "APPROVAL, ISSUE, ATTACHMENTS & AUDIT",
+      "title": "REALISATION & ACCOUNTING EFFECT",
       "repeating": false
     }
   ],
@@ -85,24 +80,6 @@
     },
     {
       "ref": "1.5",
-      "field": "Location / plant or office",
-      "dataType": "Lookup",
-      "mandatory": "Yes",
-      "validation": "Where the receipt was collected.",
-      "sampleEntry": "Head Office, Lahore",
-      "section": 1
-    },
-    {
-      "ref": "1.6",
-      "field": "Currency & exchange rate",
-      "dataType": "Text (40)",
-      "mandatory": "Yes",
-      "validation": "PKR by default; rate required for foreign currency receipts.",
-      "sampleEntry": "PKR / 1.0000",
-      "section": 1
-    },
-    {
-      "ref": "1.7",
       "field": "Amount received (PKR)",
       "dataType": "Number",
       "mandatory": "Yes",
@@ -111,7 +88,7 @@
       "section": 1
     },
     {
-      "ref": "1.8",
+      "ref": "1.6",
       "field": "Amount in words",
       "dataType": "Formula",
       "mandatory": "System",
@@ -120,7 +97,7 @@
       "section": 1
     },
     {
-      "ref": "1.9",
+      "ref": "1.7",
       "field": "Received by (cashier / officer)",
       "dataType": "Text (120)",
       "mandatory": "Yes",
@@ -129,7 +106,7 @@
       "section": 1
     },
     {
-      "ref": "1.10",
+      "ref": "1.8",
       "field": "Collected by (sales officer, if collected at site)",
       "dataType": "Text (120)",
       "mandatory": "Conditional",
@@ -138,7 +115,7 @@
       "section": 1
     },
     {
-      "ref": "1.11",
+      "ref": "1.9",
       "field": "Deposit due date for field collections",
       "dataType": "Formula",
       "mandatory": "System",
@@ -147,11 +124,11 @@
       "section": 1
     },
     {
-      "ref": "1.12",
+      "ref": "1.10",
       "field": "Receipt status",
       "dataType": "Dropdown",
       "mandatory": "System",
-      "validation": "Draft / Issued (provisional) / Realised / Bounced / Cancelled / Reversed.",
+      "validation": "Draft / Issued (provisional) / Realised / Bounced / Cancelled / Reversed - with the effective date and reason. An issued receipt cannot be edited; cancellation or reversal requires an approved reversal entry recorded here, which reinstates the customer balance.",
       "sampleEntry": "Issued (provisional)",
       "section": 1
     },
@@ -176,9 +153,9 @@
     {
       "ref": "2.3",
       "field": "Customer NTN / STRN",
-      "dataType": "Text (40)",
+      "dataType": "Lookup - read only",
       "mandatory": "System",
-      "validation": "Pulled from the customer record for withholding reconciliation.",
+      "validation": "NO MANUAL ENTRY. NTN and STRN pulled from the customer record selected in field 2.2.",
       "sampleEntry": "0077331-2 / 3277800773312",
       "section": 2
     },
@@ -220,24 +197,15 @@
     },
     {
       "ref": "2.8",
-      "field": "Credit limit utilised before receipt (PKR)",
-      "dataType": "Formula - read only",
-      "mandatory": "System",
-      "validation": "Exposure against the approved limit.",
-      "sampleEntry": "566220",
-      "section": 2
-    },
-    {
-      "ref": "2.9",
       "field": "Contact & mobile for receipt acknowledgement",
-      "dataType": "Text (120)",
-      "mandatory": "Yes",
-      "validation": "Receipt is emailed or messaged to this contact on issue.",
+      "dataType": "Lookup - read only",
+      "mandatory": "System",
+      "validation": "NO MANUAL ENTRY. Contact and mobile pulled from the points-of-contact block of the customer record; the receipt is sent there on issue.",
       "sampleEntry": "Bilal Nadeem / +92-300-1239876",
       "section": 2
     },
     {
-      "ref": "2.10",
+      "ref": "2.9",
       "field": "Project / site reference",
       "dataType": "Lookup",
       "mandatory": "No",
@@ -277,7 +245,7 @@
       "field": "Amount received in this line (PKR)",
       "dataType": "Number",
       "mandatory": "Yes",
-      "validation": "Must be greater than zero. The sum of all tender lines must equal the total amount received in field 1.7.",
+      "validation": "Must be greater than zero. The sum of all tender lines must equal the total amount received in field 1.5.",
       "sampleEntry": "2500000",
       "section": 3
     },
@@ -301,11 +269,11 @@
     },
     {
       "ref": "3.7",
-      "field": "CASH - collected by (name, designation & CNIC)",
-      "dataType": "Text (150)",
+      "field": "CASH - collected by (name & designation)",
+      "dataType": "Lookup - read only",
       "mandatory": "Cash line only",
-      "validation": "Cashier or sales officer who physically received the cash.",
-      "sampleEntry": "Cashier - T. Mehmood / 35202-8899776-1",
+      "validation": "NO MANUAL ENTRY. Cashier or sales officer selected from the employee register on sheet 07; the name and designation are pulled from that record.",
+      "sampleEntry": "Cashier - T. Mehmood",
       "section": 3
     },
     {
@@ -328,24 +296,6 @@
     },
     {
       "ref": "3.10",
-      "field": "CASH - denomination count sheet attached",
-      "dataType": "Yes / No",
-      "mandatory": "Cash line only",
-      "validation": "Signed by the person receiving and the person handing over the cash.",
-      "sampleEntry": "Yes",
-      "section": 3
-    },
-    {
-      "ref": "3.11",
-      "field": "CASH - custody until deposit",
-      "dataType": "Text (120)",
-      "mandatory": "Cash line only",
-      "validation": "Who holds the cash and where, until it is banked.",
-      "sampleEntry": "Cashier safe, head office",
-      "section": 3
-    },
-    {
-      "ref": "3.12",
       "field": "CASH - deposit slip number & bank deposit date",
       "dataType": "Text (60)",
       "mandatory": "Cash line only",
@@ -354,7 +304,7 @@
       "section": 3
     },
     {
-      "ref": "3.13",
+      "ref": "3.11",
       "field": "CASH - deposit due date (within 24 hours)",
       "dataType": "Formula",
       "mandatory": "System",
@@ -363,7 +313,7 @@
       "section": 3
     },
     {
-      "ref": "3.14",
+      "ref": "3.12",
       "field": "CASH - deposit status (system-derived)",
       "dataType": "Formula - read only",
       "mandatory": "System",
@@ -372,7 +322,7 @@
       "section": 3
     },
     {
-      "ref": "3.15",
+      "ref": "3.13",
       "field": "CHEQUE - cheque number",
       "dataType": "Text (30)",
       "mandatory": "Cheque line only",
@@ -381,7 +331,7 @@
       "section": 3
     },
     {
-      "ref": "3.16",
+      "ref": "3.14",
       "field": "CHEQUE - cheque date",
       "dataType": "Date",
       "mandatory": "Cheque line only",
@@ -390,7 +340,7 @@
       "section": 3
     },
     {
-      "ref": "3.17",
+      "ref": "3.15",
       "field": "CHEQUE - amount on the instrument (PKR)",
       "dataType": "Number",
       "mandatory": "Cheque line only",
@@ -399,7 +349,7 @@
       "section": 3
     },
     {
-      "ref": "3.18",
+      "ref": "3.16",
       "field": "CHEQUE - drawee bank & branch",
       "dataType": "Text (120)",
       "mandatory": "Cheque line only",
@@ -408,7 +358,7 @@
       "section": 3
     },
     {
-      "ref": "3.19",
+      "ref": "3.17",
       "field": "CHEQUE - post-dated?",
       "dataType": "Yes / No",
       "mandatory": "Cheque line only",
@@ -417,7 +367,7 @@
       "section": 3
     },
     {
-      "ref": "3.20",
+      "ref": "3.18",
       "field": "CHEQUE - presentation due date",
       "dataType": "Date",
       "mandatory": "Cheque line only",
@@ -426,7 +376,7 @@
       "section": 3
     },
     {
-      "ref": "3.21",
+      "ref": "3.19",
       "field": "CHEQUE - physical custody until presentation",
       "dataType": "Text (120)",
       "mandatory": "Cheque line only",
@@ -435,7 +385,7 @@
       "section": 3
     },
     {
-      "ref": "3.22",
+      "ref": "3.20",
       "field": "CHEQUE - date presented to bank",
       "dataType": "Date",
       "mandatory": "Cheque line only",
@@ -444,7 +394,7 @@
       "section": 3
     },
     {
-      "ref": "3.23",
+      "ref": "3.21",
       "field": "CHEQUE - clearing status & clearing date",
       "dataType": "Dropdown",
       "mandatory": "Cheque line only",
@@ -453,7 +403,7 @@
       "section": 3
     },
     {
-      "ref": "3.24",
+      "ref": "3.22",
       "field": "CHEQUE - return reason & charges recovered (PKR)",
       "dataType": "Text (150)",
       "mandatory": "Conditional",
@@ -462,16 +412,16 @@
       "section": 3
     },
     {
-      "ref": "3.25",
-      "field": "IBFT - payer bank & account / IBAN",
+      "ref": "3.23",
+      "field": "IBFT - payer bank & account number",
       "dataType": "Text (60)",
       "mandatory": "IBFT line only",
       "validation": "Source account from which the funds were transferred.",
-      "sampleEntry": "United Bank Limited / PK19UNIL0003120010055443",
+      "sampleEntry": "United Bank Limited / 3120010055443",
       "section": 3
     },
     {
-      "ref": "3.26",
+      "ref": "3.24",
       "field": "IBFT - transaction reference (UTR / IBFT ID)",
       "dataType": "Text (40)",
       "mandatory": "IBFT line only",
@@ -480,7 +430,7 @@
       "section": 3
     },
     {
-      "ref": "3.27",
+      "ref": "3.25",
       "field": "IBFT - date & time of transfer",
       "dataType": "Date-time",
       "mandatory": "IBFT line only",
@@ -489,7 +439,7 @@
       "section": 3
     },
     {
-      "ref": "3.28",
+      "ref": "3.26",
       "field": "IBFT - amount credited per bank statement (PKR)",
       "dataType": "Number",
       "mandatory": "IBFT line only",
@@ -498,7 +448,7 @@
       "section": 3
     },
     {
-      "ref": "3.29",
+      "ref": "3.27",
       "field": "IBFT - credit identification status",
       "dataType": "Dropdown",
       "mandatory": "IBFT line only",
@@ -507,16 +457,7 @@
       "section": 3
     },
     {
-      "ref": "3.30",
-      "field": "Bank charges deducted on this line (PKR)",
-      "dataType": "Number",
-      "mandatory": "No",
-      "validation": "Charges borne by the enterprise are posted to the bank charges account.",
-      "sampleEntry": "0",
-      "section": 3
-    },
-    {
-      "ref": "3.31",
+      "ref": "3.28",
       "field": "Line completeness check (system-derived)",
       "dataType": "Formula - read only",
       "mandatory": "System",
@@ -525,7 +466,7 @@
       "section": 3
     },
     {
-      "ref": "3.32",
+      "ref": "3.29",
       "field": "TOTAL OF ALL TENDER LINES (PKR)",
       "dataType": "Formula",
       "mandatory": "System",
@@ -534,30 +475,12 @@
       "section": 3
     },
     {
-      "ref": "3.33",
-      "field": "Difference against amount received (field 1.7)",
+      "ref": "3.30",
+      "field": "Difference against amount received (field 1.5)",
       "dataType": "Formula - read only",
       "mandatory": "System",
       "validation": "MUST BE ZERO. The receipt cannot be issued while the tender lines do not add up to the total amount received.",
       "sampleEntry": "0",
-      "section": 3
-    },
-    {
-      "ref": "3.34",
-      "field": "Split payment summary (system-derived)",
-      "dataType": "Formula - read only",
-      "mandatory": "System",
-      "validation": "Readable summary printed on the receipt, e.g. 'Cash PKR 2,500,000 + IBFT PKR 2,500,000'.",
-      "sampleEntry": "Cash PKR 2,500,000 + IBFT PKR 2,500,000",
-      "section": 3
-    },
-    {
-      "ref": "3.35",
-      "field": "Overall receipt realisation (system-derived)",
-      "dataType": "Formula - read only",
-      "mandatory": "System",
-      "validation": "Realised only when EVERY tender line is realised. If any line bounces or a cash deposit is overdue, the receipt stays provisional and the credit limit is restored only to the extent of the realised lines.",
-      "sampleEntry": "Realised",
       "section": 3
     },
     {
@@ -610,21 +533,12 @@
       "field": "Amount allocated in this receipt (PKR)",
       "dataType": "Number",
       "mandatory": "Yes",
-      "validation": "Cannot exceed the outstanding balance of the invoice.",
+      "validation": "Cannot exceed the outstanding balance of the invoice. Allocation is made invoice by invoice on these lines; any amount received in excess of the allocations is held as a customer advance.",
       "sampleEntry": "540740",
       "section": 4
     },
     {
       "ref": "4.7",
-      "field": "Discount allowed on settlement (PKR)",
-      "dataType": "Number",
-      "mandatory": "No",
-      "validation": "Prompt-payment discount, only if within the qualifying period.",
-      "sampleEntry": "0",
-      "section": 4
-    },
-    {
-      "ref": "4.8",
       "field": "Withholding tax claimed by customer (PKR)",
       "dataType": "Number",
       "mandatory": "Conditional",
@@ -633,7 +547,7 @@
       "section": 4
     },
     {
-      "ref": "4.9",
+      "ref": "4.8",
       "field": "Credit note adjusted (PKR)",
       "dataType": "Number",
       "mandatory": "No",
@@ -642,29 +556,11 @@
       "section": 4
     },
     {
-      "ref": "4.10",
+      "ref": "4.9",
       "field": "Balance remaining on the invoice (PKR)",
       "dataType": "Formula",
       "mandatory": "System",
       "validation": "Updates the invoice to Paid or Partially paid on realisation.",
-      "sampleEntry": "0",
-      "section": 4
-    },
-    {
-      "ref": "4.11",
-      "field": "Allocation method",
-      "dataType": "Dropdown",
-      "mandatory": "Yes",
-      "validation": "Manual allocation / Oldest invoice first (FIFO) / On account (unallocated).",
-      "sampleEntry": "Manual allocation",
-      "section": 4
-    },
-    {
-      "ref": "4.12",
-      "field": "Unallocated / on-account balance (PKR)",
-      "dataType": "Formula",
-      "mandatory": "System",
-      "validation": "Amount received but not yet matched to an invoice; held as a customer advance.",
       "sampleEntry": "0",
       "section": 4
     },
@@ -724,33 +620,6 @@
     },
     {
       "ref": "5.7",
-      "field": "Tax credit claimed in return (period)",
-      "dataType": "Text (30)",
-      "mandatory": "System",
-      "validation": "Tax year and return in which the credit is claimed.",
-      "sampleEntry": "Tax year 2027",
-      "section": 5
-    },
-    {
-      "ref": "5.8",
-      "field": "Sales tax withheld by customer (PKR)",
-      "dataType": "Number",
-      "mandatory": "Conditional",
-      "validation": "Where the customer is a designated sales tax withholding agent.",
-      "sampleEntry": "0",
-      "section": 5
-    },
-    {
-      "ref": "5.9",
-      "field": "Short recovery / unexplained deduction (PKR)",
-      "dataType": "Formula - read only",
-      "mandatory": "System",
-      "validation": "Difference between the invoice value and the amount received plus supported deductions; followed up with the customer.",
-      "sampleEntry": "0",
-      "section": 5
-    },
-    {
-      "ref": "5.10",
       "field": "Follow-up action on unsupported deductions",
       "dataType": "Text (200)",
       "mandatory": "Conditional",
@@ -763,7 +632,7 @@
       "field": "Realisation status",
       "dataType": "Dropdown",
       "mandatory": "System",
-      "validation": "Provisional / Realised / Bounced / Under clearing - the receipt is provisional until the funds clear.",
+      "validation": "Provisional / Realised / Bounced / Under clearing. The receipt is provisional until the funds clear, and is Realised only when EVERY tender line in Section 3 is realised - if any line bounces or a cash deposit is outstanding the receipt stays provisional. On realisation the referenced invoices are set to Paid or Partially paid.",
       "sampleEntry": "Realised",
       "section": 6
     },
@@ -778,60 +647,24 @@
     },
     {
       "ref": "6.3",
-      "field": "Bounce / return reason",
+      "field": "Bounce / return reason & reversal reference",
       "dataType": "Text (200)",
       "mandatory": "Conditional",
-      "validation": "Mandatory where the instrument was returned unpaid.",
+      "validation": "Mandatory where the instrument was returned unpaid or the receipt is reversed: the reason and the reversal entry reference. Any bounce charges are billed to the customer separately.",
       "sampleEntry": "N/A",
       "section": 6
     },
     {
       "ref": "6.4",
-      "field": "Bounce charges recovered from customer (PKR)",
-      "dataType": "Number",
-      "mandatory": "Conditional",
-      "validation": "Charges levied and debited to the customer account.",
-      "sampleEntry": "N/A",
-      "section": 6
-    },
-    {
-      "ref": "6.5",
       "field": "Customer outstanding after this receipt (PKR)",
       "dataType": "Formula - read only",
       "mandatory": "System",
-      "validation": "Updated receivable balance.",
+      "validation": "Updated receivable balance after this receipt; feeds the customer ageing and statement of account.",
       "sampleEntry": "0",
       "section": 6
     },
     {
-      "ref": "6.6",
-      "field": "Credit limit restored (PKR)",
-      "dataType": "Formula - read only",
-      "mandatory": "System",
-      "validation": "Limit is restored only on realisation, not on provisional receipt.",
-      "sampleEntry": "566220",
-      "section": 6
-    },
-    {
-      "ref": "6.7",
-      "field": "Order block released",
-      "dataType": "Formula - read only",
-      "mandatory": "System",
-      "validation": "Where an overdue block existed, it is lifted automatically once the overdue amount is cleared.",
-      "sampleEntry": "Not applicable",
-      "section": 6
-    },
-    {
-      "ref": "6.8",
-      "field": "Receivable ageing effect",
-      "dataType": "Formula - read only",
-      "mandatory": "System",
-      "validation": "Bucket from which the amount is removed in the ageing report.",
-      "sampleEntry": "Current bucket cleared",
-      "section": 6
-    },
-    {
-      "ref": "6.9",
+      "ref": "6.5",
       "field": "GL posting reference & date",
       "dataType": "Text (60)",
       "mandatory": "System",
@@ -840,130 +673,13 @@
       "section": 6
     },
     {
-      "ref": "6.10",
+      "ref": "6.6",
       "field": "Bank reconciliation status",
       "dataType": "Dropdown",
       "mandatory": "System",
       "validation": "Unreconciled / Reconciled / Exception - matched against the bank statement.",
       "sampleEntry": "Reconciled",
       "section": 6
-    },
-    {
-      "ref": "6.11",
-      "field": "Effect on invoice status",
-      "dataType": "Formula - read only",
-      "mandatory": "System",
-      "validation": "Sets the referenced invoice to Paid or Partially paid on realisation.",
-      "sampleEntry": "Invoice marked Paid",
-      "section": 6
-    },
-    {
-      "ref": "7.1",
-      "field": "Prepared by & date",
-      "dataType": "Text (120)",
-      "mandatory": "System",
-      "validation": "Officer who recorded the receipt.",
-      "sampleEntry": "AR Officer - S. Bano, 18-Nov-2026",
-      "section": 7
-    },
-    {
-      "ref": "7.2",
-      "field": "Verified by (accounts) & date",
-      "dataType": "Text (120)",
-      "mandatory": "Yes",
-      "validation": "Verifies the instrument, the allocation and any deduction claimed.",
-      "sampleEntry": "Manager Accounts - 18-Nov-2026",
-      "section": 7
-    },
-    {
-      "ref": "7.3",
-      "field": "Approved by & date",
-      "dataType": "Text (120)",
-      "mandatory": "Conditional",
-      "validation": "Required for write-offs, discounts and on-account receipts above the threshold.",
-      "sampleEntry": "CFO - 19-Nov-2026",
-      "section": 7
-    },
-    {
-      "ref": "7.4",
-      "field": "Receipt issued to customer - date & mode",
-      "dataType": "Text (80)",
-      "mandatory": "Yes",
-      "validation": "Signed or system-generated receipt sent to the customer.",
-      "sampleEntry": "18-Nov-2026, email",
-      "section": 7
-    },
-    {
-      "ref": "7.5",
-      "field": "Statement of account sent",
-      "dataType": "Yes / No + Date",
-      "mandatory": "No",
-      "validation": "Updated statement issued to the customer after allocation.",
-      "sampleEntry": "Yes - 19-Nov-2026",
-      "section": 7
-    },
-    {
-      "ref": "7.6",
-      "field": "Bank deposit slip / credit advice",
-      "dataType": "File upload",
-      "mandatory": "Yes",
-      "validation": "Evidence of the money reaching the enterprise account.",
-      "sampleEntry": "Attached",
-      "section": 7
-    },
-    {
-      "ref": "7.7",
-      "field": "Cheque or instrument scan",
-      "dataType": "File upload",
-      "mandatory": "Conditional",
-      "validation": "Both sides of the instrument, where applicable.",
-      "sampleEntry": "N/A",
-      "section": 7
-    },
-    {
-      "ref": "7.8",
-      "field": "Withholding tax certificate / CPR copy",
-      "dataType": "File upload",
-      "mandatory": "Conditional",
-      "validation": "Supports the deduction claimed in Section 5.",
-      "sampleEntry": "Pending",
-      "section": 7
-    },
-    {
-      "ref": "7.9",
-      "field": "Customer remittance advice",
-      "dataType": "File upload",
-      "mandatory": "No",
-      "validation": "Advice showing which invoices the customer intended to settle.",
-      "sampleEntry": "Attached",
-      "section": 7
-    },
-    {
-      "ref": "7.10",
-      "field": "Segregation of duties check",
-      "dataType": "Formula - read only",
-      "mandatory": "System",
-      "validation": "The person collecting, recording and reconciling the receipt must not be the same user.",
-      "sampleEntry": "Pass",
-      "section": 7
-    },
-    {
-      "ref": "7.11",
-      "field": "Audit trail",
-      "dataType": "Note - system",
-      "mandatory": "System",
-      "validation": "Issued receipts cannot be edited. Cancellation or reversal requires an approved reversal entry, and every action is logged with user and timestamp.",
-      "sampleEntry": "Enabled",
-      "section": 7
-    },
-    {
-      "ref": "7.12",
-      "field": "Cancellation / reversal reference & reason",
-      "dataType": "Text (150)",
-      "mandatory": "Conditional",
-      "validation": "Reversal entry raised where the receipt is cancelled or the instrument bounces.",
-      "sampleEntry": "N/A",
-      "section": 7
     }
   ]
 }

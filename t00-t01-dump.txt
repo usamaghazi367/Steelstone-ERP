@@ -1,0 +1,15 @@
+T00 rows=19
+1: ["INDEX","","","",""]
+2: ["Cloud ERP – Steelstone IT  |  Master index of all form specification sheets  |  Jurisdiction: Pakistan","","","",""]
+3: ["","","","",""]
+4: ["Sr. No","Page No","Form / Document","Module","DUMMY ENTRIES"]
+5: [1,"01","ENTERPRISE REGISTRATION","Operations",1]
+6: [2,"02","MANUFACTURER (SUPPLIER) REGISTRATION","Sales",3]
+7: [3,"03","DISTRIBUTOR REGISTRATION","Sales",5]
+8: [4,"04","CUSTOMER REGISTRATION - END USER","Sales",5]
+
+T01 rows=3
+1: ["SECTION 1 - BUSINESS REGISTRATION","","","","SECTION 2 - REGISTERED OFFICE & OTHER ADDRESSES","","","","","","","","","","","SECTION 3 - POINTS OF CONTACT","","","SECTION 4 - BANKING DETAILS - multiple options","",""]
+2: ["1.1 Business name (Title)","1.2 Legal status","1.3 NTN / CNIC number","1.4 Filer status","2.1 Registered office - address line 1","2.2 Registered office - address line 2","2.3 City","2.4 District / Tehsil","2.5 Province / Territory","2.6 Country","2.7 Is the registered office the same as the main business address?","2.8 Correspondence / mailing address (if different)","2.9 Branch / factory / warehouse address(es)","2.10 Landline number","2.11 Geo-coordinates of main business address (lat, long)","3.1 Primary POC - full name","3.2 Primary POC - designation","3.3 Primary POC - mobile","4.1 Bank name","4.2 Title of account","4.3 Account number"]
+3: ["Steelstone Building Materials (Pvt) Ltd","Private Limited Company","4521789-3","Active Filer","Office 12, 3rd Floor, Siddiq Trade Centre","Main Boulevard, Gulberg III","Lahore","Lahore City","Punjab","Pakistan","Yes","Same as registered office","Warehouse: Plot 45, Sundar Industrial Estate, Raiwind Road, Lahore","042-35781234","31.5165, 74.3487","Usman Tariq","Chief Executive Officer","0300-4567812","Meezan Bank Ltd","Steelstone Building Materials (Pvt) Ltd","0211-0104567890"]
+

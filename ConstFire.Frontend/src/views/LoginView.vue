@@ -6,7 +6,7 @@ import { useAuthStore } from '../stores/auth'
 const router = useRouter()
 const auth = useAuthStore()
 
-const email = ref('admin@constfire.com')
+const email = ref('admin@steelstoneit.com')
 const password = ref('Admin@123')
 const loading = ref(false)
 const error = ref('')
@@ -34,9 +34,9 @@ async function handleSubmit() {
   <div class="login-page">
     <div class="login-card">
       <div class="brand">
-        <div class="logo">CF</div>
-        <h1>ConstFire</h1>
-        <p>Fire safety & construction management</p>
+        <div class="logo">ST</div>
+        <h1>Steelstone</h1>
+        <p>Cloud ERP</p>
       </div>
 
       <form @submit.prevent="handleSubmit">

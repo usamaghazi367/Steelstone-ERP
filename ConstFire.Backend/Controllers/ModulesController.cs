@@ -8,7 +8,10 @@ namespace ConstFire.Backend.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class ModulesController(IModuleService moduleService, IFieldOptionsService fieldOptionsService) : ControllerBase
+public class ModulesController(
+    IModuleService moduleService,
+    IFieldOptionsService fieldOptionsService,
+    ConstFire.Backend.Services.Print.IRecordPrintPdfService recordPrintPdfService) : ControllerBase
 {
     [HttpGet]
     public async Task<ActionResult<List<ModuleSummaryDto>>> GetModules() =>
@@ -46,14 +49,34 @@ public class ModulesController(IModuleService moduleService, IFieldOptionsServic
         [FromQuery] string? sortBy,
         [FromQuery] string sortDir = "asc",
         [FromQuery] int page = 1,
-        [FromQuery] int pageSize = 25) =>
-        Ok(await moduleService.GetRecordsAsync(code, search, sortBy, sortDir, page, pageSize));
+        [FromQuery] int pageSize = 25,
+        [FromQuery] bool full = false) =>
+        Ok(await moduleService.GetRecordsAsync(code, search, sortBy, sortDir, page, pageSize, full));
+
+    [HttpGet("{code}/records/export")]
+    public async Task<IActionResult> ExportRecords(string code, [FromQuery] string? search, CancellationToken cancellationToken)
+    {
+        var bytes = await moduleService.ExportRecordsExcelAsync(code, search, cancellationToken);
+        var fileName = $"steelstone-module-{code}-{DateTime.UtcNow:yyyyMMdd-HHmm}.xlsx";
+        return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+    }
 
     [HttpGet("{code}/records/{id:int}")]
     public async Task<ActionResult<RecordDto>> GetRecord(string code, int id)
     {
         var record = await moduleService.GetRecordAsync(code, id);
         return record is null ? NotFound() : Ok(record);
+    }
+
+    [HttpGet("{code}/records/{id:int}/pdf")]
+    public async Task<IActionResult> DownloadRecordPdf(string code, int id, CancellationToken cancellationToken)
+    {
+        var result = await recordPrintPdfService.GenerateAsync(code, id, cancellationToken);
+        if (result is null)
+            return NotFound();
+
+        var (pdf, fileName) = result.Value;
+        return File(pdf, "application/pdf", fileName);
     }
 
     [HttpPost("{code}/records")]

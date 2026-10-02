@@ -269,6 +269,7 @@ function removeBranchRow(index: number) {
           <DynamicForm
             :key="`repeat-${index}-${conditionalKey}`"
             :fields="sectionFields"
+            :all-fields="module.fields"
             :model-value="row"
             module-code="01"
             :flat-context="flatValues"
@@ -283,6 +284,7 @@ function removeBranchRow(index: number) {
         <DynamicForm
           :key="`section-${activeSection}-${conditionalKey}`"
           :fields="sectionFields"
+          :all-fields="module.fields"
           :model-value="sectionFlatData"
           module-code="01"
           :flat-context="flatValues"

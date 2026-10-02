@@ -36,7 +36,6 @@ internal static class EnterpriseRecordHelper
 
     public static void ApplySection(
         Dictionary<string, string> data,
-        string moduleCode,
         int sectionNum,
         SaveSectionRequest request,
         bool repeating,
@@ -52,12 +51,12 @@ internal static class EnterpriseRecordHelper
                     data[$"{key}#{i}"] = value?.Trim() ?? string.Empty;
             }
 
-            if (moduleCode == ModuleCode && sectionNum == 4)
+            if (sectionNum == 4)
             {
                 var count = request.Rows.Count(r => !string.IsNullOrWhiteSpace(r.GetValueOrDefault("4.4")));
                 data["1.17"] = count.ToString();
             }
-            if (moduleCode == ModuleCode && sectionNum == 5)
+            if (sectionNum == 5)
             {
                 var count = request.Rows.Count(r => !string.IsNullOrWhiteSpace(r.GetValueOrDefault("5.2")));
                 data["1.18"] = count.ToString();

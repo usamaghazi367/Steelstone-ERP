@@ -13,6 +13,7 @@ api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token')
   if (token) {
     config.headers.Authorization = `Bearer ${token}`
+    config.headers['X-Authorization'] = `Bearer ${token}`
   }
   return config
 })
@@ -20,7 +21,9 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401 && error.config?.url !== '/api/auth/login') {
+    const url = error.config?.url ?? ''
+    const isAuthRoute = url.includes('/api/auth/login') || url.includes('/api/auth/register')
+    if (error.response?.status === 401 && !isAuthRoute) {
       localStorage.removeItem('token')
       localStorage.removeItem('user')
       if (window.location.pathname !== '/login') {

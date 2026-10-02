@@ -1,0 +1,9 @@
+﻿
+added 9 packages, and audited 10 packages in 4s
+
+1 high severity vulnerability
+
+Some issues need review, and may require choosing
+a different dependency.
+
+Run `npm audit` for details.

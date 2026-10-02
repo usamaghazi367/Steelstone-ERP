@@ -1,0 +1,60 @@
+Steelstone ERP on SmarterASP (account: usamaghazi-002)
+======================================================
+
+IMPORTANT: I cannot log into your panel from here. You must copy 4 values from
+Control Panel -> Databases -> MS SQL -> (your database) -> Connection String.
+
+Your sites (use site2 for deploy if that is where the zip is):
+  https://usamaghazi-002-site2.ltempurl.com
+  https://st102.ookpro.com
+
+STEP 1 — Open MS SQL in panel
+  - If NO database listed: Create Database -> note name, login, password
+  - If database EXISTS (old data): open THAT one (do not create a second DB unless you want empty app)
+
+STEP 2 — Copy from connection string page
+  - Server   (e.g. SQL9001.site4now.net)
+  - Database (e.g. db_a1b2c3_xxxx)
+  - User Id  (often same as database name)
+  - Password (database password — NOT hosting password Usama@123 unless panel says so)
+
+STEP 3 — Edit appsettings.Production.json on SERVER (File Manager, site root)
+
+Paste this and replace the 4 placeholders + Jwt key:
+
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=PASTE_SERVER;Database=PASTE_DATABASE;User Id=PASTE_USER;Password=PASTE_DB_PASSWORD;TrustServerCertificate=True;Encrypt=True;MultipleActiveResultSets=True;"
+  },
+  "Jwt": {
+    "Key": "PASTE_LONG_RANDOM_32_PLUS_CHARS",
+    "Issuer": "Steelstone",
+    "Audience": "Steelstone",
+    "ExpiryMinutes": 60
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*"
+}
+
+Generate Jwt key on PC:
+  powershell -File "D:\Usama Data\ConstFire\tools-seed\New-ProductionJwtKey.ps1"
+
+STEP 4 — Restart website (.NET 10.x), then open:
+  https://YOUR-SITE/api/health
+  -> "database":"connected" means SQL OK; your ErpRecords table keeps existing rows.
+
+STEP 5 — Login
+  admin@steelstoneit.com / Admin@123
+  (or admin@constfire.com if DB never migrated email)
+
+DATA SAFETY
+  - Hosting password (usamaghazi-002) is NOT the SQL password unless panel shows same.
+  - Deleting website files does NOT delete MS SQL database.
+  - Wrong Database= name in connection string = app looks "empty" but old data still on other DB.
+
+Do NOT commit real passwords to git. Keep appsettings only on SmarterASP server.

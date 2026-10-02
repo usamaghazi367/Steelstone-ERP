@@ -1,0 +1,20 @@
+Workbook: Steelstone IT (1).xlsx
+Sheet '01' resolved as: 01
+Total sheets: 16
+Sheet names: 00, 01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12, 13, 14, 15
+Block type: full ENTERPRISE REGISTRATION
+--- rows 1-25 A-F ---
+{"row":1,"A":"ENTERPRISE REGISTRATION","B":null,"C":null,"D":null,"E":null,"F":null}
+{"row":2,"A":"Cloud ERP – Enterprise Onboarding Form  |  Jurisdiction: Pakistan  |  Entity: SECP-registered Company or AOP / Partnership Firm","B":null,"C":null,"D":null,"E":null,"F":null}
+{"row":3,"A":"","B":null,"C":null,"D":null,"E":null,"F":null}
+{"row":4,"A":"Ref.","B":"Field","C":"Data Type","D":"Mandatory","E":"Validation / Allowed Values","F":"Sample Entry"}
+{"row":5,"A":"SECTION 1","B":"BUSINESS REGISTRATION","C":null,"D":null,"E":null,"F":null}
+{"row":6,"A":"1.1","B":"Business name (Title)","C":"Text (150)","D":"Yes","E":"Registered name as per SECP / Registrar of Firms / FBR NTN record; for a sole proprietor or individual, the name as per CNIC.","F":"Steelstone IT (Private) Limited"}
+{"row":7,"A":"1.2","B":"Legal status","C":"Dropdown","D":"Yes","E":"Company / AOP / Sole Proprietor / Individual. Determines whether NTN or CNIC is required in field 1.3.","F":"Company"}
+{"row":8,"A":"1.3","B":"NTN / CNIC number","C":"Text (15)","D":"Yes","E":"Company and AOP: NTN - 7 digits + '-' + check digit. Sole Proprietor and Individual: 13-digit CNIC (XXXXX-XXXXXXX-X) in lieu of NTN. Unique per record.","F":"1234567-8"}
+{"row":9,"A":"1.4","B":"Filer status","C":"Dropdown","D":"Yes","E":"Filer / Non-filer as per the FBR Active Taxpayer List - drives the withholding tax rates applied in the ERP.","F":"Filer"}
+{"row":10,"A":"SECTION 2","B":"REGISTERED OFFICE & OTHER ADDRESSES","C":null,"D":null,"E":null,"F":null}
+{"row":11,"A":"2.1","B":"Registered office - address line 1","C":"Text (150)","D":"Yes","E":"Company: as per SECP Form A / Form 29. AOP: as per Form II / deed.","F":"Office 402, 4th Floor, Arfa Software Technology Park"}
+{"row":12,"A":"2.2","B":"Registered office - address line 2","C":"Text (150)","D":"No","E":"Street / sector / landmark.","F":"346-B, Ferozepur Road"}
+{"row":13,"A":"2.3","B":"City","C":"Dropdown","D":"Yes","E":"Master list of Pakistani cities.","F":"Lahore"}
+{"row":14,"A":"2.4","B":"District / Tehsil","C":"Text (50)","D":"No","E":"Auto-filled from city where available.","F":"Lahore"}

@@ -1,19 +1,38 @@
 # Local production overrides (contain secrets)
 **/appsettings.Production.local.json
+**/appsettings.Production.json
+appsettings.Production.FOR-SERVER.json
+appsettings.Production.SMARTERASP-SERVER.json
+tools-seed/migrate-db.settings.json
 ConstFire.Frontend/.env.development.local
 ConstFire.Frontend/.env.production.local
 
-# Build / publish outputs
+# Build / publish / artifacts (keep on D: only)
+publish/
 publish-smarterasp/
 publish-staging/
 publish-staging-v2/
-ConstFire-deploy.zip
+output/
+.build-temp/
+.nuget/
+_build-out/
+_xlsx-inspect/
 run-api/
 build-out/
 build-out-v2/
+api-run/
+*.zip
+formatted-preview.xlsx
+build-deploy-log.txt
+**/_build.log
+**/logs/
 
 # Dependencies & IDE
 **/node_modules/
 **/bin/
 **/obj/
 **/dist/
+
+# OS / editor noise
+Thumbs.db
+.DS_Store

@@ -1,0 +1,12 @@
+---
+description: ConstFire builds and artifacts only on D: drive — never use C: for zips, PDFs, or temp output
+alwaysApply: true
+---
+
+# D: drive only (ConstFire / Steelstone)
+
+- **Project root**: `D:\Usama Data\ConstFire` — all work happens here.
+- **Do not** write deploy ZIPs, sample PDFs, exports, or large build artifacts to **C:** (including `C:\Users\...\Downloads`). C: disk space is limited.
+- **Build outputs**: ZIP → project root or `D:\Usama Data\ConstFire\output\`; publish → `D:\Usama Data\ConstFire\publish\`; temp → `D:\Usama Data\ConstFire\.build-temp\`; NuGet cache → `D:\Usama Data\ConstFire\.nuget\packages`.
+- **CLI defaults** (`--print-record-pdf`, `--export-formatted`, etc.): default `--output` under `D:\Usama Data\ConstFire\output\`, not Downloads.
+- When running shell commands, set `NUGET_PACKAGES`, `TEMP`, and `TMP` to D: paths under the project root when building.

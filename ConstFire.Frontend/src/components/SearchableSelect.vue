@@ -9,11 +9,13 @@ const props = withDefaults(
     loading?: boolean
     disabled?: boolean
     id?: string
+    preventAutofill?: boolean
   }>(),
   {
     placeholder: 'Type to search…',
     loading: false,
     disabled: false,
+    preventAutofill: false,
   },
 )
 
@@ -45,9 +47,15 @@ watch(
 
 function openList() {
   if (props.disabled) return
+  inputRef.value?.removeAttribute('readonly')
   open.value = true
   query.value = props.modelValue
   emit('focus')
+}
+
+function onMouseDown() {
+  if (props.disabled) return
+  openList()
 }
 
 function closeList() {
@@ -90,7 +98,16 @@ function clearValue() {
       :value="displayValue"
       :placeholder="placeholder"
       :disabled="disabled"
+      :name="id ? `search-${id}` : undefined"
+      role="combobox"
+      aria-autocomplete="list"
       autocomplete="off"
+      autocorrect="off"
+      autocapitalize="off"
+      spellcheck="false"
+      data-lpignore="true"
+      data-form-type="other"
+      @mousedown="onMouseDown"
       @focus="openList"
       @input="onInput"
       @blur="onBlur"
@@ -105,6 +122,7 @@ function clearValue() {
     >
       ×
     </button>
+    <span class="chevron" aria-hidden="true">▾</span>
     <div v-if="open" class="options-panel">
       <p v-if="loading" class="status">Loading options…</p>
       <p v-else-if="filteredOptions.length === 0" class="status">No matches found.</p>
@@ -130,12 +148,32 @@ function clearValue() {
 
 .select-input {
   width: 100%;
-  padding: 0.55rem 2rem 0.55rem 0.75rem;
+  padding: 0.55rem 2.25rem 0.55rem 0.75rem;
   min-height: 44px;
   border: 1px solid #e2e8f0;
   border-radius: 6px;
   font-size: 0.875rem;
   box-sizing: border-box;
+  background: #fff;
+  cursor: pointer;
+}
+
+.searchable-select.open .select-input {
+  cursor: text;
+}
+
+.chevron {
+  position: absolute;
+  right: 0.65rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #64748b;
+  pointer-events: none;
+  font-size: 0.85rem;
+}
+
+.searchable-select:has(.clear-btn) .chevron {
+  right: 2.1rem;
 }
 
 .select-input:focus {

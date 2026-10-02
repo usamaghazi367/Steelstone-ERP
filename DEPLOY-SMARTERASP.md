@@ -33,6 +33,7 @@
 
 | Issue | Fix |
 |-------|-----|
+| **502 / 503** (site not loading at all) | App process not started. See **SITE2-SMARTERASP-503-FIX.md**: .NET **10.x** for the website, files at site **root** (not subfolder), check `logs\stdout_*.log` |
 | **500.30** on startup | Re-upload latest zip (old build crashed on DB migrate at startup). Set **.NET 10**, fix `web.config` (`outofprocess`), create `logs` folder |
 | 500 error after app starts | Check SQL connection string in `appsettings.Production.json` |
 | Login fails | Confirm database migrated; check SmarterASP error logs / `logs/stdout_*.log` |

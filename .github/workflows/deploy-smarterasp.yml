@@ -63,17 +63,16 @@ jobs:
           REMOTE="${FTP_REMOTE_DIR:-/}"
           REMOTE="${REMOTE#/}"
           REMOTE="${REMOTE%/}"
-          OBF_PASS="$(rclone obscure "$FTP_PASSWORD")"
-          export RCLONE_CONFIG="[asp]
-          type = ftp
-          host = ${FTP_SERVER}
-          user = ${FTP_USERNAME}
-          pass = ${OBF_PASS}
-          explicit_tls = true
-          no_check_certificate = true
-          "
+          export RCLONE_CONFIG_ASP_TYPE=ftp
+          export RCLONE_CONFIG_ASP_HOST="${FTP_SERVER}"
+          export RCLONE_CONFIG_ASP_PORT=21
+          export RCLONE_CONFIG_ASP_USER="${FTP_USERNAME}"
+          export RCLONE_CONFIG_ASP_PASS="$(rclone obscure "${FTP_PASSWORD}")"
+          export RCLONE_CONFIG_ASP_EXPLICIT_TLS=true
+          export RCLONE_CONFIG_ASP_NO_CHECK_CERTIFICATE=true
           DEST="asp:"
           if [ -n "$REMOTE" ]; then DEST="asp:${REMOTE}"; fi
+          rclone lsd "$DEST" --contimeout 60s --timeout 60s
           rclone copy publish "$DEST" \
             --transfers 2 \
             --retries 8 \

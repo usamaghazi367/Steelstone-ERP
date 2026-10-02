@@ -15,7 +15,7 @@ concurrency:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
 
     steps:
       - name: Checkout
@@ -48,14 +48,12 @@ jobs:
           cp -r ConstFire.Frontend/dist publish/wwwroot
           mkdir -p publish/logs
           rm -f publish/appsettings.Production.json publish/appsettings.Production.local.json || true
-          # First deploy workaround for FTPS data-socket resets (SamKirkland/FTP-Deploy-Action#489)
-          echo "{}" > publish/.ftp-deploy-sync-state.json
+          find publish -name '*.pdb' -delete || true
 
-      - name: Install LFTP
-        run: sudo apt-get update && sudo apt-get install -y lftp
+      - name: Install rclone
+        run: curl -fsSL https://rclone.org/install.sh | sudo bash
 
-      # SamKirkland/FTP-Deploy-Action often hits ECONNRESET on SmarterASP data sockets from GitHub runners; lftp FTPS is more reliable.
-      - name: Deploy via FTPS (lftp)
+      - name: Deploy via FTPS (rclone)
         env:
           FTP_SERVER: ${{ secrets.SMARTERASP_FTP_SERVER }}
           FTP_USERNAME: ${{ secrets.SMARTERASP_FTP_USERNAME }}
@@ -63,23 +61,27 @@ jobs:
           FTP_REMOTE_DIR: ${{ secrets.SMARTERASP_FTP_REMOTE_DIR }}
         run: |
           REMOTE="${FTP_REMOTE_DIR:-/}"
+          REMOTE="${REMOTE#/}"
           REMOTE="${REMOTE%/}"
-          if [ -z "$REMOTE" ]; then REMOTE="/"; fi
-          lftp -c "
-            set net:timeout 120;
-            set net:max-retries 5;
-            set net:reconnect-interval-base 5;
-            set ftp:ssl-force true;
-            set ftp:ssl-protect-data true;
-            set ssl:verify-certificate no;
-            set ftp:passive-mode true;
-            open -u ${FTP_USERNAME},${FTP_PASSWORD} ftps://${FTP_SERVER};
-            lcd publish;
-            cd ${REMOTE};
-            mirror -R -v --parallel=2 \
-              --exclude-glob .git* \
-              --exclude-glob appsettings.Production.json \
-              --exclude-glob appsettings.Production.local.json \
-              --exclude-glob appsettings.Development.json;
-            bye
+          OBF_PASS="$(rclone obscure "$FTP_PASSWORD")"
+          export RCLONE_CONFIG="[asp]
+          type = ftp
+          host = ${FTP_SERVER}
+          user = ${FTP_USERNAME}
+          pass = ${OBF_PASS}
+          explicit_tls = true
+          no_check_certificate = true
           "
+          DEST="asp:"
+          if [ -n "$REMOTE" ]; then DEST="asp:${REMOTE}"; fi
+          rclone copy publish "$DEST" \
+            --transfers 2 \
+            --retries 8 \
+            --low-level-retries 20 \
+            --contimeout 90s \
+            --timeout 600s \
+            -v \
+            --exclude "appsettings.Production.json" \
+            --exclude "appsettings.Production.local.json" \
+            --exclude "appsettings.Development.json" \
+            --exclude ".git/**"

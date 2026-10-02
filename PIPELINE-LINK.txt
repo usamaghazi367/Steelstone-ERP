@@ -1,11 +1,14 @@
 Steelstone ERP — CI/CD pipeline (GitHub Actions)
 ================================================
 
-Pipeline check (sab runs yahan):
+Pipeline check (sab runs yahan — left side par "Deploy to SmarterASP" bhi dikhega):
 https://github.com/usamaghazi367/Steelstone-ERP/actions
 
-Sirf deploy workflow:
+Sirf deploy workflow (recommended bookmark):
 https://github.com/usamaghazi367/Steelstone-ERP/actions/workflows/deploy-smarterasp.yml
+
+Latest run direct (har push ke baad nayi line upar aati hai):
+https://github.com/usamaghazi367/Steelstone-ERP/actions/workflows/deploy-smarterasp.yml?query=branch%3Amain
 
 Aap ka routine:
 1) Code change karo (D:\Usama Data\ConstFire)

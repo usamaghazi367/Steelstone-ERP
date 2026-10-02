@@ -51,24 +51,35 @@ jobs:
           # First deploy workaround for FTPS data-socket resets (SamKirkland/FTP-Deploy-Action#489)
           echo "{}" > publish/.ftp-deploy-sync-state.json
 
-      - name: Deploy via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.6
-        with:
-          server: ${{ secrets.SMARTERASP_FTP_SERVER }}
-          username: ${{ secrets.SMARTERASP_FTP_USERNAME }}
-          password: ${{ secrets.SMARTERASP_FTP_PASSWORD }}
-          local-dir: publish/
-          server-dir: ${{ secrets.SMARTERASP_FTP_REMOTE_DIR }}
-          protocol: ftps
-          port: 21
-          security: strict
-          timeout: 120000
-          log-level: standard
-          state-name: .ftp-deploy-sync-state.json
-          dangerous-clean-slate: false
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/appsettings.Production.json
-            **/appsettings.Production.local.json
-            **/appsettings.Development.json
+      - name: Install LFTP
+        run: sudo apt-get update && sudo apt-get install -y lftp
+
+      # SamKirkland/FTP-Deploy-Action often hits ECONNRESET on SmarterASP data sockets from GitHub runners; lftp FTPS is more reliable.
+      - name: Deploy via FTPS (lftp)
+        env:
+          FTP_SERVER: ${{ secrets.SMARTERASP_FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.SMARTERASP_FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.SMARTERASP_FTP_PASSWORD }}
+          FTP_REMOTE_DIR: ${{ secrets.SMARTERASP_FTP_REMOTE_DIR }}
+        run: |
+          REMOTE="${FTP_REMOTE_DIR:-/}"
+          REMOTE="${REMOTE%/}"
+          if [ -z "$REMOTE" ]; then REMOTE="/"; fi
+          lftp -c "
+            set net:timeout 120;
+            set net:max-retries 5;
+            set net:reconnect-interval-base 5;
+            set ftp:ssl-force true;
+            set ftp:ssl-protect-data true;
+            set ssl:verify-certificate no;
+            set ftp:passive-mode true;
+            open -u ${FTP_USERNAME},${FTP_PASSWORD} ftps://${FTP_SERVER};
+            lcd publish;
+            cd ${REMOTE};
+            mirror -R -v --parallel=2 \
+              --exclude-glob .git* \
+              --exclude-glob appsettings.Production.json \
+              --exclude-glob appsettings.Production.local.json \
+              --exclude-glob appsettings.Development.json;
+            bye
+          "

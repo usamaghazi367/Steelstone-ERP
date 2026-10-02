@@ -1,0 +1,36 @@
+Steelstone — auto deploy (non-technical)
+=====================================
+
+Sach baat:
+- Mere paas aap ka SQL database password file mein hai (server chalane ke liye).
+- SmarterASP ka FTP password alag hota hai — woh file mein NAHI hai.
+- Bina FTP ke main khud panel login nahi kar sakta (aap ka hosting login mujhe nahi diya).
+
+Main ne aap ke liye ye bana diya hai (D: par):
+
+1) PUSH-AND-DEPLOY.bat
+   - GitHub par code push
+   - Phir SmarterASP par files upload (FTP se)
+
+2) SETUP-AUTO-DEPLOY.bat  (sirf EK dafa)
+   - GitHub Actions ke secrets set karta hai
+   - Pehle .deploy\ftp-config.env khulega — 4 lines bharni hain
+
+FTP — aap ne sahi jagah dhoond li (screenshot):
+
+   Server: win8086.site4now.net
+   Login:  usamaghazi-002
+   Path:   /  (Root)
+
+   Ab sirf PASSWORD chahiye (screenshot par password nahi dikhta):
+   -> Usi FTP page par "usamaghazi-002" ke saamne pencil (Edit) dabayein
+   -> "Change password" / password dikhe ya naya password set karein
+   -> Woh password .deploy\ftp-config.env mein PUT_FTP_PASSWORD_HERE ki jagah likhein
+
+Agar aap bilkul kuch nahi karna chahte:
+   Kisi ek dafa kisi ko 5 minute ke liye bol dein ke FTP Access ki 4 cheezen
+   .deploy\ftp-config.env mein paste kar dein, phir SETUP-AUTO-DEPLOY.bat double-click.
+
+Us ke baad sirf PUSH-AND-DEPLOY.bat — manual zip upload khatam.
+
+Live site check: https://st102.ookpro.com/api/health

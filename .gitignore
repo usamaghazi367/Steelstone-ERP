@@ -1,3 +1,6 @@
+# Deploy credentials (local D: only)
+.deploy/ftp-config.env
+
 # Local production overrides (contain secrets)
 **/appsettings.Production.local.json
 **/appsettings.Production.json

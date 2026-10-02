@@ -1,0 +1,19 @@
+Steelstone ERP — CI/CD pipeline (GitHub Actions)
+================================================
+
+Pipeline check (sab runs yahan):
+https://github.com/usamaghazi367/Steelstone-ERP/actions
+
+Sirf deploy workflow:
+https://github.com/usamaghazi367/Steelstone-ERP/actions/workflows/deploy-smarterasp.yml
+
+Aap ka routine:
+1) Code change karo (D:\Usama Data\ConstFire)
+2) git add -A
+3) git commit -m "message"
+4) git push origin main
+5) Upar wale link par jao — green tick = deploy OK
+6) Phir site check: https://st102.ookpro.com/api/health
+
+Manual deploy dubara chalana (bina code change):
+GitHub → Actions → "Deploy to SmarterASP" → Run workflow

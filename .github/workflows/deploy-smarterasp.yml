@@ -48,6 +48,8 @@ jobs:
           cp -r ConstFire.Frontend/dist publish/wwwroot
           mkdir -p publish/logs
           rm -f publish/appsettings.Production.json publish/appsettings.Production.local.json || true
+          # First deploy workaround for FTPS data-socket resets (SamKirkland/FTP-Deploy-Action#489)
+          echo "{}" > publish/.ftp-deploy-sync-state.json
 
       - name: Deploy via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.6
@@ -58,7 +60,11 @@ jobs:
           local-dir: publish/
           server-dir: ${{ secrets.SMARTERASP_FTP_REMOTE_DIR }}
           protocol: ftps
+          port: 21
+          security: strict
+          timeout: 120000
           log-level: standard
+          state-name: .ftp-deploy-sync-state.json
           dangerous-clean-slate: false
           exclude: |
             **/.git*

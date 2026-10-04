@@ -49,11 +49,13 @@ jobs:
           mkdir -p publish/logs
           rm -f publish/appsettings.Production.json publish/appsettings.Production.local.json || true
           find publish -name '*.pdb' -delete || true
+          echo "{}" > publish/.ftp-deploy-sync-state.json
 
-      - name: Install rclone
-        run: curl -fsSL https://rclone.org/install.sh | sudo bash
+      - name: Install LFTP
+        run: sudo apt-get update && sudo apt-get install -y lftp
 
-      - name: Deploy via FTPS (rclone)
+      # lftp FTPS is more reliable than rclone on SmarterASP from GitHub runners.
+      - name: Deploy via FTPS (lftp)
         env:
           FTP_SERVER: ${{ secrets.SMARTERASP_FTP_SERVER }}
           FTP_USERNAME: ${{ secrets.SMARTERASP_FTP_USERNAME }}
@@ -62,44 +64,35 @@ jobs:
         run: |
           set -euo pipefail
           REMOTE="${FTP_REMOTE_DIR:-/}"
-          REMOTE="${REMOTE#/}"
           REMOTE="${REMOTE%/}"
-          export RCLONE_CONFIG_ASP_TYPE=ftp
-          export RCLONE_CONFIG_ASP_HOST="${FTP_SERVER}"
-          export RCLONE_CONFIG_ASP_PORT=21
-          export RCLONE_CONFIG_ASP_USER="${FTP_USERNAME}"
-          export RCLONE_CONFIG_ASP_PASS="$(rclone obscure "${FTP_PASSWORD}")"
-          export RCLONE_CONFIG_ASP_EXPLICIT_TLS=true
-          export RCLONE_CONFIG_ASP_NO_CHECK_CERTIFICATE=true
-          export RCLONE_CONFIG_ASP_DISABLE_EPSV=true
-          export RCLONE_CONFIG_ASP_DISABLE_MLSD=false
-          DEST="asp:"
-          if [ -n "$REMOTE" ]; then DEST="asp:${REMOTE}"; fi
-          echo "Publish size:"
+          if [ -z "$REMOTE" ]; then REMOTE="/"; fi
           du -sh publish || true
-          echo "Listing remote (FTPS)..."
-          rclone lsd "$DEST" --contimeout 90s --timeout 120s -v
-          COPY_FLAGS=(
-            --transfers 1
-            --checkers 1
-            --retries 12
-            --low-level-retries 30
-            --contimeout 120s
-            --timeout 900s
-            -v
-            --exclude "appsettings.Production.json"
-            --exclude "appsettings.Production.local.json"
-            --exclude "appsettings.Development.json"
-            --exclude ".git/**"
-          )
-          for attempt in 1 2 3 4 5; do
-            echo "=== FTPS deploy attempt ${attempt}/5 ==="
-            if rclone copy publish "$DEST" "${COPY_FLAGS[@]}"; then
+          LFTP_SCRIPT="
+            set net:timeout 180;
+            set net:max-retries 8;
+            set net:reconnect-interval-base 8;
+            set ftp:ssl-force true;
+            set ftp:ssl-protect-data true;
+            set ssl:verify-certificate no;
+            set ftp:passive-mode true;
+            open -u ${FTP_USERNAME},${FTP_PASSWORD} ftps://${FTP_SERVER};
+            lcd publish;
+            cd ${REMOTE};
+            mirror -R -v --parallel=1 \
+              --exclude-glob .git* \
+              --exclude-glob appsettings.Production.json \
+              --exclude-glob appsettings.Production.local.json \
+              --exclude-glob appsettings.Development.json;
+            bye
+          "
+          for attempt in 1 2 3; do
+            echo "=== LFTP deploy attempt ${attempt}/3 ==="
+            if lftp -c "${LFTP_SCRIPT}"; then
               echo "Deploy succeeded on attempt ${attempt}."
               exit 0
             fi
-            echo "Attempt ${attempt} failed; waiting 45s before retry..."
-            sleep 45
+            echo "Attempt ${attempt} failed; waiting 60s..."
+            sleep 60
           done
-          echo "All FTPS deploy attempts failed."
+          echo "All LFTP deploy attempts failed."
           exit 1

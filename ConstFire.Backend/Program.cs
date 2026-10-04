@@ -254,7 +254,7 @@ if (args.Contains("--print-record-pdf", StringComparer.OrdinalIgnoreCase))
     var print = scope.ServiceProvider.GetRequiredService<ConstFire.Backend.Services.Print.IRecordPrintPdfService>();
 
     (byte[] Pdf, string FileName)? generated;
-    if (usePreviewSample && moduleCode == "02")
+    if (usePreviewSample && moduleCode is "02" or "09")
     {
         var modules = scope.ServiceProvider.GetRequiredService<IModuleService>();
         var envForPrint = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
@@ -266,8 +266,20 @@ if (args.Contains("--print-record-pdf", StringComparer.OrdinalIgnoreCase))
         }
 
         var config = ModuleConfigHelper.LoadConfig(envForPrint, moduleCode);
-        var pdf = ConstFire.Backend.Services.Print.SteelstoneControlledPrintComposer.BuildPreviewSampleModule02(module, config);
-        generated = (pdf, "steelstone-manufacturer-registration-preview-mfr-00021.pdf");
+        byte[] pdf;
+        string previewFileName;
+        if (moduleCode == "02")
+        {
+            pdf = ConstFire.Backend.Services.Print.SteelstoneControlledPrintComposer.BuildPreviewSampleModule02(module, config);
+            previewFileName = "steelstone-manufacturer-registration-preview-mfr-00021.pdf";
+        }
+        else
+        {
+            pdf = ConstFire.Backend.Services.Print.SteelstoneQuotationPrintComposer.BuildPreviewSample(module, config);
+            previewFileName = "QUOTATION-SALES-PREVIEW-APPROVAL.pdf";
+        }
+
+        generated = (pdf, previewFileName);
     }
     else
     {

@@ -356,44 +356,8 @@ internal static class SteelstoneControlledPrintComposer
         IContainer container,
         string leftTitle,
         string rightTitle,
-        IReadOnlyList<(string LLabel, string LVal, string RLabel, string RVal)> pairs)
-    {
-        container.Table(table =>
-        {
-            table.ColumnsDefinition(c =>
-            {
-                c.RelativeColumn();
-                c.RelativeColumn();
-            });
-
-            table.Cell().Background(SteelstonePrintTheme.LightGreyHeader).Border(0.5f).Padding(4)
-                .Text(leftTitle.ToUpperInvariant()).Bold().FontSize(8);
-            table.Cell().Background(SteelstonePrintTheme.LightGreyHeader).Border(0.5f).Padding(4)
-                .Text(rightTitle.ToUpperInvariant()).Bold().FontSize(8);
-
-            foreach (var (lLabel, lVal, rLabel, rVal) in pairs)
-            {
-                ComposePairCell(table, lLabel, lVal);
-                ComposePairCell(table, rLabel, rVal);
-            }
-        });
-    }
-
-    private static void ComposePairCell(TableDescriptor table, string label, string value)
-    {
-        table.Cell().Border(0.5f).Padding(4).MinHeight(16).Text(text =>
-        {
-            if (string.IsNullOrWhiteSpace(label) && string.IsNullOrWhiteSpace(value))
-            {
-                text.Span(" ").FontSize(8);
-                return;
-            }
-
-            text.Span(string.IsNullOrWhiteSpace(label) ? " " : label).FontSize(8);
-            text.Span(" ").FontSize(8);
-            text.Span(string.IsNullOrWhiteSpace(value) ? "—" : value).FontSize(8);
-        });
-    }
+        IReadOnlyList<(string LLabel, string LVal, string RLabel, string RVal)> pairs) =>
+        SteelstoneErpPrintChrome.ComposeDualColumnPairBlock(container, leftTitle, rightTitle, pairs);
 
     private static void ComposeNumberedDataTable(
         IContainer container,

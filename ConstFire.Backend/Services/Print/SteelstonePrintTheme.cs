@@ -18,6 +18,16 @@ internal static class SteelstonePrintTheme
 
     public static readonly string Navy = "#2F5597";
     public static readonly string LightGreyHeader = "#D9D9D9";
+    /// <summary>Light blue field-name column (ERP-FORMATS label cells).</summary>
+    public static readonly string FieldLabelBackground = "#B4C6E7";
+    public static readonly string FieldLabelText = "#1E293B";
+    public static readonly string FieldValueText = "#000000";
+
+    /// <summary>Reserved height at page bottom for quotation approval boxes (1 inch).</summary>
+    public const float QuotationApprovalBandHeight = 72f;
+
+    /// <summary>Item rows kept with approval band when paginating.</summary>
+    public const int QuotationTailRowsWithApproval = 3;
     public static readonly string TotalHighlight = "#B4C6E7";
     public static readonly string HeaderBorder = "#94A3B8";
     public static readonly string HeaderLabelGrey = "#64748B";

@@ -16,6 +16,7 @@ import {
   downloadRecordPdf,
 } from '../services/modules'
 import type { ModuleDetail, ModuleSummary, RecordItem } from '../types/modules'
+import { moduleHasErpPdfPrint } from '../constants/erpDocumentModules'
 
 const route = useRoute()
 const router = useRouter()
@@ -41,6 +42,8 @@ const deleting = ref(false)
 const wizardRecordId = ref<number | null>(null)
 const wizardRecordCode = ref<string | undefined>()
 const creatingWizardDraft = ref(false)
+const detailRecord = ref<RecordItem | null>(null)
+const showFormPreview = ref(false)
 
 const hasSectionWizard = computed(() => (moduleDetail.value?.sections?.length ?? 0) > 0)
 const showModuleWizard = computed(
@@ -271,6 +274,65 @@ function sortIcon(column: string) {
   if (sortBy.value !== column) return '↕'
   return sortDir.value === 'asc' ? '↑' : '↓'
 }
+
+function openRecordDetail(row: RecordItem) {
+  detailRecord.value = row
+}
+
+function closeRecordDetail() {
+  detailRecord.value = null
+}
+
+const showErpRowPrint = computed(() => moduleHasErpPdfPrint(code.value))
+
+const formPreviewRows = computed(() => {
+  if (!moduleDetail.value) return []
+  const fields = [...moduleDetail.value.fields].sort((a, b) => compareFieldRef(a.ref, b.ref))
+  const rows: { label: string; value: string }[] = []
+  if (wizardRecordCode.value || formData.value._recordCode) {
+    rows.push({
+      label: 'Record ID',
+      value: wizardRecordCode.value || formData.value._recordCode || '—',
+    })
+  }
+  for (const f of fields) {
+    const indexed = Object.keys(formData.value)
+      .filter((k) => k === f.ref || k.startsWith(`${f.ref}#`))
+      .sort(compareFieldRef)
+    if (indexed.length === 0) {
+      const raw = formData.value[f.ref]
+      rows.push({ label: f.fieldName, value: raw?.trim() ? raw : '—' })
+      continue
+    }
+    for (const key of indexed) {
+      const suffix = key.includes('#') ? ` (${Number(key.split('#')[1]) + 1})` : ''
+      const raw = formData.value[key]
+      rows.push({ label: `${f.fieldName}${suffix}`, value: raw?.trim() ? raw : '—' })
+    }
+  }
+  return rows
+})
+
+const detailPreviewRows = computed(() => {
+  const row = detailRecord.value
+  if (!row || !moduleDetail.value) return []
+  const rows: { label: string; value: string }[] = [
+    { label: 'System ID', value: String(row.id) },
+    { label: 'Created', value: formatDate(row.createdAt) },
+  ]
+  const keys = Object.keys(row.data).sort((a, b) => compareFieldRef(a, b))
+  for (const key of keys) {
+    const base = key.split('#')[0]
+    const field = moduleDetail.value.fields.find((f) => f.ref === base)
+    const suffix = key.includes('#') ? ` (${Number(key.split('#')[1]) + 1})` : ''
+    const label =
+      key === '_recordCode' ? 'Record ID' : `${field?.fieldName ?? base}${suffix}`
+    const val = row.data[key]
+    rows.push({ label, value: val?.trim() ? val : '—' })
+  }
+  return rows
+})
+
 </script>
 
 <template>
@@ -339,7 +401,14 @@ function sortIcon(column: string) {
               </div>
             </dl>
             <div class="record-card-actions">
-              <button type="button" class="print-row" :disabled="printingRowId === row.id" @click="onPrintRowPdf(row)">
+              <button type="button" class="view-row" @click="openRecordDetail(row)">View</button>
+              <button
+                v-if="showErpRowPrint"
+                type="button"
+                class="print-row"
+                :disabled="printingRowId === row.id"
+                @click="onPrintRowPdf(row)"
+              >
                 {{ printingRowId === row.id ? 'PDF…' : 'Print PDF' }}
               </button>
               <button type="button" @click="setAction('edit', row.id)">Edit</button>
@@ -373,7 +442,14 @@ function sortIcon(column: string) {
                 <td v-for="col in viewColumns" :key="col.ref">{{ row.data[col.ref] || '—' }}</td>
                 <td>{{ formatDate(row.createdAt) }}</td>
                 <td class="actions sticky-actions">
-                  <button type="button" class="print-row" :disabled="printingRowId === row.id" @click="onPrintRowPdf(row)">
+                  <button type="button" class="view-row" @click="openRecordDetail(row)">View</button>
+                  <button
+                    v-if="showErpRowPrint"
+                    type="button"
+                    class="print-row"
+                    :disabled="printingRowId === row.id"
+                    @click="onPrintRowPdf(row)"
+                  >
                     {{ printingRowId === row.id ? 'PDF…' : 'Print' }}
                   </button>
                   <button type="button" @click="setAction('edit', row.id)">Edit</button>
@@ -410,6 +486,7 @@ function sortIcon(column: string) {
           <h2>{{ action === 'add' ? 'Add New Record' : `Edit Record #${editId}` }}</h2>
           <div class="form-actions">
             <button class="btn-secondary" @click="setAction('view')">Cancel</button>
+            <button type="button" class="btn-secondary" @click="showFormPreview = true">View data</button>
             <button class="btn-primary" :disabled="saving" @click="saveRecord">
               {{ saving ? 'Saving…' : 'Save' }}
             </button>
@@ -442,6 +519,52 @@ function sortIcon(column: string) {
 
       <div v-else-if="action === 'delete'" class="panel hint-panel">
         Select a record from <strong>View Data</strong> and click Delete.
+      </div>
+
+      <div v-if="detailRecord" class="record-modal-backdrop" @click.self="closeRecordDetail">
+        <div class="record-modal" role="dialog" aria-labelledby="record-detail-title">
+          <header class="record-modal-head">
+            <h2 id="record-detail-title">Record details</h2>
+            <button type="button" class="modal-close" aria-label="Close" @click="closeRecordDetail">×</button>
+          </header>
+          <div class="record-modal-body">
+            <dl class="preview-dl">
+              <div v-for="(item, idx) in detailPreviewRows" :key="idx" class="preview-row">
+                <dt>{{ item.label }}</dt>
+                <dd>{{ item.value }}</dd>
+              </div>
+            </dl>
+          </div>
+          <footer class="record-modal-foot">
+            <button type="button" class="btn-secondary" @click="closeRecordDetail">Close</button>
+            <button type="button" class="btn-primary" @click="setAction('edit', detailRecord!.id); closeRecordDetail()">
+              Edit
+            </button>
+          </footer>
+        </div>
+      </div>
+
+      <div v-if="showFormPreview" class="record-modal-backdrop" @click.self="showFormPreview = false">
+        <div class="record-modal" role="dialog" aria-labelledby="form-preview-title">
+          <header class="record-modal-head">
+            <h2 id="form-preview-title">Preview before save</h2>
+            <button type="button" class="modal-close" aria-label="Close" @click="showFormPreview = false">×</button>
+          </header>
+          <div class="record-modal-body">
+            <dl class="preview-dl">
+              <div v-for="(item, idx) in formPreviewRows" :key="idx" class="preview-row">
+                <dt>{{ item.label }}</dt>
+                <dd>{{ item.value }}</dd>
+              </div>
+            </dl>
+          </div>
+          <footer class="record-modal-foot">
+            <button type="button" class="btn-secondary" @click="showFormPreview = false">Close</button>
+            <button type="button" class="btn-primary" :disabled="saving" @click="showFormPreview = false; saveRecord()">
+              {{ saving ? 'Saving…' : 'Save' }}
+            </button>
+          </footer>
+        </div>
       </div>
     </template>
   </AppLayout>
@@ -477,22 +600,22 @@ function sortIcon(column: string) {
 
 .action-bar {
   display: flex;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
+  gap: 0.35rem;
+  margin-bottom: 0.5rem;
   flex-wrap: nowrap;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  padding-bottom: 0.25rem;
+  padding-bottom: 0.15rem;
 }
 
 .action-bar button {
-  padding: 0.65rem 1rem;
-  min-height: 44px;
+  padding: 0.35rem 0.65rem;
+  min-height: 32px;
   border: 1px solid #e2e8f0;
-  border-radius: 8px;
+  border-radius: 6px;
   background: #fff;
   color: #475569;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   font-weight: 500;
   cursor: pointer;
   white-space: nowrap;
@@ -527,23 +650,23 @@ function sortIcon(column: string) {
 .panel {
   background: #fff;
   border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  padding: 1.25rem;
+  border-radius: 10px;
+  padding: 0.65rem 0.75rem;
 }
 
 .toolbar {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 1rem;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
   flex-wrap: wrap;
 }
 
 .search-input {
   flex: 1 1 100%;
   min-width: 0;
-  padding: 0.65rem 0.875rem;
-  min-height: 44px;
+  padding: 0.4rem 0.65rem;
+  min-height: 34px;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
   font-size: 1rem;
@@ -625,8 +748,15 @@ function sortIcon(column: string) {
   position: sticky;
   right: 0;
   background: #fff;
-  min-width: 8.5rem;
+  min-width: 11rem;
   box-shadow: -4px 0 8px rgba(15, 23, 42, 0.06);
+}
+
+.wide-table th,
+.wide-table td {
+  padding: 0.28rem 0.45rem;
+  line-height: 1.25;
+  font-size: 0.8125rem;
 }
 
 .wide-table thead .sticky-actions {
@@ -770,7 +900,7 @@ table {
 
 th,
 td {
-  padding: 0.65rem 0.75rem;
+  padding: 0.35rem 0.5rem;
   text-align: left;
   border-bottom: 1px solid #f1f5f9;
 }
@@ -796,13 +926,20 @@ th {
 }
 
 .actions button {
-  padding: 0.3rem 0.6rem;
-  margin-right: 0.35rem;
+  padding: 0.15rem 0.4rem;
+  margin-right: 0.2rem;
   border: 1px solid #e2e8f0;
-  border-radius: 5px;
+  border-radius: 4px;
   background: #fff;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   cursor: pointer;
+  line-height: 1.2;
+}
+
+.actions button.view-row {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #334155;
 }
 
 .actions button.danger {
@@ -935,5 +1072,104 @@ th {
   text-align: center;
   padding: 3rem;
   color: #64748b;
+}
+
+.record-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(15, 23, 42, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.record-modal {
+  width: min(640px, 100%);
+  max-height: min(85vh, 720px);
+  background: #fff;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.15);
+}
+
+.record-modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.65rem 0.85rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.record-modal-head h2 {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #0f172a;
+}
+
+.modal-close {
+  border: none;
+  background: transparent;
+  font-size: 1.35rem;
+  line-height: 1;
+  cursor: pointer;
+  color: #64748b;
+  padding: 0 0.25rem;
+}
+
+.record-modal-body {
+  overflow: auto;
+  padding: 0.65rem 0.85rem;
+}
+
+.preview-dl {
+  margin: 0;
+}
+
+.preview-row {
+  display: grid;
+  grid-template-columns: minmax(120px, 38%) 1fr;
+  gap: 0.35rem 0.75rem;
+  padding: 0.35rem 0;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 0.8125rem;
+}
+
+.preview-row dt {
+  margin: 0;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.preview-row dd {
+  margin: 0;
+  color: #0f172a;
+  word-break: break-word;
+}
+
+.record-modal-foot {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 0.65rem 0.85rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.form-header {
+  margin-bottom: 0.65rem;
+}
+
+.form-actions {
+  gap: 0.4rem;
+}
+
+.form-actions .btn-secondary,
+.form-actions .btn-primary {
+  padding: 0.4rem 0.75rem;
+  min-height: 34px;
+  font-size: 0.8125rem;
 }
 </style>

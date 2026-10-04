@@ -23,12 +23,14 @@ internal static class RecordPrintPdfDocuments
         var data = record.Data;
         var labels = RecordPrintDataHelper.BuildLabelMap(module.Fields);
 
-        return moduleCode switch
+        if (SteelstoneErpDocumentPrintModuleCodes.IsErpDocument(moduleCode))
         {
-            "09" => BuildQuote(module, record, config, data, labels),
-            "11" => BuildInvoice(module, record, config, data, labels),
-            _ => SteelstoneControlledPrintComposer.Build(module, record, config, data, labels)
-        };
+            return moduleCode == "09"
+                ? SteelstoneQuotationPrintComposer.Build(module, record, config, data, labels)
+                : SteelstoneControlledPrintComposer.Build(module, record, config, data, labels);
+        }
+
+        return SteelstoneControlledPrintComposer.Build(module, record, config, data, labels);
     }
 
     private static byte[] BuildQuote(

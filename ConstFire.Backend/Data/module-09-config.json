@@ -3,6 +3,14 @@
   "name": "QUOTATION  (SALES QUOTE)",
   "category": "ERP Module",
   "recordCodePrefix": "QOT",
+  "print": {
+    "documentTitle": "QUOTATION",
+    "subtitle": "Sales Quote | Cement Supply & Delivery",
+    "docNo": "SSIT-F-SAL-09",
+    "version": "1.0 (Rev 00)",
+    "approvalNo": "QMS-26-009",
+    "effective": "01-Oct-2026"
+  },
   "listColumns": [
     "_recordCode",
     "1.1",

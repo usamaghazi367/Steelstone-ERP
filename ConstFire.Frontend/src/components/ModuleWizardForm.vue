@@ -34,6 +34,7 @@ const activeSection = ref(props.initialSection ?? sections.value[0]?.num ?? 1)
 const formState = ref<ModuleFormState>({ completedSections: [], sections: {} })
 const saving = ref(false)
 const error = ref('')
+const showPreview = ref(false)
 
 const currentSection = computed(() => sections.value.find((s) => s.num === activeSection.value))
 const completedSections = computed(() => formState.value.completedSections)
@@ -136,6 +137,40 @@ function onRepeatingRowUpdate(index: number, data: Record<string, string>) {
   )
   repeatingRows.value = rows
 }
+
+function compareFieldRef(a: string, b: string) {
+  const pa = a.split('.').map((p) => parseInt(p, 10) || 0)
+  const pb = b.split('.').map((p) => parseInt(p, 10) || 0)
+  const len = Math.max(pa.length, pb.length)
+  for (let i = 0; i < len; i++) {
+    const d = (pa[i] ?? 0) - (pb[i] ?? 0)
+    if (d !== 0) return d
+  }
+  return a.localeCompare(b)
+}
+
+const previewRows = computed(() => {
+  const rows: { label: string; value: string }[] = []
+  if (formState.value.recordCode) {
+    rows.push({ label: 'Record ID', value: formState.value.recordCode })
+  }
+  const fields = [...props.module.fields].sort((a, b) => compareFieldRef(a.ref, b.ref))
+  for (const f of fields) {
+    const keys = Object.keys(flatValues.value)
+      .filter((k) => k === f.ref || k.startsWith(`${f.ref}#`))
+      .sort(compareFieldRef)
+    if (keys.length === 0) {
+      rows.push({ label: f.fieldName, value: '—' })
+      continue
+    }
+    for (const key of keys) {
+      const suffix = key.includes('#') ? ` (${Number(key.split('#')[1]) + 1})` : ''
+      const val = flatValues.value[key]
+      rows.push({ label: `${f.fieldName}${suffix}`, value: val?.trim() ? val : '—' })
+    }
+  }
+  return rows
+})
 
 async function saveCurrentSection() {
   if (!currentSection.value) return
@@ -262,9 +297,33 @@ async function saveCurrentSection() {
         <button type="button" class="btn-secondary" :disabled="activeSection <= 1" @click="goSection(activeSection - 1)">
           Previous section
         </button>
+        <button type="button" class="btn-secondary" @click="showPreview = true">View data</button>
         <button type="button" class="btn-primary" :disabled="saving" @click="saveCurrentSection">
           {{ saving ? 'Saving…' : 'Save section & continue' }}
         </button>
+      </div>
+    </div>
+
+    <div v-if="showPreview" class="wizard-modal-backdrop" @click.self="showPreview = false">
+      <div class="wizard-modal" role="dialog" aria-labelledby="wizard-preview-title">
+        <header class="wizard-modal-head">
+          <h2 id="wizard-preview-title">Preview before save</h2>
+          <button type="button" class="modal-close" aria-label="Close" @click="showPreview = false">×</button>
+        </header>
+        <div class="wizard-modal-body">
+          <dl class="preview-dl">
+            <div v-for="(item, idx) in previewRows" :key="idx" class="preview-row">
+              <dt>{{ item.label }}</dt>
+              <dd>{{ item.value }}</dd>
+            </div>
+          </dl>
+        </div>
+        <footer class="wizard-modal-foot">
+          <button type="button" class="btn-secondary" @click="showPreview = false">Close</button>
+          <button type="button" class="btn-primary" :disabled="saving" @click="showPreview = false; saveCurrentSection()">
+            {{ saving ? 'Saving…' : 'Save section & continue' }}
+          </button>
+        </footer>
       </div>
     </div>
   </div>
@@ -376,10 +435,11 @@ async function saveCurrentSection() {
 .btn-remove,
 .btn-primary,
 .btn-secondary {
-  min-height: 44px;
-  padding: 0.55rem 1rem;
-  border-radius: 8px;
+  min-height: 34px;
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
   cursor: pointer;
+  font-size: 0.8125rem;
 }
 
 .btn-add {
@@ -397,16 +457,20 @@ async function saveCurrentSection() {
 
 .section-actions {
   display: flex;
-  gap: 0.75rem;
-  margin-top: 1rem;
+  gap: 0.4rem;
+  margin-top: 0.65rem;
   flex-wrap: wrap;
+}
+
+.section-actions .btn-primary {
+  flex: 1;
+  min-width: 160px;
 }
 
 .btn-primary {
   background: #ea580c;
   color: #fff;
   border: none;
-  flex: 1;
 }
 
 .btn-secondary {
@@ -457,5 +521,87 @@ async function saveCurrentSection() {
 .saved-table th {
   background: #f1f5f9;
   font-weight: 600;
+}
+
+.wizard-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(15, 23, 42, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.wizard-modal {
+  width: min(640px, 100%);
+  max-height: min(85vh, 720px);
+  background: #fff;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.15);
+}
+
+.wizard-modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.65rem 0.85rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.wizard-modal-head h2 {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.modal-close {
+  border: none;
+  background: transparent;
+  font-size: 1.35rem;
+  line-height: 1;
+  cursor: pointer;
+  color: #64748b;
+}
+
+.wizard-modal-body {
+  overflow: auto;
+  padding: 0.65rem 0.85rem;
+}
+
+.preview-dl {
+  margin: 0;
+}
+
+.preview-row {
+  display: grid;
+  grid-template-columns: minmax(120px, 38%) 1fr;
+  gap: 0.35rem 0.75rem;
+  padding: 0.35rem 0;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 0.8125rem;
+}
+
+.preview-row dt {
+  margin: 0;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.preview-row dd {
+  margin: 0;
+  color: #0f172a;
+  word-break: break-word;
+}
+
+.wizard-modal-foot {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 0.65rem 0.85rem;
+  border-top: 1px solid #e2e8f0;
 }
 </style>

@@ -24,8 +24,7 @@ internal static class SteelstoneControlledPrintComposer
     public static PrintMeta ResolveMeta(ModuleDetailDto module, ModuleConfig? config, RecordDto record)
     {
         var p = config?.Print;
-        var title = p?.DocumentTitle
-            ?? module.Name.ToUpperInvariant();
+        var title = p?.DocumentTitle ?? module.Name.ToUpperInvariant();
         var subtitle = p?.Subtitle ?? module.Name;
         return new PrintMeta(
             title,
@@ -44,41 +43,42 @@ internal static class SteelstoneControlledPrintComposer
         Dictionary<string, string> labels)
     {
         var meta = ResolveMeta(module, config, record);
-        var sections = (config?.Sections ?? [])
-            .OrderBy(s => s.Num)
-            .ToList();
+        var sections = (config?.Sections ?? []).OrderBy(s => s.Num).ToList();
+        var blockNum = 0;
 
         return Document.Create(container =>
         {
             container.Page(page =>
             {
                 page.Size(PageSizes.A4);
-                page.MarginHorizontal(24);
-                page.MarginVertical(22);
-                page.DefaultTextStyle(x => x.FontSize(8.5f));
+                page.MarginHorizontal(22);
+                page.MarginVertical(18);
+                page.DefaultTextStyle(x => x.FontSize(8f));
 
                 page.Header().Element(c => ComposePageHeader(c, meta));
                 page.Footer().Element(ComposePageFooter);
 
-                page.Content().PaddingTop(6).Column(col =>
+                page.Content().PaddingTop(4).Column(col =>
                 {
-                    var sectionIndex = 0;
                     foreach (var section in sections)
                     {
+                        if (section.Num == 1)
+                        {
+                            col.Item().PaddingTop(2).Element(c =>
+                                ComposeModule02StyleHeaderBlock(c, module, record, data, labels, section.Title));
+                            continue;
+                        }
+
                         if (section.Repeating)
                         {
-                            sectionIndex++;
+                            blockNum++;
                             var refs = config is null
                                 ? []
                                 : ModuleConfigHelperPrintExtensions.GetSectionFieldRefsFromConfig(config, section.Num);
                             var rows = RecordPrintDataHelper.GetRepeatingRows(data, section.Num, refs);
-                            var cols = BuildTableColumns(refs, labels, maxCols: 6);
-                            col.Item().PaddingTop(sectionIndex == 1 ? 4 : 10)
-                                .Element(c => ComposeNumberedSection(
-                                    c,
-                                    $"{sectionIndex}. {CleanSectionTitle(section.Title)}",
-                                    cols,
-                                    rows));
+                            var cols = BuildTableColumns(refs, labels);
+                            col.Item().PaddingTop(8).Element(c =>
+                                ComposeNumberedDataTable(c, blockNum, CleanSectionTitle(section.Title), cols, rows));
                             continue;
                         }
 
@@ -86,19 +86,21 @@ internal static class SteelstoneControlledPrintComposer
                         if (fields.Count == 0)
                             continue;
 
-                        if (section.Num == 1)
-                        {
-                            col.Item().PaddingTop(4).Element(c =>
-                                ComposeDualColumnDetailBlock(c, section.Title, fields, data, labels, record));
-                            continue;
-                        }
-
-                        sectionIndex++;
-                        col.Item().PaddingTop(10).Element(c =>
-                            ComposeNumberedStaticSection(c, $"{sectionIndex}. {CleanSectionTitle(section.Title)}", fields, data, labels));
+                        blockNum++;
+                        var (leftTitle, rightTitle) = SplitSectionTitles(section.Title);
+                        col.Item().PaddingTop(8).Element(c =>
+                            ComposeNumberedDualFieldSection(
+                                c,
+                                blockNum,
+                                CleanSectionTitle(section.Title),
+                                leftTitle,
+                                rightTitle,
+                                fields,
+                                data,
+                                labels));
                     }
 
-                    col.Item().PaddingTop(14).Element(ComposeSignatureBlock);
+                    col.Item().PaddingTop(12).Element(ComposeSignatureBlock);
                 });
             });
         }).GeneratePdf();
@@ -123,10 +125,10 @@ internal static class SteelstoneControlledPrintComposer
     {
         var contacts = new[]
         {
-            new Dictionary<string, string> { ["3.1"] = "Kamran Baig", ["3.2"] = "General Manager Sales", ["3.3"] = "+92-333-1122334", ["3.4"] = "kamran.baig@pakcement.com", ["3.5"] = "Primary commercial contact" },
-            new Dictionary<string, string> { ["3.1"] = "Sana Malik", ["3.2"] = "Dispatch Coordinator", ["3.3"] = "+92-300-4455667", ["3.4"] = "dispatch@pakcement.com", ["3.5"] = "Plant dispatch window" },
-            new Dictionary<string, string> { ["3.1"] = "Engr. Tariq Mahmood", ["3.2"] = "Plant Manager", ["3.3"] = "+92-300-8877665", ["3.4"] = "tariq.m@pakcement.com", ["3.5"] = "Site escalation" },
-            new Dictionary<string, string> { ["3.1"] = "Accounts Team", ["3.2"] = "Finance / Billing", ["3.3"] = "+92-25-4670011", ["3.4"] = "accounts@pakcement.com", ["3.5"] = "Invoice & WHT queries" },
+            new Dictionary<string, string> { ["3.1"] = "Kamran Baig", ["3.2"] = "General Manager Sales", ["3.3"] = "+92-333-1122334" },
+            new Dictionary<string, string> { ["3.1"] = "Sana Malik", ["3.2"] = "Dispatch Coordinator", ["3.3"] = "+92-300-4455667" },
+            new Dictionary<string, string> { ["3.1"] = "Engr. Tariq Mahmood", ["3.2"] = "Plant Manager", ["3.3"] = "+92-300-8877665" },
+            new Dictionary<string, string> { ["3.1"] = "Accounts Team", ["3.2"] = "Finance / Billing", ["3.3"] = "+92-25-4670011" },
         };
 
         var data = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
@@ -141,7 +143,9 @@ internal static class SteelstoneControlledPrintComposer
                 new Dictionary<string, string>
                 {
                     ["2.1"] = "1", ["2.2"] = "Nooriabad Cement Plant", ["2.3"] = "PLANT-01",
-                    ["2.4"] = "Deh Kohistan, Main Super Highway, Nooriabad, Jamshoro, Sindh", ["2.5"] = "Nooriabad / Sindh"
+                    ["2.4"] = "Deh Kohistan, Main Super Highway, Nooriabad, Jamshoro, Sindh",
+                    ["2.5"] = "Nooriabad / Sindh", ["2.7"] = "Engr. Tariq Mahmood / Plant Manager",
+                    ["2.8"] = "+92-300-8877665", ["2.13"] = "Operational"
                 }
             }),
             ["2.1#0"] = "1",
@@ -149,6 +153,9 @@ internal static class SteelstoneControlledPrintComposer
             ["2.3#0"] = "PLANT-01",
             ["2.4#0"] = "Deh Kohistan, Main Super Highway, Nooriabad, Jamshoro, Sindh",
             ["2.5#0"] = "Nooriabad / Sindh",
+            ["2.7#0"] = "Engr. Tariq Mahmood / Plant Manager",
+            ["2.8#0"] = "+92-300-8877665",
+            ["2.13#0"] = "Operational",
             ["__section_3"] = System.Text.Json.JsonSerializer.Serialize(contacts),
         };
 
@@ -171,17 +178,29 @@ internal static class SteelstoneControlledPrintComposer
         return t.Trim().TrimEnd('.');
     }
 
+    private static (string Left, string Right) SplitSectionTitles(string sectionTitle)
+    {
+        var clean = CleanSectionTitle(sectionTitle).ToUpperInvariant();
+        if (clean.Contains("WORKING CALENDAR", StringComparison.OrdinalIgnoreCase))
+            return ("WORKING CALENDAR", "SHIFTS & DISPATCH");
+        if (clean.Contains("WITHHOLDING", StringComparison.OrdinalIgnoreCase))
+            return ("WITHHOLDING TAX", "EXEMPTION DETAILS");
+        var mid = clean.Length / 2;
+        var split = clean.LastIndexOf(' ', mid);
+        if (split <= 0) split = mid;
+        return (clean[..split].Trim(), clean[split..].Trim());
+    }
+
     private static List<(string Header, string Ref)> BuildTableColumns(
         IReadOnlyList<string> refs,
-        Dictionary<string, string> labels,
-        int maxCols)
+        Dictionary<string, string> labels)
     {
-        var result = new List<(string, string)> { ("SR.", "__sr__") };
-        foreach (var r in refs.Take(maxCols - 1))
+        var result = new List<(string, string)> { ("Sr.", "__sr__") };
+        foreach (var r in refs)
         {
-            var h = RecordPrintDataHelper.Label(labels, r);
-            if (h.Length > 22) h = h[..22];
-            result.Add((h.ToUpperInvariant(), r));
+            var h = SteelstonePrintLabelHelper.ShortLabel(RecordPrintDataHelper.Label(labels, r));
+            if (h.Length > 28) h = h[..28];
+            result.Add((h, r));
         }
 
         return result;
@@ -191,44 +210,62 @@ internal static class SteelstoneControlledPrintComposer
     {
         container.Column(col =>
         {
-            col.Item().AlignCenter().Text(SteelstonePrintTheme.CompanyLegalName).Bold().FontSize(11);
-            col.Item().AlignCenter().Text(meta.DocumentTitle).Bold().FontSize(14).FontColor(SteelstonePrintTheme.Navy);
-            col.Item().AlignCenter().Text(meta.Subtitle).FontSize(9).FontColor(Colors.Grey.Darken2);
+            col.Item().Row(row =>
+            {
+                var logo = SteelstonePrintAssets.TryLoadLogoBytes();
+                if (logo is not null)
+                    row.ConstantItem(50).Height(50).Image(logo).FitArea();
+                else
+                    row.ConstantItem(50);
 
-            col.Item().PaddingTop(4).Table(table =>
+                row.RelativeItem().Column(center =>
+                {
+                    center.Item().AlignCenter().Text(SteelstonePrintTheme.CompanyLegalName).Bold().FontSize(11);
+                    center.Item().AlignCenter().Text(meta.DocumentTitle).Bold().FontSize(13).FontColor(SteelstonePrintTheme.Navy);
+                    center.Item().AlignCenter().Text(meta.Subtitle).FontSize(8.5f).FontColor(Colors.Grey.Darken2);
+                });
+            });
+
+            col.Item().PaddingTop(5).Table(table =>
             {
                 table.ColumnsDefinition(c =>
                 {
-                    c.ConstantColumn(58);
-                    c.RelativeColumn();
-                    c.ConstantColumn(52);
-                    c.RelativeColumn();
-                    c.ConstantColumn(36);
-                    c.RelativeColumn();
+                    c.RelativeColumn(2);
+                    c.RelativeColumn(2);
+                    c.RelativeColumn(2);
                 });
 
-                table.Cell().Border(0.5f).Background(SteelstonePrintTheme.LightGreyHeader).Padding(3)
-                    .Text("Doc No.").SemiBold().FontSize(7);
-                table.Cell().Border(0.5f).Padding(3).Text(meta.DocNo).FontSize(7);
-                table.Cell().Border(0.5f).Background(SteelstonePrintTheme.LightGreyHeader).Padding(3)
-                    .Text("Version").SemiBold().FontSize(7);
-                table.Cell().Border(0.5f).Padding(3).Text(meta.Version).FontSize(7);
-                table.Cell().Border(0.5f).Background(SteelstonePrintTheme.LightGreyHeader).Padding(3)
-                    .Text("Page").SemiBold().FontSize(7);
-                table.Cell().Border(0.5f).Padding(3).AlignCenter().Text(text =>
+                table.Cell().PaddingVertical(2).Text(text =>
                 {
-                    text.CurrentPageNumber().FontSize(7);
-                    text.Span(" of ").FontSize(7);
-                    text.TotalPages().FontSize(7);
+                    text.Span("Doc No.: ").SemiBold().FontSize(7.5f);
+                    text.Span(meta.DocNo).FontSize(7.5f);
+                });
+                table.Cell().PaddingVertical(2).Text(text =>
+                {
+                    text.Span("Version: ").SemiBold().FontSize(7.5f);
+                    text.Span(meta.Version).FontSize(7.5f);
+                });
+                table.Cell().PaddingVertical(2).AlignRight().Text(text =>
+                {
+                    text.Span("Page: ").SemiBold().FontSize(7.5f);
+                    text.CurrentPageNumber().FontSize(7.5f);
+                    text.Span(" of ").FontSize(7.5f);
+                    text.TotalPages().FontSize(7.5f);
                 });
 
-                table.Cell().Border(0.5f).Background(SteelstonePrintTheme.LightGreyHeader).Padding(3)
-                    .Text("Approval No.").SemiBold().FontSize(7);
-                table.Cell().Border(0.5f).Padding(3).Text(meta.ApprovalNo).FontSize(7);
-                table.Cell().Border(0.5f).Background(SteelstonePrintTheme.LightGreyHeader).Padding(3)
-                    .Text("Effective").SemiBold().FontSize(7);
-                table.Cell().ColumnSpan(3).Border(0.5f).Padding(3).Text(meta.Effective).FontSize(7);
+                table.Cell().PaddingVertical(2).Text(text =>
+                {
+                    text.Span("Approval No.: ").SemiBold().FontSize(7.5f);
+                    text.Span(meta.ApprovalNo).FontSize(7.5f);
+                });
+                table.Cell().ColumnSpan(2).PaddingVertical(2).Text(text =>
+                {
+                    text.Span("Effective: ").SemiBold().FontSize(7.5f);
+                    text.Span(meta.Effective).FontSize(7.5f);
+                });
             });
+
+            col.Item().PaddingTop(2).LineHorizontal(0.75f).LineColor(SteelstonePrintTheme.Navy);
         });
     }
 
@@ -237,26 +274,91 @@ internal static class SteelstoneControlledPrintComposer
         container.Column(col =>
         {
             col.Item().LineHorizontal(0.5f).LineColor(Colors.Grey.Lighten1);
-            col.Item().PaddingTop(3).AlignCenter().Text(SteelstonePrintTheme.FooterAddressLine).FontSize(6.5f);
+            col.Item().PaddingTop(2).AlignCenter().Text(SteelstonePrintTheme.FooterAddressLine).FontSize(6.5f);
             col.Item().AlignCenter().Text(SteelstonePrintTheme.FooterTaxLine).FontSize(6.5f);
             col.Item().AlignCenter().Text(SteelstonePrintTheme.FooterControlledLine).FontSize(6.5f).Italic();
         });
     }
 
-    private static void ComposeDualColumnDetailBlock(
+    private static void ComposeModule02StyleHeaderBlock(
         IContainer container,
-        string sectionTitle,
-        IReadOnlyList<ModuleFieldDto> fields,
+        ModuleDetailDto module,
+        RecordDto record,
         Dictionary<string, string> data,
         Dictionary<string, string> labels,
-        RecordDto record)
+        string sectionTitle)
     {
-        var leftTitle = CleanSectionTitle(sectionTitle).ToUpperInvariant();
-        var rightTitle = "RECORD";
-        var mid = (fields.Count + 1) / 2;
-        var left = fields.Take(mid).ToList();
-        var right = fields.Skip(mid).ToList();
+        var business = RecordPrintDataHelper.Val(data, "1.1");
+        var code = record.RecordCode ?? RecordPrintDataHelper.Val(data, "_recordCode");
+        var manufacturerDisplay = string.IsNullOrWhiteSpace(code) ? business : $"{code} - {business}";
 
+        var pairs = new List<(string LLabel, string LVal, string RLabel, string RVal)>
+        {
+            ("Business name", business, "Manufacturer", manufacturerDisplay),
+            ("Legal status", RecordPrintDataHelper.Val(data, "1.2"), "NTN / CNIC", RecordPrintDataHelper.Val(data, "1.3")),
+            ("Filer status", RecordPrintDataHelper.Val(data, "1.4"), "", ""),
+        };
+
+        ComposeDualColumnPairBlock(
+            container,
+            "REGISTRATION DETAILS",
+            "MANUFACTURER",
+            pairs);
+    }
+
+    private static void ComposeNumberedDualFieldSection(
+        IContainer container,
+        int blockNum,
+        string sectionTitle,
+        string leftTitle,
+        string rightTitle,
+        IReadOnlyList<ModuleFieldDto> fields,
+        Dictionary<string, string> data,
+        Dictionary<string, string> labels)
+    {
+        container.Column(col =>
+        {
+            col.Item().Background(SteelstonePrintTheme.LightGreyHeader).Padding(4)
+                .Text($"{blockNum}. {sectionTitle.ToUpperInvariant()}").Bold().FontSize(9);
+
+            var pairs = BuildFieldPairs(fields, data, labels);
+            col.Item().Element(c => ComposeDualColumnPairBlock(c, leftTitle, rightTitle, pairs));
+        });
+    }
+
+    private static List<(string LLabel, string LVal, string RLabel, string RVal)> BuildFieldPairs(
+        IReadOnlyList<ModuleFieldDto> fields,
+        Dictionary<string, string> data,
+        Dictionary<string, string> labels)
+    {
+        var pairs = new List<(string, string, string, string)>();
+        for (var i = 0; i < fields.Count; i += 2)
+        {
+            var left = fields[i];
+            var lLabel = SteelstonePrintLabelHelper.ShortLabel(RecordPrintDataHelper.Label(labels, left.Ref));
+            var lVal = RecordPrintDataHelper.FormatDisplayValue(RecordPrintDataHelper.Val(data, left.Ref));
+
+            if (i + 1 >= fields.Count)
+            {
+                pairs.Add((lLabel, lVal, "", ""));
+                continue;
+            }
+
+            var right = fields[i + 1];
+            var rLabel = SteelstonePrintLabelHelper.ShortLabel(RecordPrintDataHelper.Label(labels, right.Ref));
+            var rVal = RecordPrintDataHelper.FormatDisplayValue(RecordPrintDataHelper.Val(data, right.Ref));
+            pairs.Add((lLabel, lVal, rLabel, rVal));
+        }
+
+        return pairs;
+    }
+
+    private static void ComposeDualColumnPairBlock(
+        IContainer container,
+        string leftTitle,
+        string rightTitle,
+        IReadOnlyList<(string LLabel, string LVal, string RLabel, string RVal)> pairs)
+    {
         container.Table(table =>
         {
             table.ColumnsDefinition(c =>
@@ -265,101 +367,55 @@ internal static class SteelstoneControlledPrintComposer
                 c.RelativeColumn();
             });
 
-            table.Cell().Background(SteelstonePrintTheme.Navy).Padding(4)
-                .Text(leftTitle).FontColor(Colors.White).Bold().FontSize(8);
-            table.Cell().Background(SteelstonePrintTheme.Navy).Padding(4)
-                .Text(rightTitle).FontColor(Colors.White).Bold().FontSize(8);
+            table.Cell().Background(SteelstonePrintTheme.LightGreyHeader).Border(0.5f).Padding(4)
+                .Text(leftTitle.ToUpperInvariant()).Bold().FontSize(8);
+            table.Cell().Background(SteelstonePrintTheme.LightGreyHeader).Border(0.5f).Padding(4)
+                .Text(rightTitle.ToUpperInvariant()).Bold().FontSize(8);
 
-            var maxRows = Math.Max(left.Count, right.Count + 1);
-            for (var i = 0; i < maxRows; i++)
+            foreach (var (lLabel, lVal, rLabel, rVal) in pairs)
             {
-                ComposeKeyValueCell(table, i < left.Count ? left[i] : null, data, labels, record);
-                if (i == 0)
-                {
-                    ComposeRecordKeyValueCell(
-                        table,
-                        "Record ID",
-                        record.RecordCode ?? RecordPrintDataHelper.Val(data, "_recordCode"));
-                }
-                else
-                {
-                    ComposeKeyValueCell(table, i - 1 < right.Count ? right[i - 1] : null, data, labels, record);
-                }
+                ComposePairCell(table, lLabel, lVal);
+                ComposePairCell(table, rLabel, rVal);
             }
         });
     }
 
-    private static void ComposeRecordKeyValueCell(TableDescriptor table, string label, string? value)
+    private static void ComposePairCell(TableDescriptor table, string label, string value)
     {
-        table.Cell().Border(0.5f).Padding(4).Text(text =>
+        table.Cell().Border(0.5f).Padding(4).MinHeight(16).Text(text =>
         {
-            text.Span(label).SemiBold().FontSize(7);
-            text.Span("  ").FontSize(7);
+            if (string.IsNullOrWhiteSpace(label) && string.IsNullOrWhiteSpace(value))
+            {
+                text.Span(" ").FontSize(8);
+                return;
+            }
+
+            text.Span(string.IsNullOrWhiteSpace(label) ? " " : label).FontSize(8);
+            text.Span(" ").FontSize(8);
             text.Span(string.IsNullOrWhiteSpace(value) ? "—" : value).FontSize(8);
         });
     }
 
-    private static void ComposeKeyValueCell(
-        TableDescriptor table,
-        ModuleFieldDto? field,
-        Dictionary<string, string> data,
-        Dictionary<string, string> labels,
-        RecordDto record)
-    {
-        if (field is null)
-        {
-            table.Cell().Border(0.5f).Padding(4).Text(" ");
-            return;
-        }
-
-        var val = RecordPrintDataHelper.FormatDisplayValue(RecordPrintDataHelper.Val(data, field.Ref));
-        var label = RecordPrintDataHelper.Label(labels, field.Ref);
-        ComposeRecordKeyValueCell(table, label, val);
-    }
-
-    private static void ComposeNumberedStaticSection(
+    private static void ComposeNumberedDataTable(
         IContainer container,
-        string title,
-        IReadOnlyList<ModuleFieldDto> fields,
-        Dictionary<string, string> data,
-        Dictionary<string, string> labels)
-    {
-        container.Column(col =>
-        {
-            col.Item().Background(SteelstonePrintTheme.LightGreyHeader).Padding(4).Text(title).Bold().FontSize(9);
-            col.Item().Border(0.5f).Padding(6).Column(inner =>
-            {
-                foreach (var field in fields)
-                {
-                    var val = RecordPrintDataHelper.FormatDisplayValue(RecordPrintDataHelper.Val(data, field.Ref));
-                    if (string.IsNullOrWhiteSpace(val)) continue;
-                    inner.Item().PaddingBottom(2).Text(text =>
-                    {
-                        text.Span(RecordPrintDataHelper.Label(labels, field.Ref) + ": ").SemiBold().FontSize(8);
-                        text.Span(val).FontSize(8);
-                    });
-                }
-            });
-        });
-    }
-
-    private static void ComposeNumberedSection(
-        IContainer container,
-        string title,
+        int blockNum,
+        string sectionTitle,
         IReadOnlyList<(string Header, string Ref)> columns,
         IReadOnlyList<Dictionary<string, string>> rows)
     {
         container.Column(col =>
         {
-            col.Item().Background(SteelstonePrintTheme.LightGreyHeader).Padding(4).Text(title).Bold().FontSize(9);
+            col.Item().Background(SteelstonePrintTheme.LightGreyHeader).Padding(4)
+                .Text($"{blockNum}. {sectionTitle.ToUpperInvariant()}").Bold().FontSize(9);
+
             col.Item().Table(table =>
             {
                 table.ColumnsDefinition(cols =>
                 {
                     foreach (var (header, _) in columns)
                     {
-                        if (header is "SR.")
-                            cols.ConstantColumn(28);
+                        if (header.Equals("Sr.", StringComparison.OrdinalIgnoreCase))
+                            cols.ConstantColumn(24);
                         else
                             cols.RelativeColumn();
                     }
@@ -367,14 +423,14 @@ internal static class SteelstoneControlledPrintComposer
 
                 foreach (var (header, _) in columns)
                 {
-                    table.Cell().Background(SteelstonePrintTheme.Navy).Padding(3)
-                        .Text(header).FontColor(Colors.White).Bold().FontSize(7);
+                    table.Cell().Background(SteelstonePrintTheme.Navy).Border(0.5f).Padding(3)
+                        .Text(header.ToUpperInvariant()).FontColor(Colors.White).Bold().FontSize(7);
                 }
 
                 if (rows.Count == 0)
                 {
                     table.Cell().ColumnSpan((uint)columns.Count).Border(0.5f).Padding(8)
-                        .Text("No entries saved in this section.").FontColor(Colors.Grey.Darken1).Italic();
+                        .Text("No entries saved in this section.").FontColor(Colors.Grey.Darken1).Italic().FontSize(8);
                     return;
                 }
 
@@ -387,7 +443,7 @@ internal static class SteelstoneControlledPrintComposer
                             : RecordPrintDataHelper.FormatDisplayValue(
                                 rows[i].TryGetValue(fieldRef, out var v) ? v : string.Empty);
                         if (string.IsNullOrWhiteSpace(display)) display = "—";
-                        table.Cell().Border(0.5f).Padding(3).Text(display).FontSize(7.5f);
+                        table.Cell().Border(0.5f).Padding(3).MinHeight(14).Text(display).FontSize(7.5f);
                     }
                 }
             });
@@ -401,23 +457,23 @@ internal static class SteelstoneControlledPrintComposer
             row.RelativeItem().Column(c =>
             {
                 c.Item().Text("Prepared by").SemiBold().FontSize(8);
-                c.Item().PaddingTop(16).Text("____________________________").FontSize(8);
+                c.Item().PaddingTop(14).Text("____________________________").FontSize(8);
                 c.Item().Text("Name / Designation").FontSize(7);
                 c.Item().Text("Date").FontSize(7);
             });
-            row.ConstantItem(12);
+            row.ConstantItem(10);
             row.RelativeItem().Column(c =>
             {
                 c.Item().Text("Approved by").SemiBold().FontSize(8);
-                c.Item().PaddingTop(16).Text("____________________________").FontSize(8);
+                c.Item().PaddingTop(14).Text("____________________________").FontSize(8);
                 c.Item().Text("Name / Designation").FontSize(7);
                 c.Item().Text("Date").FontSize(7);
             });
-            row.ConstantItem(12);
+            row.ConstantItem(10);
             row.RelativeItem().Column(c =>
             {
-                c.Item().Text("Party acceptance").SemiBold().FontSize(8);
-                c.Item().PaddingTop(16).Text("____________________________").FontSize(8);
+                c.Item().Text("Accepted by supplier").SemiBold().FontSize(8);
+                c.Item().PaddingTop(14).Text("____________________________").FontSize(8);
                 c.Item().Text("Name, signature & stamp").FontSize(7);
                 c.Item().Text("Date").FontSize(7);
             });

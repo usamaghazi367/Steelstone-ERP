@@ -27,6 +27,7 @@
     <Content Update="web.config" CopyToPublishDirectory="PreserveNewest" />
     <Content Update="Data\*.json" CopyToPublishDirectory="PreserveNewest" />
     <Content Include="Data\Steelstone-Formatted-Workbook-Template.xlsx" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="Data\Print\**\*" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>

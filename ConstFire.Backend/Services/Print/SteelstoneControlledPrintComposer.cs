@@ -210,62 +210,56 @@ internal static class SteelstoneControlledPrintComposer
     {
         container.Column(col =>
         {
+            // Reference ERP-FORMATS: logo left | company + doc title center | doc control block right
             col.Item().Row(row =>
             {
                 var logo = SteelstonePrintAssets.TryLoadLogoBytes();
                 if (logo is not null)
-                    row.ConstantItem(50).Height(50).Image(logo).FitArea();
+                    row.ConstantItem(54).Height(54).Image(logo).FitArea();
                 else
-                    row.ConstantItem(50);
+                    row.ConstantItem(54).Height(54).Border(0.5f).BorderColor(Colors.Grey.Lighten2)
+                        .AlignCenter().AlignMiddle().Text("LOGO").FontSize(6).FontColor(Colors.Grey.Medium);
 
-                row.RelativeItem().Column(center =>
+                row.RelativeItem().PaddingHorizontal(6).Column(center =>
                 {
                     center.Item().AlignCenter().Text(SteelstonePrintTheme.CompanyLegalName).Bold().FontSize(11);
-                    center.Item().AlignCenter().Text(meta.DocumentTitle).Bold().FontSize(13).FontColor(SteelstonePrintTheme.Navy);
-                    center.Item().AlignCenter().Text(meta.Subtitle).FontSize(8.5f).FontColor(Colors.Grey.Darken2);
+                    center.Item().AlignCenter().Text(meta.DocumentTitle).Bold().FontSize(12.5f).FontColor(SteelstonePrintTheme.Navy);
+                    center.Item().AlignCenter().Text(meta.Subtitle).FontSize(8f).FontColor(Colors.Grey.Darken2);
+                });
+
+                row.ConstantItem(148).Column(right =>
+                {
+                    right.Item().AlignRight().Text(text =>
+                    {
+                        text.Span("Doc No.: ").SemiBold().FontSize(7f);
+                        text.Span(meta.DocNo).FontSize(7f);
+                    });
+                    right.Item().AlignRight().Text(text =>
+                    {
+                        text.Span("Version: ").SemiBold().FontSize(7f);
+                        text.Span(meta.Version).FontSize(7f);
+                    });
+                    right.Item().AlignRight().Text(text =>
+                    {
+                        text.Span("Approval No.: ").SemiBold().FontSize(7f);
+                        text.Span(meta.ApprovalNo).FontSize(7f);
+                    });
+                    right.Item().AlignRight().Text(text =>
+                    {
+                        text.Span("Effective: ").SemiBold().FontSize(7f);
+                        text.Span(meta.Effective).FontSize(7f);
+                    });
+                    right.Item().AlignRight().Text(text =>
+                    {
+                        text.Span("Page: ").SemiBold().FontSize(7f);
+                        text.CurrentPageNumber().FontSize(7f);
+                        text.Span(" of ").FontSize(7f);
+                        text.TotalPages().FontSize(7f);
+                    });
                 });
             });
 
-            col.Item().PaddingTop(5).Table(table =>
-            {
-                table.ColumnsDefinition(c =>
-                {
-                    c.RelativeColumn(2);
-                    c.RelativeColumn(2);
-                    c.RelativeColumn(2);
-                });
-
-                table.Cell().PaddingVertical(2).Text(text =>
-                {
-                    text.Span("Doc No.: ").SemiBold().FontSize(7.5f);
-                    text.Span(meta.DocNo).FontSize(7.5f);
-                });
-                table.Cell().PaddingVertical(2).Text(text =>
-                {
-                    text.Span("Version: ").SemiBold().FontSize(7.5f);
-                    text.Span(meta.Version).FontSize(7.5f);
-                });
-                table.Cell().PaddingVertical(2).AlignRight().Text(text =>
-                {
-                    text.Span("Page: ").SemiBold().FontSize(7.5f);
-                    text.CurrentPageNumber().FontSize(7.5f);
-                    text.Span(" of ").FontSize(7.5f);
-                    text.TotalPages().FontSize(7.5f);
-                });
-
-                table.Cell().PaddingVertical(2).Text(text =>
-                {
-                    text.Span("Approval No.: ").SemiBold().FontSize(7.5f);
-                    text.Span(meta.ApprovalNo).FontSize(7.5f);
-                });
-                table.Cell().ColumnSpan(2).PaddingVertical(2).Text(text =>
-                {
-                    text.Span("Effective: ").SemiBold().FontSize(7.5f);
-                    text.Span(meta.Effective).FontSize(7.5f);
-                });
-            });
-
-            col.Item().PaddingTop(2).LineHorizontal(0.75f).LineColor(SteelstonePrintTheme.Navy);
+            col.Item().PaddingTop(4).LineHorizontal(0.75f).LineColor(SteelstonePrintTheme.Navy);
         });
     }
 

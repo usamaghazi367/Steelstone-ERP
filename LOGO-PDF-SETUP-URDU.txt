@@ -1,0 +1,40 @@
+Steelstone logo — PDF header (Roman Urdu guide)
+===============================================
+
+PDF header layout (reference jaisa):
+  LEFT   = logo
+  CENTER = STEELSTONE IT (PRIVATE) LIMITED + document title
+  RIGHT  = Doc No, Version, Approval No, Effective, Page x of y
+
+Aap ko logo SERVER par alag se FTP se daalne ki zaroorat NAHI jab tak aap Git deploy use kar rahe hain.
+
+OPTION A — Sab se aasaan (recommended)
+--------------------------------------
+1) Project folder kholo: D:\Usama Data\ConstFire
+2) Double-click: INSTALL-LOGO-FOR-PDF.bat
+3) Apni logo wali JPG file select karo (jo aap ne chat mein bheji thi)
+4) File yahan copy ho jayegi:
+   ConstFire.Backend\Data\Print\steelstone-logo-blue.jpg
+
+5) GitHub par bhejne ke liye (taake server par bhi aa jaye):
+   git add ConstFire.Backend/Data/Print/steelstone-logo-blue.jpg
+   git commit -m "Add Steelstone PDF header logo"
+   git push origin main
+
+6) Pipeline green hone ke baad live site par Print PDF mein logo dikhega.
+
+OPTION B — Manual copy (bina script)
+------------------------------------
+Apni logo file copy karo is exact naam se:
+  D:\Usama Data\ConstFire\ConstFire.Backend\Data\Print\steelstone-logo-blue.jpg
+
+Phir wahi git add / commit / push (step 5 upar).
+
+Local PDF test (logo check):
+  ConstFire.Backend folder mein:
+  dotnet run -c Release -- --print-record-pdf --code=02 --preview
+
+Output:
+  D:\Usama Data\ConstFire\output\steelstone-manufacturer-registration-preview-mfr-00021.pdf
+
+Note: Logo file git mein honi chahiye — .env ya password files ki tarah secret NAHI hai (yeh public branding hai).

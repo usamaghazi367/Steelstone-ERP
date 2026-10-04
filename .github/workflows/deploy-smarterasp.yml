@@ -60,6 +60,7 @@ jobs:
           FTP_PASSWORD: ${{ secrets.SMARTERASP_FTP_PASSWORD }}
           FTP_REMOTE_DIR: ${{ secrets.SMARTERASP_FTP_REMOTE_DIR }}
         run: |
+          set -euo pipefail
           REMOTE="${FTP_REMOTE_DIR:-/}"
           REMOTE="${REMOTE#/}"
           REMOTE="${REMOTE%/}"
@@ -70,17 +71,35 @@ jobs:
           export RCLONE_CONFIG_ASP_PASS="$(rclone obscure "${FTP_PASSWORD}")"
           export RCLONE_CONFIG_ASP_EXPLICIT_TLS=true
           export RCLONE_CONFIG_ASP_NO_CHECK_CERTIFICATE=true
+          export RCLONE_CONFIG_ASP_DISABLE_EPSV=true
+          export RCLONE_CONFIG_ASP_DISABLE_MLSD=false
           DEST="asp:"
           if [ -n "$REMOTE" ]; then DEST="asp:${REMOTE}"; fi
-          rclone lsd "$DEST" --contimeout 60s --timeout 60s
-          rclone copy publish "$DEST" \
-            --transfers 2 \
-            --retries 8 \
-            --low-level-retries 20 \
-            --contimeout 90s \
-            --timeout 600s \
-            -v \
-            --exclude "appsettings.Production.json" \
-            --exclude "appsettings.Production.local.json" \
-            --exclude "appsettings.Development.json" \
+          echo "Publish size:"
+          du -sh publish || true
+          echo "Listing remote (FTPS)..."
+          rclone lsd "$DEST" --contimeout 90s --timeout 120s -v
+          COPY_FLAGS=(
+            --transfers 1
+            --checkers 1
+            --retries 12
+            --low-level-retries 30
+            --contimeout 120s
+            --timeout 900s
+            -v
+            --exclude "appsettings.Production.json"
+            --exclude "appsettings.Production.local.json"
+            --exclude "appsettings.Development.json"
             --exclude ".git/**"
+          )
+          for attempt in 1 2 3 4 5; do
+            echo "=== FTPS deploy attempt ${attempt}/5 ==="
+            if rclone copy publish "$DEST" "${COPY_FLAGS[@]}"; then
+              echo "Deploy succeeded on attempt ${attempt}."
+              exit 0
+            fi
+            echo "Attempt ${attempt} failed; waiting 45s before retry..."
+            sleep 45
+          done
+          echo "All FTPS deploy attempts failed."
+          exit 1

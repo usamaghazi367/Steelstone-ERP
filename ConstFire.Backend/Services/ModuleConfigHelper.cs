@@ -11,6 +11,17 @@ internal sealed class ModuleConfig
     public List<ModuleSectionConfig> Sections { get; set; } = [];
     public List<ModuleFieldConfig> Fields { get; set; } = [];
     public List<string>? ListColumns { get; set; }
+    public ModulePrintConfig? Print { get; set; }
+}
+
+internal sealed class ModulePrintConfig
+{
+    public string? DocumentTitle { get; set; }
+    public string? Subtitle { get; set; }
+    public string? DocNo { get; set; }
+    public string? Version { get; set; }
+    public string? ApprovalNo { get; set; }
+    public string? Effective { get; set; }
 }
 
 internal sealed class ModuleSectionConfig

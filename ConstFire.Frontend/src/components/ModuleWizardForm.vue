@@ -99,6 +99,20 @@ function removeRepeatingRow(index: number) {
   repeatingRows.value = repeatingRows.value.filter((_, i) => i !== index)
 }
 
+function rowHasContent(row: Record<string, string>) {
+  return Object.values(row).some((v) => String(v ?? '').trim().length > 0)
+}
+
+const savedRepeatingTableRows = computed(() => {
+  if (!currentSection.value?.repeating) return [] as Record<string, string>[]
+  return repeatingRows.value.filter(rowHasContent)
+})
+
+function sanitizeRepeatingRows(rows: RepeatingSectionData): RepeatingSectionData {
+  const filled = rows.filter(rowHasContent)
+  return filled.length > 0 ? filled : [{}]
+}
+
 function onSectionFormUpdate(data: Record<string, string>) {
   const sectionNum = currentSection.value?.num ?? 1
   sectionFlatData.value = applyModuleConditionalCascade(
@@ -130,7 +144,7 @@ async function saveCurrentSection() {
   try {
     const sectionNum = currentSection.value.num
     const payload = currentSection.value.repeating
-      ? { rows: repeatingRows.value }
+      ? { rows: sanitizeRepeatingRows(repeatingRows.value) }
       : { data: { ...sectionFlatData.value } }
 
     const saved = await saveSection(props.module.code, props.recordId, sectionNum, payload)
@@ -206,6 +220,28 @@ async function saveCurrentSection() {
           />
         </div>
         <button type="button" class="btn-add" @click="addRepeatingRow">+ Add another entry</button>
+
+        <div v-if="savedRepeatingTableRows.length" class="saved-entries">
+          <h3>Saved entries in this section ({{ savedRepeatingTableRows.length }})</h3>
+          <div class="saved-table-wrap">
+            <table class="saved-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th v-for="field in sectionFields" :key="field.ref">{{ field.fieldName }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(row, index) in savedRepeatingTableRows" :key="index">
+                  <td>{{ index + 1 }}</td>
+                  <td v-for="field in sectionFields" :key="field.ref">
+                    {{ row[field.ref] || '—' }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </template>
 
       <template v-else>
@@ -384,5 +420,42 @@ async function saveCurrentSection() {
   border: 1px solid #fecaca;
   padding: 0.75rem;
   border-radius: 8px;
+}
+
+.saved-entries {
+  margin-top: 1rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 0.75rem;
+  background: #fff;
+}
+
+.saved-entries h3 {
+  margin: 0 0 0.5rem;
+  font-size: 0.9rem;
+  color: #0f172a;
+}
+
+.saved-table-wrap {
+  overflow-x: auto;
+}
+
+.saved-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+
+.saved-table th,
+.saved-table td {
+  border: 1px solid #e2e8f0;
+  padding: 0.4rem 0.5rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.saved-table th {
+  background: #f1f5f9;
+  font-weight: 600;
 }
 </style>

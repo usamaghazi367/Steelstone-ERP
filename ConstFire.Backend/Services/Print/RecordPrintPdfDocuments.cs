@@ -27,7 +27,7 @@ internal static class RecordPrintPdfDocuments
         {
             "09" => BuildQuote(module, record, config, data, labels),
             "11" => BuildInvoice(module, record, config, data, labels),
-            _ => BuildGenericDocument(module, record, config, data, labels)
+            _ => SteelstoneControlledPrintComposer.Build(module, record, config, data, labels)
         };
     }
 

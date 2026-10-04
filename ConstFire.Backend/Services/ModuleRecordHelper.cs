@@ -27,24 +27,29 @@ internal static class ModuleRecordHelper
     {
         if (repeating && request.Rows is not null)
         {
-            data[$"__section_{sectionNum}"] = JsonSerializer.Serialize(request.Rows);
+            var cleanedRows = request.Rows
+                .Where(r => r.Values.Any(v => !string.IsNullOrWhiteSpace(v)))
+                .Select(r => r.ToDictionary(kv => kv.Key, kv => kv.Value?.Trim() ?? string.Empty, StringComparer.OrdinalIgnoreCase))
+                .ToList();
+
+            data[$"__section_{sectionNum}"] = JsonSerializer.Serialize(cleanedRows);
             RemoveIndexedKeys(data, fieldRefs);
-            for (var i = 0; i < request.Rows.Count; i++)
+            for (var i = 0; i < cleanedRows.Count; i++)
             {
-                foreach (var (key, value) in request.Rows[i])
-                    data[$"{key}#{i}"] = value?.Trim() ?? string.Empty;
+                foreach (var (key, value) in cleanedRows[i])
+                    data[$"{key}#{i}"] = value;
             }
 
             if (moduleCode == EnterpriseRecordHelper.ModuleCode)
             {
                 if (sectionNum == 4)
                 {
-                    var count = request.Rows.Count(r => !string.IsNullOrWhiteSpace(r.GetValueOrDefault("4.4")));
+                    var count = cleanedRows.Count(r => !string.IsNullOrWhiteSpace(r.GetValueOrDefault("4.4")));
                     data["1.17"] = count.ToString();
                 }
                 if (sectionNum == 5)
                 {
-                    var count = request.Rows.Count(r => !string.IsNullOrWhiteSpace(r.GetValueOrDefault("5.2")));
+                    var count = cleanedRows.Count(r => !string.IsNullOrWhiteSpace(r.GetValueOrDefault("5.2")));
                     data["1.18"] = count.ToString();
                 }
             }

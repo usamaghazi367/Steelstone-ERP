@@ -15,7 +15,9 @@ Aap ka routine:
 2) git add -A
 3) git commit -m "message"
 4) git push origin main
-5) Upar wale link par jao — green tick = deploy OK
+5) Upar wale link par jao — green tick = deploy OK, red X = fail (line par click karke log dekhein)
+Latest success example:
+https://github.com/usamaghazi367/Steelstone-ERP/actions/runs/37051693295
 6) Phir site check: https://st102.ookpro.com/api/health
 
 Manual deploy dubara chalana (bina code change):

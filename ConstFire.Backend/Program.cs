@@ -248,13 +248,33 @@ if (args.Contains("--print-record-pdf", StringComparer.OrdinalIgnoreCase))
 
     var moduleCode = codeArg?["--code=".Length..].Trim() ?? "09";
     int? recordId = int.TryParse(idArg?["--id=".Length..], out var parsedId) ? parsedId : null;
+    var usePreviewSample = args.Contains("--preview", StringComparer.OrdinalIgnoreCase);
 
     using var scope = app.Services.CreateScope();
     var print = scope.ServiceProvider.GetRequiredService<ConstFire.Backend.Services.Print.IRecordPrintPdfService>();
 
-    var generated = recordId is int rid
-        ? await print.GenerateAsync(moduleCode, rid)
-        : await print.GenerateFirstRecordSampleAsync(moduleCode);
+    (byte[] Pdf, string FileName)? generated;
+    if (usePreviewSample && moduleCode == "02")
+    {
+        var modules = scope.ServiceProvider.GetRequiredService<IModuleService>();
+        var envForPrint = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
+        var module = await modules.GetModuleAsync(moduleCode);
+        if (module is null)
+        {
+            Console.Error.WriteLine($"Module {moduleCode} not found.");
+            return;
+        }
+
+        var config = ModuleConfigHelper.LoadConfig(envForPrint, moduleCode);
+        var pdf = ConstFire.Backend.Services.Print.SteelstoneControlledPrintComposer.BuildPreviewSampleModule02(module, config);
+        generated = (pdf, "steelstone-manufacturer-registration-preview-mfr-00021.pdf");
+    }
+    else
+    {
+        generated = recordId is int rid
+            ? await print.GenerateAsync(moduleCode, rid)
+            : await print.GenerateFirstRecordSampleAsync(moduleCode);
+    }
 
     if (generated is null)
     {

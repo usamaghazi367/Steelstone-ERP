@@ -3,6 +3,14 @@
   "name": "MANUFACTURER (SUPPLIER) REGISTRATION",
   "category": "ERP Module",
   "recordCodePrefix": "MFR",
+  "print": {
+    "documentTitle": "MANUFACTURER (SUPPLIER) REGISTRATION",
+    "subtitle": "Vendor Master | Manufacturer Register",
+    "docNo": "SSIT-F-REG-02",
+    "version": "1.0 (Rev 00)",
+    "approvalNo": "QMS-26-002",
+    "effective": "01-Oct-2026"
+  },
   "listColumns": [
     "_recordCode",
     "1.1",

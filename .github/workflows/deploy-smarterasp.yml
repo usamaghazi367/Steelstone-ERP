@@ -108,8 +108,8 @@ jobs:
             open -u ${FTP_USERNAME},${FTP_PASSWORD} ftps://${FTP_SERVER};
             lcd publish;
             cd ${REMOTE};
-            echo '=== wwwroot (UI) ===';
-            mirror -R -v --parallel=2 --delete wwwroot;
+            echo '=== wwwroot (UI; no --delete — remote cleanup is too slow on FTPS) ===';
+            mirror -R -v --parallel=2 --ignore-time wwwroot;
             echo '=== root DLLs and config (no subfolders) ===';
             mirror -R -v --parallel=1 --ignore-time --no-recursion \
               --exclude-glob appsettings.Production.json \

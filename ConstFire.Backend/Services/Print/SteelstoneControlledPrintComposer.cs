@@ -208,58 +208,63 @@ internal static class SteelstoneControlledPrintComposer
 
     private static void ComposePageHeader(IContainer container, PrintMeta meta)
     {
-        container.Column(col =>
+        container.Table(table =>
         {
-            // Reference ERP-FORMATS: logo left | company + doc title center | doc control block right
-            col.Item().Row(row =>
+            table.ColumnsDefinition(c =>
             {
-                var logo = SteelstonePrintAssets.TryLoadLogoBytes();
-                if (logo is not null)
-                    row.ConstantItem(54).Height(54).Image(logo).FitArea();
-                else
-                    row.ConstantItem(54).Height(54).Border(0.5f).BorderColor(Colors.Grey.Lighten2)
-                        .AlignCenter().AlignMiddle().Text("LOGO").FontSize(6).FontColor(Colors.Grey.Medium);
-
-                row.RelativeItem().PaddingHorizontal(6).Column(center =>
-                {
-                    center.Item().AlignCenter().Text(SteelstonePrintTheme.CompanyLegalName).Bold().FontSize(11);
-                    center.Item().AlignCenter().Text(meta.DocumentTitle).Bold().FontSize(12.5f).FontColor(SteelstonePrintTheme.Navy);
-                    center.Item().AlignCenter().Text(meta.Subtitle).FontSize(8f).FontColor(Colors.Grey.Darken2);
-                });
-
-                row.ConstantItem(148).Column(right =>
-                {
-                    right.Item().AlignRight().Text(text =>
-                    {
-                        text.Span("Doc No.: ").SemiBold().FontSize(7f);
-                        text.Span(meta.DocNo).FontSize(7f);
-                    });
-                    right.Item().AlignRight().Text(text =>
-                    {
-                        text.Span("Version: ").SemiBold().FontSize(7f);
-                        text.Span(meta.Version).FontSize(7f);
-                    });
-                    right.Item().AlignRight().Text(text =>
-                    {
-                        text.Span("Approval No.: ").SemiBold().FontSize(7f);
-                        text.Span(meta.ApprovalNo).FontSize(7f);
-                    });
-                    right.Item().AlignRight().Text(text =>
-                    {
-                        text.Span("Effective: ").SemiBold().FontSize(7f);
-                        text.Span(meta.Effective).FontSize(7f);
-                    });
-                    right.Item().AlignRight().Text(text =>
-                    {
-                        text.Span("Page: ").SemiBold().FontSize(7f);
-                        text.CurrentPageNumber().FontSize(7f);
-                        text.Span(" of ").FontSize(7f);
-                        text.TotalPages().FontSize(7f);
-                    });
-                });
+                c.ConstantColumn(78);
+                c.RelativeColumn(5);
+                c.ConstantColumn(132);
             });
 
-            col.Item().PaddingTop(4).LineHorizontal(0.75f).LineColor(SteelstonePrintTheme.Navy);
+            var logo = SteelstonePrintAssets.TryLoadLogoBytes();
+            var logoCell = table.Cell().Border(0.75f).BorderColor(SteelstonePrintTheme.HeaderBorder)
+                .Padding(6).AlignMiddle().AlignCenter().MinHeight(78);
+            if (logo is not null)
+                logoCell.Image(logo).FitArea();
+            else
+                logoCell.Text("LOGO").FontSize(6).FontColor(Colors.Grey.Medium);
+
+            table.Cell().Border(0.75f).BorderColor(SteelstonePrintTheme.HeaderBorder).PaddingVertical(8).PaddingHorizontal(6)
+                .Column(center =>
+                {
+                    center.Item().AlignCenter().Text(SteelstonePrintTheme.CompanyLegalName)
+                        .FontSize(9.5f).FontColor(SteelstonePrintTheme.HeaderCompanyGrey);
+                    center.Item().PaddingTop(2).AlignCenter().Text(meta.DocumentTitle)
+                        .Bold().FontSize(14f).FontColor(SteelstonePrintTheme.Navy);
+                    center.Item().PaddingTop(2).AlignCenter().Text(meta.Subtitle)
+                        .FontSize(8f).FontColor(SteelstonePrintTheme.HeaderLabelGrey);
+                });
+
+            table.Cell().Border(0.75f).BorderColor(SteelstonePrintTheme.HeaderBorder).PaddingVertical(6).PaddingHorizontal(8)
+                .Column(right =>
+                {
+                    right.Item().Element(c => ComposeHeaderMetaLine(c, "Doc No.:", meta.DocNo));
+                    right.Item().Element(c => ComposeHeaderMetaLine(c, "Version:", meta.Version));
+                    right.Item().Element(c => ComposeHeaderMetaLine(c, "Approval No.:", meta.ApprovalNo));
+                    right.Item().Element(c => ComposeHeaderMetaLine(c, "Effective:", meta.Effective));
+                    right.Item().Element(c => ComposeHeaderMetaPageLine(c));
+                });
+        });
+    }
+
+    private static void ComposeHeaderMetaLine(IContainer container, string label, string value)
+    {
+        container.PaddingBottom(1).Text(text =>
+        {
+            text.Span(label + " ").FontSize(7.5f).FontColor(SteelstonePrintTheme.HeaderLabelGrey);
+            text.Span(string.IsNullOrWhiteSpace(value) ? "—" : value).Bold().FontSize(7.5f).FontColor(SteelstonePrintTheme.Navy);
+        });
+    }
+
+    private static void ComposeHeaderMetaPageLine(IContainer container)
+    {
+        container.Text(text =>
+        {
+            text.Span("Page: ").FontSize(7.5f).FontColor(SteelstonePrintTheme.HeaderLabelGrey);
+            text.CurrentPageNumber().Bold().FontSize(7.5f).FontColor(SteelstonePrintTheme.Navy);
+            text.Span(" of ").FontSize(7.5f).FontColor(SteelstonePrintTheme.HeaderLabelGrey);
+            text.TotalPages().Bold().FontSize(7.5f).FontColor(SteelstonePrintTheme.Navy);
         });
     }
 

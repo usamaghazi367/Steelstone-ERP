@@ -19,4 +19,7 @@ internal static class SteelstonePrintTheme
     public static readonly string Navy = "#2F5597";
     public static readonly string LightGreyHeader = "#D9D9D9";
     public static readonly string TotalHighlight = "#B4C6E7";
+    public static readonly string HeaderBorder = "#94A3B8";
+    public static readonly string HeaderLabelGrey = "#64748B";
+    public static readonly string HeaderCompanyGrey = "#475569";
 }

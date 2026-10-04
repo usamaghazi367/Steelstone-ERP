@@ -12,6 +12,10 @@ on:
         description: Upload runtimes/ (only if .NET native deps changed)
         type: boolean
         default: false
+      sync_static_assets:
+        description: Upload Data/ and LatoFont/ (PDF fonts, seed data)
+        type: boolean
+        default: false
 
 concurrency:
   group: smarterasp-deploy
@@ -67,18 +71,35 @@ jobs:
           FTP_PASSWORD: ${{ secrets.SMARTERASP_FTP_PASSWORD }}
           FTP_REMOTE_DIR: ${{ secrets.SMARTERASP_FTP_REMOTE_DIR }}
           SYNC_RUNTIMES: ${{ github.event_name == 'workflow_dispatch' && inputs.sync_runtimes || false }}
+          SYNC_STATIC_ASSETS: ${{ github.event_name == 'workflow_dispatch' && inputs.sync_static_assets || false }}
         run: |
           set -euo pipefail
           REMOTE="${FTP_REMOTE_DIR:-/}"
           REMOTE="${REMOTE%/}"
           if [ -z "$REMOTE" ]; then REMOTE="/"; fi
-          du -sh publish || true
-          du -sh publish/wwwroot publish/Data publish/LatoFont publish/runtimes 2>/dev/null || true
+          du -sh publish/wwwroot publish 2>/dev/null || true
 
-          LFTP_BASE="
-            set net:timeout 180;
-            set net:max-retries 8;
-            set net:reconnect-interval-base 8;
+          OPTIONAL=""
+          if [ "${SYNC_STATIC_ASSETS}" = "true" ]; then
+            OPTIONAL="${OPTIONAL}
+            echo 'Upload Data/ and LatoFont/ (manual static assets)';
+            mirror -R -v --parallel=1 --ignore-time Data;
+            mirror -R -v --parallel=1 --ignore-time LatoFont;"
+          else
+            echo "Skipping Data/ and LatoFont/ on routine deploy (use sync_static_assets if needed)."
+          fi
+          if [ "${SYNC_RUNTIMES}" = "true" ]; then
+            OPTIONAL="${OPTIONAL}
+            echo 'Upload runtimes/ (manual)';
+            mirror -R -v --parallel=1 --ignore-time runtimes;"
+          else
+            echo "Skipping runtimes/ on routine deploy (use sync_runtimes if needed)."
+          fi
+
+          LFTP_SCRIPT="
+            set net:timeout 120;
+            set net:max-retries 5;
+            set net:reconnect-interval-base 10;
             set ftp:ssl-force true;
             set ftp:ssl-protect-data true;
             set ssl:verify-certificate no;
@@ -87,35 +108,25 @@ jobs:
             open -u ${FTP_USERNAME},${FTP_PASSWORD} ftps://${FTP_SERVER};
             lcd publish;
             cd ${REMOTE};
+            echo '=== wwwroot (UI) ===';
+            mirror -R -v --parallel=2 --delete wwwroot;
+            echo '=== root DLLs and config (no subfolders) ===';
+            mirror -R -v --parallel=1 --ignore-time --no-recursion \
+              --exclude-glob appsettings.Production.json \
+              --exclude-glob appsettings.Production.local.json \
+              --exclude-glob appsettings.Development.json \
+              --exclude-glob '*.pdb' .;
+            ${OPTIONAL}
+            bye
           "
-
-          run_lftp() {
-            local label="$1"
-            local body="$2"
-            for attempt in 1 2 3; do
-              echo "=== ${label} (attempt ${attempt}/3) ==="
-              if lftp -c "${LFTP_BASE} ${body} bye"; then
-                return 0
-              fi
-              echo "${label} failed; waiting 45s..."
-              sleep 45
-            done
-            return 1
-          }
-
-          run_lftp "wwwroot" "echo 'Upload wwwroot'; mirror -R -v --parallel=2 --delete wwwroot;" || exit 1
-          run_lftp "root binaries" "echo 'Upload publish root DLLs/config (no subdirs)'; mirror -R -v --parallel=1 --ignore-time --no-recursion \
-            --exclude-glob appsettings.Production.json \
-            --exclude-glob appsettings.Production.local.json \
-            --exclude-glob appsettings.Development.json \
-            --exclude-glob '*.pdb' .;" || exit 1
-          run_lftp "Data" "echo 'Upload Data/'; mirror -R -v --parallel=1 --ignore-time Data;" || exit 1
-          run_lftp "LatoFont" "echo 'Upload LatoFont/'; mirror -R -v --parallel=1 --ignore-time LatoFont;" || exit 1
-
-          if [ "${SYNC_RUNTIMES}" = "true" ]; then
-            run_lftp "runtimes" "echo 'Upload runtimes/ (manual)'; mirror -R -v --parallel=1 --ignore-time runtimes;" || exit 1
-          else
-            echo "Skipping runtimes/ (~138MB; already on server — use workflow_dispatch sync_runtimes if needed)."
-          fi
-
-          echo "SmarterASP FTPS deploy completed."
+          for attempt in 1 2 3; do
+            echo "=== LFTP deploy attempt ${attempt}/3 ==="
+            if lftp -c "${LFTP_SCRIPT}"; then
+              echo "SmarterASP FTPS deploy completed."
+              exit 0
+            fi
+            echo "Attempt ${attempt} failed; waiting 45s..."
+            sleep 45
+          done
+          echo "All LFTP deploy attempts failed."
+          exit 1

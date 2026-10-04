@@ -75,16 +75,21 @@ jobs:
             set ftp:ssl-protect-data true;
             set ssl:verify-certificate no;
             set ftp:passive-mode true;
+            set sync:use-mdtm false;
             open -u ${FTP_USERNAME},${FTP_PASSWORD} ftps://${FTP_SERVER};
             lcd publish;
             cd ${REMOTE};
-            mirror -R -v --parallel=1 wwwroot;
-            mirror -R -v --parallel=1 --only-newer \
+            echo '=== wwwroot (always refresh, ~1MB) ===';
+            mirror -R -v --parallel=2 --delete wwwroot;
+            echo '=== backend (skip unchanged by size; CI timestamps always new) ===';
+            mirror -R -v --parallel=2 --ignore-time \
               --exclude-glob wwwroot/** \
+              --exclude-glob logs/** \
               --exclude-glob .git* \
               --exclude-glob appsettings.Production.json \
               --exclude-glob appsettings.Production.local.json \
-              --exclude-glob appsettings.Development.json;
+              --exclude-glob appsettings.Development.json \
+              --exclude-glob '*.pdb';
             bye
           "
           for attempt in 1 2 3; do

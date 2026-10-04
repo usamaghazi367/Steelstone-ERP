@@ -20,7 +20,7 @@ concurrency:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 120
 
     steps:
       - name: Checkout
@@ -72,15 +72,10 @@ jobs:
           REMOTE="${FTP_REMOTE_DIR:-/}"
           REMOTE="${REMOTE%/}"
           if [ -z "$REMOTE" ]; then REMOTE="/"; fi
-          RUNTIME_EXCLUDE="--exclude-glob runtimes/**"
-          if [ "${SYNC_RUNTIMES}" = "true" ]; then
-            RUNTIME_EXCLUDE=""
-            echo "Including runtimes/ (manual native-deps sync)."
-          else
-            echo "Skipping runtimes/ on FTPS (already on server; enable sync_runtimes if needed)."
-          fi
           du -sh publish || true
-          LFTP_SCRIPT="
+          du -sh publish/wwwroot publish/Data publish/LatoFont publish/runtimes 2>/dev/null || true
+
+          LFTP_BASE="
             set net:timeout 180;
             set net:max-retries 8;
             set net:reconnect-interval-base 8;
@@ -92,28 +87,35 @@ jobs:
             open -u ${FTP_USERNAME},${FTP_PASSWORD} ftps://${FTP_SERVER};
             lcd publish;
             cd ${REMOTE};
-            echo '=== wwwroot (always refresh, ~1MB) ===';
-            mirror -R -v --parallel=2 --delete wwwroot;
-            echo '=== backend (skip unchanged by size; CI timestamps always new) ===';
-            mirror -R -v --parallel=1 --ignore-time \
-              ${RUNTIME_EXCLUDE} \
-              --exclude-glob wwwroot/** \
-              --exclude-glob logs/** \
-              --exclude-glob .git* \
-              --exclude-glob appsettings.Production.json \
-              --exclude-glob appsettings.Production.local.json \
-              --exclude-glob appsettings.Development.json \
-              --exclude-glob '*.pdb';
-            bye
           "
-          for attempt in 1 2 3; do
-            echo "=== LFTP deploy attempt ${attempt}/3 ==="
-            if lftp -c "${LFTP_SCRIPT}"; then
-              echo "Deploy succeeded on attempt ${attempt}."
-              exit 0
-            fi
-            echo "Attempt ${attempt} failed; waiting 60s..."
-            sleep 60
-          done
-          echo "All LFTP deploy attempts failed."
-          exit 1
+
+          run_lftp() {
+            local label="$1"
+            local body="$2"
+            for attempt in 1 2 3; do
+              echo "=== ${label} (attempt ${attempt}/3) ==="
+              if lftp -c "${LFTP_BASE} ${body} bye"; then
+                return 0
+              fi
+              echo "${label} failed; waiting 45s..."
+              sleep 45
+            done
+            return 1
+          }
+
+          run_lftp "wwwroot" "echo 'Upload wwwroot'; mirror -R -v --parallel=2 --delete wwwroot;" || exit 1
+          run_lftp "root binaries" "echo 'Upload publish root DLLs/config (no subdirs)'; mirror -R -v --parallel=1 --ignore-time --no-recursion \
+            --exclude-glob appsettings.Production.json \
+            --exclude-glob appsettings.Production.local.json \
+            --exclude-glob appsettings.Development.json \
+            --exclude-glob '*.pdb' .;" || exit 1
+          run_lftp "Data" "echo 'Upload Data/'; mirror -R -v --parallel=1 --ignore-time Data;" || exit 1
+          run_lftp "LatoFont" "echo 'Upload LatoFont/'; mirror -R -v --parallel=1 --ignore-time LatoFont;" || exit 1
+
+          if [ "${SYNC_RUNTIMES}" = "true" ]; then
+            run_lftp "runtimes" "echo 'Upload runtimes/ (manual)'; mirror -R -v --parallel=1 --ignore-time runtimes;" || exit 1
+          else
+            echo "Skipping runtimes/ (~138MB; already on server — use workflow_dispatch sync_runtimes if needed)."
+          fi
+
+          echo "SmarterASP FTPS deploy completed."

@@ -7,6 +7,11 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      sync_runtimes:
+        description: Upload runtimes/ (only if .NET native deps changed)
+        type: boolean
+        default: false
 
 concurrency:
   group: smarterasp-deploy
@@ -61,11 +66,19 @@ jobs:
           FTP_USERNAME: ${{ secrets.SMARTERASP_FTP_USERNAME }}
           FTP_PASSWORD: ${{ secrets.SMARTERASP_FTP_PASSWORD }}
           FTP_REMOTE_DIR: ${{ secrets.SMARTERASP_FTP_REMOTE_DIR }}
+          SYNC_RUNTIMES: ${{ github.event_name == 'workflow_dispatch' && inputs.sync_runtimes || false }}
         run: |
           set -euo pipefail
           REMOTE="${FTP_REMOTE_DIR:-/}"
           REMOTE="${REMOTE%/}"
           if [ -z "$REMOTE" ]; then REMOTE="/"; fi
+          RUNTIME_EXCLUDE="--exclude-glob runtimes/**"
+          if [ "${SYNC_RUNTIMES}" = "true" ]; then
+            RUNTIME_EXCLUDE=""
+            echo "Including runtimes/ (manual native-deps sync)."
+          else
+            echo "Skipping runtimes/ on FTPS (already on server; enable sync_runtimes if needed)."
+          fi
           du -sh publish || true
           LFTP_SCRIPT="
             set net:timeout 180;
@@ -82,7 +95,8 @@ jobs:
             echo '=== wwwroot (always refresh, ~1MB) ===';
             mirror -R -v --parallel=2 --delete wwwroot;
             echo '=== backend (skip unchanged by size; CI timestamps always new) ===';
-            mirror -R -v --parallel=2 --ignore-time \
+            mirror -R -v --parallel=1 --ignore-time \
+              ${RUNTIME_EXCLUDE} \
               --exclude-glob wwwroot/** \
               --exclude-glob logs/** \
               --exclude-glob .git* \
